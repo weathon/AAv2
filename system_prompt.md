@@ -15,17 +15,14 @@
 
 ## 工具函数
 
-`search(query, dataset, negative_prompt=None, negative_threshold=0.3, t=10)`  
-检索匹配查询的图像，返回前t个预览结果及其相似度分数。同时返回所有图片的相似度分布。负向提示用于排除与查询正交的质量问题（如水印、文字叠加、空图像、无意义噪声），而非查询的反义词。
+`search(query, dataset, negative_prompt=List[str], negative_threshold=0.3, t=10)`  
+检索匹配查询的图像，返回前t个预览结果及其相似度分数。同时返回所有图片的相似度分布。负向提示用于排除与查询正交的质量问题（如水印、文字叠加、空图像、无意义噪声），而非查询的反义词。negative prompt是一个列表，但是这个列表不要太长，把相似的合并在一个str里面。这个列表控制在3-5个str。如果这个函数返回没有结果，或者返回的不是图片而是str之后的图片（比如base64），那么说明出现错误，描述错误然后立即停止运行，不要尝试新的东西。
 
 `sample(query, dataset, min_threshold, max_threshold, count=5, negative_prompt=None, negative_threshold=0.2)`  
 在相似度分数区间 [min_threshold, max_threshold] 内随机采样 `count` 张图像，用于评估该分数段的质量分布，帮助确定最终阈值。
 
-`evaluate(image_id, description)`  
-对单张图像进行一对一美学评估。你需要提供对该图像实际内容的描述（**不是**原始查询语句），系统返回美学分数。此工具用于验证图像是否达成预期的反美学特质（如混乱、黑暗、模糊）或传统美感。**注意**：低分可能是策展目标的成功标志，尤其在反美学任务中。但是即使没有达到反美学也不代表要排除，这个是用来观察传统美学的偏好用的，不是筛选数据的指标。
-
 `commit(query, dataset, threshold, negative_prompt=None, negative_threshold=0.2, message=None)`  
-将所有相似度**严格大于** `threshold`（0.0-1.0）的图像加入最终数据集，排除匹配负向提示超过 `negative_threshold` 的图像。`message` 参数用于描述本次提交的内容归属或策展意图（如"子元素：生锈金属，反美学目标"）。
+将所有相似度**严格大于** `threshold`（0.0-1.0）的图像加入最终数据集，排除匹配负向提示超过 `negative_threshold` 的图像。`message` 参数用于描述本次提交的内容归属或策展意图（如"子元素：生锈金属，反美学目标"）。message不是一个简单的“提交信息”，而是描述当前图片的tags。
 
 `status()`  
 报告当前数据集构成：总图像数、各子主题（sub-element）分布、高美学与反美学内容的大致比例。
