@@ -29,46 +29,73 @@ from io import BytesIO
 from hpsv3 import HPSv3RewardInferencer
 inferencer = HPSv3RewardInferencer(device='cuda:1')
 import numpy as np
-def rate_images(image_paths):
-    captions = []
-    for path in image_paths:
-        image = Image.open(path)
-        buffered = BytesIO()
-        image.save(buffered, format="PNG")
-        b64_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-        completion = captioning_client.chat.completions.create(
-            extra_body={},
-            model="openai/gpt-5-chat",
-            messages=[
-                {
-                "role": "user",
-                "content": [
+def _caption_single_image(path, max_retries=4):
+    """Caption a single image via OpenRouter API with retry logic."""
+    image = Image.open(path)
+    buffered = BytesIO()
+    image.save(buffered, format="PNG")
+    b64_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            completion = captioning_client.chat.completions.create(
+                extra_body={},
+                model="openai/gpt-5-chat",
+                messages=[
                     {
-                    "type": "text",
-                    "text": "Caption this image basic on physical facts in the image, ignore aesthetics and styles. Only describe what you see in the image, do not add any interpretation or imagination. Be concise and objective."
-                    },
-                    {
-                    "type": "image_url",
-                    "image_url": {
-                        "url": f"data:image/png;base64,{b64_str}"
-                    }
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "Caption this image based on physical facts in the image, ignore aesthetics and styles. Only describe what you see in the image, do not add any interpretation or imagination. Be concise and objective."
+                            },
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:image/png;base64,{b64_str}"
+                                }
+                            }
+                        ]
                     }
                 ]
-                }
-            ]
             )
-        captions.append(completion.choices[0].message.content)
-        print(f"[LOG] Generated caption for {path}: {captions[-1]}")
-    
-    image_paths = image_paths
-    prompts = captions
-    rewards = inferencer.reward(prompts=prompts, image_paths=image_paths)
-    scores = [reward[0].item() for reward in rewards] 
+            caption = completion.choices[0].message.content
+            print(f"[LOG] Generated caption for {path}: {caption}")
+            return caption
+        except Exception as e:
+            print(f"[WARN] Captioning attempt {attempt}/{max_retries} failed for {path}: {e}")
+            if attempt < max_retries:
+                time.sleep(2 ** attempt)
+            else:
+                print(f"[ERROR] All {max_retries} captioning attempts failed for {path}, using fallback.")
+                return "An image."
+
+def rate_images(image_paths):
+    # Caption images in parallel with 10 workers and 4 retries each
+    captions = [None] * len(image_paths)
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        future_to_idx = {
+            executor.submit(_caption_single_image, path, max_retries=4): idx
+            for idx, path in enumerate(image_paths)
+        }
+        for future in as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            captions[idx] = future.result()
+
+    # Feed to HPSv3 in batches of 4
+    scores = []
+    for i in range(0, len(image_paths), 4):
+        batch_prompts = captions[i:i+4]
+        batch_paths = image_paths[i:i+4]
+        with torch.no_grad():
+            rewards = inferencer.reward(prompts=batch_prompts, image_paths=batch_paths)
+        scores.extend([reward[0].item() for reward in rewards])
     hist = np.histogram(scores, bins=10)
     hist_str = f"Score histogram: {hist[0].tolist()}, bins: {hist[1].tolist()}"
     raw_scores = [f"{score:.4f}" for score in scores]
-    return hist_str + str(raw_scores)
+    return hist_str + "\nRaw Scores: " + str(raw_scores)
 
 
 def _search(query: str, dataset: str, negative_prompts: list[str] = [], negative_threshold: float = 0.3, t: int = 10, return_paths: bool = False) -> ToolOutputImage:
@@ -246,5 +273,5 @@ def aesthetics_rate(query: str, dataset: str, min_threshold: float, max_threshol
         print(f"[LOG] Rating all {len(paths)} matching images.")
 
     scores = rate_images(paths_to_rate)
-
+    print(f"[LOG] Aesthetics scores: {scores}")
     return f"Aesthetics scores for {len(paths_to_rate)} images: {scores}"

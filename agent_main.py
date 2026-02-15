@@ -17,15 +17,16 @@ with open("system_prompt.md", "r") as f:
 # Initialize agent
 agent = Agent(name="Assistant",
               tools=[search, commit, sample, aesthetics_rate, undo_commit, status, sample_from_committed],
-              instructions=system_prompt,
+              instructions=system_prompt, 
               model_settings=ModelSettings(
                 reasoning=Reasoning(effort="medium"),
+                parallel_tool_calls=False, 
               ),
               model="gpt-5.2")
             #   model="google/gemini-3-flash-preview")
 
 # Initialize dataset.json if it doesn't exist, or load existing commits
-if os.path.exists("dataset.json"):
+if os.path.exists("dataset.json"): 
     with open("dataset.json", "r") as f:
         try:
             dataset_commits.update(json.load(f))
