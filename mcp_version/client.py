@@ -15,6 +15,7 @@ import asyncio
 import base64
 import datetime
 import io
+import uuid
 
 import dotenv
 dotenv.load_dotenv()
@@ -35,7 +36,7 @@ SYSTEM_PROMPT_PATH = os.path.join(os.path.dirname(__file__), "system_prompt.md")
 MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://localhost:8765/sse")
 MAX_TURNS = 100
 MODEL = "moonshotai/kimi-k2.5"
-INITIAL_PROMPT = "Psychedelic art"
+INITIAL_PROMPT = "战乱之后"
 WEAVE_PROJECT = os.getenv("WEAVE_PROJECT", "aas2-mcp-client")
 _WEAVE_ENABLED = False
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "4"))
@@ -250,6 +251,11 @@ def _write_sample_markdown(md_path: str, png_filename: str, llm_description: str
 async def run_agent():
     _trace("agent_start", model=MODEL, max_turns=MAX_TURNS, initial_prompt=INITIAL_PROMPT)
     os.makedirs(SAMPLE_LOG_DIR, exist_ok=True)
+    # Create run-specific log directory with UUID
+    run_id = str(uuid.uuid4())
+    run_log_dir = os.path.join(SAMPLE_LOG_DIR, run_id)
+    os.makedirs(run_log_dir, exist_ok=True)
+    print(f"[INIT] Run ID: {run_id}")
     # Load system prompt
     with open(SYSTEM_PROMPT_PATH, "r") as f:
         system_prompt = f.read()
@@ -302,15 +308,18 @@ async def run_agent():
                 _recompress_old_images(messages, recent_count=10)
                 for attempt in range(1, LLM_MAX_RETRIES + 1):
                     try:
-                        response = await llm.chat.completions.create(
-                            model=MODEL,
-                            messages=messages,
-                            tools=openai_tools if openai_tools else None,
-                            extra_body={
-                                "provider": {
-                                    "order": ["moonshotai/int4"],
-                                }
-                            },
+                        response = await asyncio.wait_for(
+                            llm.chat.completions.create(
+                                model=MODEL,
+                                messages=messages,
+                                tools=openai_tools if openai_tools else None,
+                                extra_body={
+                                    "provider": {
+                                        "order": ["moonshotai/int4"],
+                                    }
+                                },
+                            ),
+                            timeout=120
                         )
                         first_choice = response.choices[0]
                         first_message = first_choice.message
@@ -461,8 +470,8 @@ async def run_agent():
                             sample_id = f"turn{turn + 1:03d}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
                             png_filename = f"{sample_id}.png"
                             md_filename = f"{sample_id}.md"
-                            png_path = os.path.join(SAMPLE_LOG_DIR, png_filename)
-                            md_path = os.path.join(SAMPLE_LOG_DIR, md_filename)
+                            png_path = os.path.join(run_log_dir, png_filename)
+                            md_path = os.path.join(run_log_dir, md_filename)
                             try:
                                 _save_data_url_image(image_parts[0]["image_url"]["url"], png_path)
                                 pending_sample_artifact = {
