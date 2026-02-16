@@ -65,7 +65,7 @@ def commit(query: str, dataset: str, threshold: float, negative_prompts: list[st
     selected_images = []
     mask = res >= threshold
     candidate_indices = torch.where(mask)[0].tolist()
-    selected_images = [names[i].item() for i in candidate_indices]
+    selected_images = [names[i].item() for i in candidate_indices if names[i].item() not in empty_images]
 
     print(f"[LOG] Sample results: {selected_images}.")
 
