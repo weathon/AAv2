@@ -475,7 +475,7 @@ def sample(
         query: Text query for semantic image search.
         dataset: One of "photos", "dreamcore", or "artwork".
         min_threshold: Minimum cosine similarity.
-        max_threshold: Maximum cosine similarity.
+        max_threshold: Maximum cosine similarity (usually 1.0 unless excluding with negative_prompts).
         count: Number of images to sample.
         negative_prompts: Negative text prompts to exclude.
         negative_threshold: Threshold for negative filtering.
@@ -540,7 +540,7 @@ def aesthetics_rate(
         query: Text query for semantic image search.
         dataset: One of "photos", "dreamcore", or "artwork".
         min_threshold: Minimum cosine similarity.
-        max_threshold: Maximum cosine similarity.
+        max_threshold: Maximum cosine similarity (usually 1.0 unless excluding with negative_prompts).
         negative_prompts: Negative text prompts to exclude.
         negative_threshold: Threshold for negative filtering.
         sample_size: Max number of images to rate (25-50 recommended).
@@ -602,7 +602,7 @@ def commit(
     Args:
         query: Text query used for the search.
         dataset: One of "photos", "dreamcore", or "artwork".
-        threshold: Minimum cosine similarity threshold (0.0-1.0).
+        threshold: Minimum cosine similarity threshold (0.0-1.0). Usually 1.0 unless excluding with negative_prompts.
         negative_prompts: Negative text prompts to exclude.
         negative_threshold: Threshold for negative filtering.
         message: Descriptive tags for this commit (sub-element, aesthetic direction, etc.).
@@ -633,7 +633,7 @@ def commit(
 
     mask = res >= threshold
     candidate_indices = torch.where(mask)[0].tolist()
-    selected_images = [names[i].item() for i in candidate_indices]
+    selected_images = [names[i].item() for i in candidate_indices if names[i].item() not in excluded]
 
     images = [
         f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}"
