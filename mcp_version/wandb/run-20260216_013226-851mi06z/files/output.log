@@ -1,0 +1,1588 @@
+[WARN] weave.init failed: Project Mismatch: weave and wandb must be initialized using the same project. Found wandb.init targeting project "3dsmile/aas2" and weave.init targeting project "3dsmile/agent". To fix, please use the same project for both library initializations.
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Flash Attention is not i...alled. Falling to SDPA.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+[INIT] Connected to MCP server. Available tools: ['search', 'sample', 'aesthetics_rate', 'commit', 'undo_commit', 'status', 'sample_from_committed', 'test_image', 'log_actions']
+
+============================================================
+[TURN 1/100]
+============================================================
+[TOOL CALL] log_actions({"msg": "Starting collection for 'Psychedelic Art'.\nPlan:\n1. Broad search for 'Psychedelic Art' across all datasets.\n2. Deconstruct into sub-elements:\n   - High Aesthetics/Modern: Fractal patterns)
+[TOOL RESULT] Logged.
+[TOOL CALL] search({"dataset": "artwork", "query": "psychedelic art, trippy visuals, acid art", "t": 15})
+[TOOL RESULT] Showing top 15 results for 'psychedelic art, trippy visuals, acid art' in artwork.
+[TOOL CALL] search({"t": 15, "query": "surreal psychedelic nightmare, weird trippy visuals", "dataset": "dreamcore"})
+[TOOL RESULT] No Image Found
+
+============================================================
+[TURN 2/100]
+============================================================
+[TOOL CALL] log_actions({"msg": "Initial search in 'artwork' showed a mix of abstract and psychedelic styles. However, 'dreamcore' returned no images for the specific query. I'll broaden the search in 'photos' and 'dreamcore)
+[TOOL RESULT] Logged.
+[TOOL CALL] search({"dataset": "photos", "t": 15, "query": "neon fluid art, colourful liquid swirls, macro oil and water psychedelic patterns"})
+[TOOL RESULT] Showing top 15 results for 'neon fluid art, colourful liquid swirls, macro oil and water psychedelic patterns' in photos.
+[TOOL CALL] search({"dataset": "artwork", "t": 15, "query": "intricate fractal geometry, mandalas, kaleidoscopic digital art, sacred geometry"})
+[TOOL RESULT] Showing top 15 results for 'intricate fractal geometry, mandalas, kaleidoscopic digital art, sacred geometry' in artwork.
+
+============================================================
+[TURN 3/100]
+============================================================
+[TOOL CALL] sample({"query": "neon fluid art, colourful liquid swirls, macro oil and water psychedelic patterns", "max_threshold": 0.9, "min_threshold": 0.3, "dataset": "photos"})
+[TOOL RESULT] Sampled 5 from 2899 candidates.
+[TOOL CALL] sample({"dataset": "artwork", "min_threshold": 0.4, "query": "intricate fractal geometry, mandalas, kaleidoscopic digital art", "max_threshold": 0.9})
+[TOOL RESULT] Sampled 2 from 2 candidates.
+[TOOL CALL] aesthetics_rate({"query": "neon fluid art, colourful liquid swirls, macro oil and water psychedelic patterns", "dataset": "photos", "min_threshold": 0.3, "max_threshold": 1})
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='weave version 0.52.28 is...To upgrade, please run:', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value=' $ pip install weave --upgrade', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Logged in as Weights & Biases user: wguo6358.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='View Weave data at https....ai/3dsmile/agent/weave', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected ident at line 1 column 3 [type=json_invalid, input_value="[INIT] weave enabled for project 'agent'.", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7e93-8ee5-cef6e84eaa6e', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7503-a3a6-cbc8be88ff25', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7640-8faa-66ac2546a8fa', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value="[LOG] Starting collection for 'Psychedelic Art'.", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Plan:', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: invalid number at line 1 column 3 [type=json_invalid, input_value="1. Broad search for 'Psy...t' across all datasets.", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: invalid number at line 1 column 3 [type=json_invalid, input_value='2. Deconstruct into sub-elements:', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: invalid number at line 1 column 5 [type=json_invalid, input_value='   - High Aesthetics/Mod...kaleidoscopic geometry.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: invalid number at line 1 column 5 [type=json_invalid, input_value="   - Anti-Aesthetic/Raw:...es, 'bad trip' imagery.", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: invalid number at line 1 column 5 [type=json_invalid, input_value='   - Conceptual: Surreal...re), optical illusions.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: invalid number at line 1 column 3 [type=json_invalid, input_value='3. Target 200+ images by...pts (watermarks, text).', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: invalid number at line 1 column 3 [type=json_invalid, input_value='4. Monitor aesthetics sc...wide-spectrum coverage.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-77e0-9d48-0df134738a61', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value="[LOG] Searching for 'psy...n dataset 'artwork' ...", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7640-87f2-9ff2a43ec093', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-70d0-abb0-630c8602cda8', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7722-8650-0410fb9da000', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-72c1-a400-603a4aca7478', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value="[LOG] Searching for 'sur...dataset 'dreamcore' ...", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7840-8b07-c4c78d9f4874', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7071-8f20-ac711f0f83c3', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7492-879e-f272ed5ad818', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7fa1-b7a1-011384f269d9', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value="[LOG] Initial search in ... fractal and fluid art.", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7562-947a-97fd66b690c6', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7081-9f7f-4ce4d50e272c', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value="[LOG] Searching for 'neo...in dataset 'photos' ...", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7190-bd58-d0e2312e8cd0', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7032-8c92-a7dc82e30da9', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7cf0-9699-11f233ef4695', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7a92-8d1b-97e8a3e3e055', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value="[LOG] Searching for 'int...n dataset 'artwork' ...", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7e13-81d4-74b03f889de5', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7e13-81d4-74d0131b9309', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-70c1-b290-f5fbce96200e', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7721-8e96-a952849b2e08', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value="[LOG] Sampling for 'neon...between 0.3 and 0.9 ...", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7c62-a0d1-7d674f5692ea', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7282-9c0b-646df595a53f', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Sampled 5 images from 2899 candidates.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-70f0-8fcd-f6898a34a4de', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7b01-a03f-d567e2344b9b', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value="[LOG] Sampling for 'intr...between 0.4 and 0.9 ...", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7a71-ad50-113e9e95ce88', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7a71-ad50-11570af36dfe', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Sampled 2 images from 2 candidates.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7683-8faf-214e00da3b29', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7d80-a080-3150a6f99bb3', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value="[LOG] Rating aesthetics ...between 0.3 and 1.0 ...", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7d31-a7bd-3c100c7ee050', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7953-a781-58abde35e6c8', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Sampled 100 images... candidates for rating.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7231-85e1-9b9d0d184166', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-70b0-8be0-e29834b99bd9', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7110-b586-00115a8b9089', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7fd1-9dc7-cf1e52e61e36', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7293-a6a1-29d24fe08a40', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7fd1-9dc7-cf3b838b6b97', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-76d1-b994-414af1ba3070', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-76d1-b994-41313938db39', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7293-a6a1-29e9df313944', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7fd1-9dc7-cf2de239321f', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7293-a6a1-2a08347a044c', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7293-a6a1-29f8e8276569', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-75f1-823e-4100ade3d381', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-75d0-81c6-b949cc724ccc', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7b20-9505-d84c981fc273', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7d12-b610-2513fb2e7841', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-79e2-bd6d-a4229e57dc98', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7ac2-bccc-b9a5d18913fa', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7b20-9505-d85de8abfbcb', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-79d0-8a34-f3a10a12de51', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-79d3-86a7-3dd2d05009b4', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-78d3-ac7c-6d8e32a5f4ab', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...inst a dark background.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7031-a251-f8001998d6a1', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7ff2-87f8-912ea92cc1dc', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...ut discernible objects.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-75c2-9a46-692f12f105aa', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7643-93fb-86dfb8c68924', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7fc1-be1d-fa3dbf2d1177', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7cc2-a834-6404296c5e48', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...green textured surface.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7ea1-a764-fea86c1731b9', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-72d0-ba4a-1931e7298074', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7fb1-9d35-d585636221da', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...ers with dark cavities.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7760-93ee-13c395fe44b3', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-79a1-9f3a-339f8e30553b', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7370-832d-d0c10b93cf47', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...nst a black background.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7fd0-98fe-7e4b4f00fc37', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-74b0-8e1d-8d4e62f31f4a', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7ea2-ab45-2152f44f3e20', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ... parallel barb pattern.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-74c3-8fb3-d2637ec70916', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-73c1-81f1-2371fbe719e8', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7e60-b463-ac9b6011df38', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...nst a black background.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7341-93e8-891828768544', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7b00-a174-64b398945b7a', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7a72-a50b-c7b6b43441a7', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...tered white highlights.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7c43-8404-0567561b5056', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7591-bb5e-afbc797bba8d', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7953-a01b-dcbae2c58ebd', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...spot in the background.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7882-9dc0-9c3d94e5eca6', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-78c1-8bb7-d90236b692c0', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7121-a949-94ae8030e667', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...a solid red background.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-72d1-ac3f-b8652a932a1b', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7a30-a7f5-e348dfd6cfcc', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7852-ad23-142e30405c3e', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...strand-like structures.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7ee1-b43c-ffa912e67979', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7c30-a2c4-4c7194296bd2', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-76f3-825f-67143170c9b9', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...black textured surface.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-74e3-8bb7-b4fbc110630c', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-76f3-8aac-57f2ce9ce2a6', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7773-a6b3-8b64067c8764', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...ed small circular dots.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7143-a662-f73ec17b3aad', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-76f3-809e-9c8914ede6ae', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7b70-ac92-d2cb2994b7a8', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ... and yellow background.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7152-80f0-fa2d11273ee7', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7000-8c11-34b7d20e47ea', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7b71-85fc-d0cd95a0d086', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ... by multicolored light.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7850-85cc-cc2b57175d2c', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7cf2-9bfe-d9db73de8dd7', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7b60-abc2-8039d6393b89', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ... and blur on the right.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7b53-a4f4-11e19c5059fe', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7010-ae86-4ddbca94b5ee', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7d62-a4ed-7d8694ad7f25', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...ck, bright green slime.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7da1-8eea-34478418537d', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7061-92ec-cddb2315e317', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7b42-843e-e4a9863720bd', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...es and curved surfaces.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7431-9d91-6ff4b8b0200a', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7773-afb0-86cc25037466', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-74d0-8d02-2e3cd9399e39', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...ndistinct central form.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7542-a76b-3fccc1bdca8e', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-79e2-ba01-42b63796e5d5', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7361-98ec-ece4c7db58a2', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...ered in a brown liquid.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7ee0-aca2-a82b960f2ea9', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7970-8887-8b989391fcc3', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7a81-9541-3a964a7299c7', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ... torn rectangular hole.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7073-be3c-06dd9dee5fa5', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7730-b904-7ef678ea3024', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7ad3-99e7-08ea929c5c0f', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...red horizontal stripes.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-76e1-b529-d55efc31bb57', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7111-bb3f-9c6bdcda1160', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7660-8c1a-bc728e6f8656', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...und with a pink border.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7e43-b00e-b5d84d8461c6', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7460-9750-bed48fb57aec', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='🍩 https://wandb.ai/3d...-7470-8ee0-78a35c7b8fc6', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 2 [type=json_invalid, input_value='[LOG] Generated caption ...inst a dark background.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid

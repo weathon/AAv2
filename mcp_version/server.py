@@ -191,7 +191,7 @@ def _caption_single_image(path: str, max_retries: int = 4) -> str:
         try:
             completion = captioning_client.chat.completions.create(
                 extra_body={},
-                model="moonshotai/kimi-k2.5",
+                model="qwen/qwen3-vl-30b-a3b-instruct",
                 messages=[
                     {
                         "role": "user",

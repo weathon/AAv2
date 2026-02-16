@@ -3,7 +3,7 @@ MCP Client / Agent loop for the dataset curation system.
 
 Connects to the MCP tool server (server.py) via SSE transport,
 discovers available tools, and runs an agentic LLM loop using
-Gemini 3 Flash (via OpenRouter) that autonomously calls MCP tools.
+Kimi K2.5 (via OpenRouter) that autonomously calls MCP tools.
 
 Replaces the OpenAI Agents SDK Runner.run_sync() approach with a
 manual tool-calling loop over the MCP protocol.
@@ -34,7 +34,7 @@ from mcp.client.sse import sse_client
 SYSTEM_PROMPT_PATH = os.path.join(os.path.dirname(__file__), "system_prompt.md")
 MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://localhost:8765/sse")
 MAX_TURNS = 100
-MODEL = "google/gemini-3-flash-preview"
+MODEL = "moonshotai/kimi-k2.5"
 INITIAL_PROMPT = "Psychedelic art"
 WEAVE_PROJECT = os.getenv("WEAVE_PROJECT", "aas2-mcp-client")
 _WEAVE_ENABLED = False
@@ -150,7 +150,7 @@ def _save_data_url_image(data_url: str, output_path: str) -> None:
         f.write(image_bytes)
 
 
-def _compress_image_for_llm(data_url: str, max_width: int = 1536, quality: int = 80) -> str:
+def _compress_image_for_llm(data_url: str, max_width: int = 1536, quality: int = 80, format: str = "webp") -> str:
     """Compress image for LLM message (in-memory only, for payload optimization).
 
     Resizes to max_width and converts to WebP (or JPEG fallback) with quality setting.
@@ -161,6 +161,7 @@ def _compress_image_for_llm(data_url: str, max_width: int = 1536, quality: int =
         data_url: Base64 data URL of image
         max_width: Maximum width/height for thumbnail (default 1536px)
         quality: Quality setting for compression (default 80, valid 0-100)
+        format: Target format "webp" (default) or "jpeg"
     """
     if "," not in data_url:
         return data_url  # Return original if invalid
@@ -305,6 +306,11 @@ async def run_agent():
                             model=MODEL,
                             messages=messages,
                             tools=openai_tools if openai_tools else None,
+                            extra_body={
+                                "provider": {
+                                    "order": ["moonshotai/int4"],
+                                }
+                            },
                         )
                         first_choice = response.choices[0]
                         first_message = first_choice.message
