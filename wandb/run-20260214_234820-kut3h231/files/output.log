@@ -1,0 +1,332 @@
+[LOG] Searching for 'psychedelic art' in dataset 'photos' with negative prompt '['watermark', 'text overlay', 'empty frame']' and threshold 0.3 for 20 items...
+[LOG] Search results: ['534693.jpg', '488274.jpg', '827929.jpg', '310590.jpg', '847771.jpg', '289672.jpg', '833307.jpg', '90885.jpg', '291457.jpg', '272194.jpg', '655831.jpg', '816137.jpg', '538798.jpg', '656818.jpg', '119856.jpg', '159220.jpg', '17460.jpg', '664397.jpg', '16396.jpg', '837130.jpg'].
+[non-fatal] Tracing client error 400: {
+  "error": {
+    "message": "Invalid 'data[0].span_data.output': string too long. Expected a string with maximum length 1048576, but got a string with length 6331802 instead.",
+    "type": "invalid_request_error",
+    "param": "data[0].span_data.output",
+    "code": "string_above_max_length"
+  }
+}
+[LOG] Initial broad search 'psychedelic art' on 'photos' completed. Observations: strong presence of neon swirls, oil-film / soap-film color patterns, kaleidoscopic mandala motifs, murals/tie-dye portraits, and some motion blur/long-exposure light trails. Next: decompose into specific visual subelements and run targeted searches per subelement across datasets (artwork, dreamcore, photos). Will sample each result range and run aesthetics_rate (DEBUG MODE).
+[LOG] Searching for 'psychedelic kaleidoscopic mandala fractal symmetrical pattern vibrant colors' in dataset 'artwork' with negative prompt '['watermark', 'text overlay', 'empty frame']' and threshold 0.3 for 20 items...
+[LOG] Search results: ['john-mccracken_untitled-1971.jpg', 'alma-woodsey-thomas_springtime-in-washington-1971.jpg', 'maria-primachenko_tablecloth-1976.jpg', 'paul-reed_28-1963.jpg', 'alma-woodsey-thomas_ressurection-1966.jpg', 'horia-bernea_praporele-florilor-1976.jpg', 'horia-bernea_simeze.jpg', 'paul-feeley_etamin-1965.jpg', 'piero-dorazio_cercles-de-nuit-1992.jpg', 'frank-stella_sinjerli-variation-iv-1977.jpg', 'paul-reed_17f-1963.jpg', 'judy-chicago_pasadena-lifesavers-red-5-1970.jpg', 'frank-stella_les-indes-galantes-iv-1973.jpg', 'judy-chicago_pasadena-lifesavers-yellow-series-5-1969.jpg', 'peter-max_untitled-bob-dylan-1967.jpg', 'frank-stella_sunset-beach-sketch-1967.jpg', 'paul-feeley_untitled-color-radiation-from-blue-center-1964.jpg', 'alice-baber_lavender-high-1968.jpg', 'judy-chicago_optical-shapes-3-1969.jpg', 'nicholas-krushenick_james-bond-meets-pussy-galore-1965.jpg'].
+[non-fatal] Tracing client error 400: {
+  "error": {
+    "message": "Invalid 'data[0].span_data.output': string too long. Expected a string with maximum length 1048576, but got a string with length 6091582 instead.",
+    "type": "invalid_request_error",
+    "param": "data[0].span_data.output",
+    "code": "string_above_max_length"
+  }
+}
+[LOG] Sampling for 'psychedelic kaleidoscopic mandala fractal symmetrical pattern vibrant colors' in dataset 'artwork' with negative prompt '['watermark', 'text overlay', 'empty frame']' and negative threshold 0.2 between 0.35 and 0.9 for 8 items...
+[LOG] Sampled 8 images from 49 candidates.
+[non-fatal] Tracing client error 400: {
+  "error": {
+    "message": "Invalid 'data[0].span_data.output': string too long. Expected a string with maximum length 1048576, but got a string with length 1981850 instead.",
+    "type": "invalid_request_error",
+    "param": "data[0].span_data.output",
+    "code": "string_above_max_length"
+  }
+}
+[LOG] Rating aesthetics for 'psychedelic kaleidoscopic mandala fractal symmetrical pattern vibrant colors' in dataset 'artwork' between 0.35 and 0.9...
+[LOG] Sampled 40 images from 49 total candidates for rating.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/paul-feeley_untitled-1965.jpg: A circular image containing alternating red and blue elongated shapes arranged symmetrically on a beige background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/paul-feeley_untitled-april-15-1964.jpg: Eight colored teardrop-shaped forms in red, yellow, blue, and green arranged in a circular pattern on a white background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/jackson-pollock_circle-1941(1).jpg: A circular image filled with overlapping abstract shapes in red, green, yellow, blue, and black.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/nicholas-krushenick_james-bond-meets-pussy-galore-1965.jpg: The image shows red and yellow spiral shapes on both sides and several purple curved forms extending upward from the center against a white background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/paul-reed_17f-1963.jpg: Six blue and green curved shapes arranged in a circular pattern on a dark background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/alma-woodsey-thomas_ressurection-1966.jpg: The image shows concentric circles made of small rectangular patches in yellow, orange, red, purple, blue, green, and light green colors.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/maria-primachenko_tablecloth-1976.jpg: The image shows a symmetrical pattern with four yellow human-like faces, blue circular areas containing red and pink flowers, and green leaves on an orange background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_fort-n-de-las-flores-1967.jpg: Two adjacent squares composed of concentric bands in red, orange, yellow, green, blue, and purple on a white background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/horia-bernea_prapor-1982.jpg: A symmetrical pattern composed of overlapping diamond shapes in shades of pink, beige, and gray.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_sunset-beach-sketch-1967.jpg: The image shows a series of concentric squares in red, orange, yellow, green, blue, and purple colors.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/piero-dorazio_cercles-de-nuit-1992.jpg: The image shows multiple concentric spiral patterns in red, yellow, green, white, and blue on a dark blue background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_harran-ii-1967.jpg: The image shows four squares and three semicircles containing concentric multicolored bands arranged in a symmetrical pattern.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/richard-pousette-dart_now-a-turning-orb.jpg: A circular shape with black, white, green, and yellow rings is centered on a textured gray background with intersecting dark lines.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/john-mccracken_untitled-1971.jpg: The image shows a circular pattern with concentric rings of yellow, red, purple, white, and black shapes arranged symmetrically.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/paul-feeley_untitled-color-radiation-from-blue-center-1964.jpg: An arrangement of colored curved shapes, including blue, yellow, green, and pink, radiating outward from a central blue shape on a light background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/ion-tuculescu_relations-in-orange.jpg: The image shows a vertical arrangement of circular and oval shapes in red, orange, blue, yellow, black, and white colors.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/janos-mattis-teutsch_white-cross-1918.jpg: The image shows overlapping curved and circular shapes in green, yellow, orange, blue, and purple with a white cross-like form near the center.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/nicholas-krushenick_untitled-1965.jpg: The image shows wavy, parallel bands in red, yellow, blue, purple, and white separated by black outlines.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_sidi-ifni-from-america-s-hommage-picasso-1973.jpg: A square divided into eight triangular sections with diagonal colored stripes in yellow, blue, red, pink, and orange on a white background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/horia-bernea_prapor-1987.jpg: A dark, textured, square-shaped metal sheet is positioned on a white background with its corners pointing up, down, left, and right.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/horia-bernea_praporele-florilor-1976.jpg: A symmetrical pattern with pink, yellow, blue, and red shapes arranged around a central point on a square surface with a dark red border.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/judy-chicago_optical-shapes-3-1969.jpg: Three hexagonal ring shapes in red, yellow, pink, and brown colors arranged on a white background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/alice-baber_lavender-high-1968.jpg: The image shows overlapping translucent shapes in blue, green, yellow, orange, and purple spread outward from the center.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/paul-feeley_gomelza-1965.jpg: The image shows a pattern of four red cross-shaped forms surrounded by four blue rounded X-shaped forms on a white background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/hedda-sterne_metaphores-and-metamorphoses-1967.jpg: A circular pattern with a yellow center surrounded by green and blue layered shapes on a dark blue background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_aghtana-iii-1968.jpg: The image shows a red-bordered shape containing sections of multicolored geometric patterns on a light gray background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/paul-reed_28-1963.jpg: The image shows a square composition with eight curved, multicolored shapes in blue, green, and yellow arranged in a circular pattern on a background divided into dark maroon and black triangular sections.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/fernand-leger_contrast-of-forms-1913.jpg: The image shows overlapping oval and rectangular shapes filled with red, blue, yellow, green, and white segments outlined in black.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/paul-reed_20-1962.jpg: A circular arrangement of interlocking orange and green abstract shapes on a light gray background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_fez-2-1964.jpg: The image shows alternating green and orange diagonal stripes forming four triangles meeting at the center.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/paul-klee_heroic-roses-1938(1).jpg: The image shows a composition of geometric shapes, including orange spirals outlined in black on a green, purple, and brown background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/alma-woodsey-thomas_springtime-in-washington-1971.jpg: A circular pattern composed of concentric rings of red, yellow, green, blue, and purple segments on a white background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/john-mccracken_mandala-i-1972.jpg: A series of concentric circles in different colors arranged from the center outward on a black background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_firuzabad-1970.jpg: Two overlapping circular shapes containing intersecting geometric segments in red, orange, blue, gray, and black.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_sinjerli-variation-iv-1977.jpg: A circle filled with intersecting curved and straight shapes in multiple colors including red, blue, green, yellow, black, and purple on a plain background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_les-indes-galantes-iv-1973.jpg: Two adjacent square patterns composed of concentric colored lines in orange, red, blue, green, and purple on a white background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/peter-max_untitled-bob-dylan-1967.jpg: A black-and-white portrait of a person wearing dark sunglasses is centered within a symmetrical pattern of colorful shapes and white flower-like designs on a gray background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_double-gray-scramble-1973.jpg: Two adjacent squares each containing concentric colored squares in red, yellow, green, black, and white.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/jacoba-van-heemskerck_bild-no-131-1921.jpg: The image shows irregular shapes in blue, yellow, red, green, and black arranged in a circular pattern.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/horia-bernea_prapor(1).jpg: The image shows intersecting triangular and rectangular shapes in various shades of brown, yellow, gray, and beige.
+[LOG] Aesthetics scores: Score histogram: [2, 0, 2, 4, 6, 10, 5, 8, 2, 1], bins: [1.2174757719039917, 2.4621949076652525, 3.7069140434265138, 4.951633179187775, 6.196352314949036, 7.441071450710297, 8.685790586471558, 9.930509722232818, 11.17522885799408, 12.419947993755342, 13.664667129516602]
+Raw Scores: ['10.1403', '10.4431', '5.4160', '10.1052', '8.2243', '10.9761', '12.0199', '10.5827', '7.3380', '7.4080', '7.8916', '5.9554', '9.9012', '6.5579', '7.5575', '11.7821', '5.1832', '4.5968', '7.5690', '8.9349', '4.1474', '6.9965', '7.5577', '8.1035', '8.7263', '10.5761', '10.7409', '7.4891', '10.1618', '6.6886', '8.0186', '5.7814', '7.9304', '2.2794', '9.7645', '8.7185', '13.6647', '1.2175', '7.1070', '8.3389']
+[LOG] Committing with message: subelement: kaleidoscopic mandala / op-art; tags: mandala, kaleidoscope, symmetry, vibrant; aesthetic_direction: high-aesthetic
+[LOG] Sampling for 'psychedelic kaleidoscopic mandala fractal symmetrical pattern vibrant colors' in dataset 'artwork' with negative prompt '['watermark', 'text overlay', 'empty frame']' and threshold 0.2
+[LOG] Sample results: ['maria-primachenko_tablecloth-1976.jpg', 'alma-woodsey-thomas_springtime-in-washington-1971.jpg', 'john-mccracken_untitled-1971.jpg', 'paul-reed_28-1963.jpg'].
+[LOG] Searching for 'neon swirls soap film oil slick colorful psychedelic marbling vibrant swirls' in dataset 'photos' with negative prompt '['watermark', 'text overlay', 'empty frame']' and threshold 0.3 for 20 items...
+[LOG] Search results: ['847771.jpg', '827929.jpg', '329180.jpg', '662250.jpg', '912463.jpg', '946841.jpg', '915949.jpg', '816137.jpg', '73349.jpg', '42178.jpg', '2902.jpg', '820649.jpg', '311848.jpg', '627699.jpg', '520300.jpg', '833890.jpg', '400919.jpg', '936362.jpg', '233943.jpg', '501857.jpg'].
+[non-fatal] Tracing client error 400: {
+  "error": {
+    "message": "Invalid 'data[0].span_data.output': string too long. Expected a string with maximum length 1048576, but got a string with length 5817446 instead.",
+    "type": "invalid_request_error",
+    "param": "data[0].span_data.output",
+    "code": "string_above_max_length"
+  }
+}
+[LOG] Sampling for 'neon swirls soap film oil slick colorful psychedelic marbling vibrant swirls' in dataset 'photos' with negative prompt '['watermark', 'text overlay', 'empty frame']' and negative threshold 0.2 between 0.35 and 0.9 for 8 items...
+[LOG] Sampled 8 images from 621 candidates.
+[non-fatal] Tracing client error 400: {
+  "error": {
+    "message": "Invalid 'data[0].span_data.output': string too long. Expected a string with maximum length 1048576, but got a string with length 3157034 instead.",
+    "type": "invalid_request_error",
+    "param": "data[0].span_data.output",
+    "code": "string_above_max_length"
+  }
+}
+[LOG] Rating aesthetics for 'neon swirls soap film oil slick colorful psychedelic marbling vibrant swirls' in dataset 'photos' between 0.35 and 0.9...
+[LOG] Sampled 40 images from 621 total candidates for rating.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/775202.jpg: The image shows a mixture of blurred green, yellow, red, and blue colors spreading outward from a central area.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/73799.jpg: The image shows a smooth surface with overlapping curved bands of green, red, and blue colors.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/861247.jpg: Intertwined streaks of yellow, purple, and blue light on a black background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/313317.jpg: Close-up of green and orange surfaces covered with multiple water droplets.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/617292.jpg: A stream of liquid forms a vortex-like shape in front of a yellow and magenta checkered background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/780081.jpg: Black and white concentric patterns distorted by red liquid streaks.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/657078.jpg: The image shows a blurred mix of pink, green, blue, white, and yellow colors.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/786380.jpg: Two water droplets on a dark surface reflecting red, green, and blue light.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/211893.jpg: A circular arrangement of multicolored lights with a dark central point.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/290740.jpg: Colorful translucent objects surrounded by numerous small bubbles.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/397696.jpg: Close-up of soap bubbles showing colorful patterns and reflections on their surfaces.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/28835.jpg: A group of transparent glass marbles with colorful swirls inside.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/840192.jpg: A close-up of a spiral surface with water droplets reflecting multiple colors of light.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/891817.jpg: Colored light trails of red, blue, and green are visible swirling in a transparent container filled with liquid.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/744393.jpg: The image shows a group of circular openings arranged in a grid pattern with red and white light shining through them.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/833860.jpg: The image shows blurred areas of purple, blue, green, yellow, black, and white forming curved and overlapping shapes.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/386137.jpg: The image shows overlapping curved and straight lines of red, orange, and yellow light on a dark background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/936829.jpg: A surface with multicolored patches of green, blue, and orange, intersected by several parallel lines.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/427194.jpg: Rows of colorful circular and oval shapes in pink, yellow, orange, and purple on a reflective surface.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/65164.jpg: The image shows abstract streaks of orange, blue, yellow, green, and white colors blending and overlapping on a smooth surface.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/776316.jpg: Bright red, blue, orange, and yellow light reflections appear on a dark surface.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/303119.jpg: Blue liquid lines intersecting on a translucent yellowish surface.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/816251.jpg: A close-up of a wavy, reflective surface showing bands of yellow, purple, blue, and green light.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/827929.jpg: The image shows swirling patterns of green, blue, yellow, orange, and pink colors.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/535353.jpg: A large, colorful soap bubble floating against a partly cloudy blue sky.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/285451.jpg: A distorted blue and white pattern with wavy lines bordered by a purple frame.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/250625.jpg: Water droplets on a yellow surface reflecting distorted yellow and green shapes.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/73060.jpg: The image shows a close-up of a smooth, reflective surface with red, yellow, white, blue, and green curved shapes.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/538089.jpg: Close-up of translucent, irregularly shaped bubbles with reflections in blue, green, purple, orange, and yellow colors.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/364244.jpg: Blue and yellow circular light trails on a dark background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/344493.jpg: A droplet with green and black wavy patterns reflecting a similarly patterned background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/733498.jpg: Overlapping translucent shapes in yellow, purple, and blue on a black background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/17550.jpg: A close-up of a twisted glass stem with reflections of red, orange, yellow, and blue light.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/944189.jpg: A close-up of a blue ice block with cracks and darker blue spots.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/516763.jpg: Two transparent plastic forks with rainbow-colored light patterns on a black background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/200631.jpg: A close-up view of a coiled plastic spring with green, yellow, orange, and red sections.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/840547.jpg: Several yellow circular droplets of varying sizes are suspended in a clear liquid.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/926934.jpg: A green spiral object with a metal pin in the center is shown against a background of multicolored star-shaped lights.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/312079.jpg: Clusters of irregularly shaped red, orange, yellow, and green spots covering the surface.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/816214.jpg: Several transparent bubbles with reflections and colored light patterns on a red and blue surface.
+[LOG] Aesthetics scores: Score histogram: [3, 1, 5, 4, 4, 9, 6, 1, 5, 2], bins: [1.575918436050415, 2.8925931215286256, 4.209267807006836, 5.525942492485047, 6.842617177963257, 8.159291863441467, 9.47596654891968, 10.79264123439789, 12.1093159198761, 13.42599060535431, 14.74266529083252]
+Raw Scores: ['13.1759', '14.4419', '4.6439', '10.3997', '3.2332', '9.5873', '12.6573', '7.6863', '8.3186', '9.0490', '2.3629', '4.4343', '14.7427', '4.6666', '13.2763', '8.9790', '8.6408', '6.2076', '9.7777', '9.1811', '9.3579', '7.0986', '7.6185', '5.2682', '7.9137', '5.1910', '8.6276', '1.8907', '12.9099', '6.3598', '10.1458', '13.2516', '9.3511', '8.9979', '1.5759', '6.7097', '9.6920', '9.7713', '6.4663', '11.2268']
+[LOG] Committing with message: subelement: neon swirls / oil-film / soap-film; tags: marbling, oil-slick, neon, liquid color; aesthetic_direction: high-aesthetic
+[LOG] Sampling for 'neon swirls soap film oil slick colorful psychedelic marbling vibrant swirls' in dataset 'photos' with negative prompt '['watermark', 'text overlay', 'empty frame']' and threshold 0.2
+[LOG] Sample results: ['501857.jpg', '946841.jpg', '400919.jpg', '329180.jpg', '233943.jpg', '820649.jpg', '301280.jpg', '328708.jpg', '848148.jpg', '816137.jpg', '811191.jpg', '740309.jpg', '16897.jpg', '847516.jpg', '538798.jpg', '198846.jpg', '662250.jpg', '397696.jpg', '775514.jpg', '311848.jpg', '602109.jpg', '830023.jpg', '827929.jpg', '274057.jpg', '936362.jpg', '42178.jpg', '847186.jpg', '364697.jpg', '847771.jpg', '258132.jpg', '73349.jpg', '833890.jpg', '627699.jpg', '17460.jpg', '768048.jpg', '912463.jpg', '119856.jpg', '49782.jpg', '2902.jpg', '896872.jpg', '832795.jpg', '938570.jpg', '520300.jpg', '534693.jpg', '915949.jpg', '656548.jpg', '291758.jpg'].
+[LOG] Searching for '1960s psychedelic poster vintage ornate typography flat colors psychedelic poster art' in dataset 'artwork' with negative prompt '['watermark', 'text overlay', 'empty frame']' and threshold 0.3 for 20 items...
+[LOG] Search results: ['henri-matisse_panel-with-mask-1947.jpg', 'hiro-yamagata_not-detected-272395.jpg', 'nicholas-krushenick_untitled-1965.jpg', 'nicholas-krushenick_james-bond-meets-pussy-galore-1965.jpg', 'larry-bell_nude-1974.jpg', 'peter-max_toulouse-lautrec-1966.jpg', 'peter-max_untitled-bob-dylan-1967.jpg', 'louis-schanker_football-1941.jpg', 'peter-blake_the-beach-boys-1964.jpg', 'piero-dorazio_cercles-de-nuit-1992.jpg', 'carlos-merida_la-m-scara-m-gica-1969.jpg', 'juan-gris_newspaper-and-fruit-dish-1916.jpg', 'gene-davis_smithsonian-resident-associates-program-1980-15th-anniversary-poster-1980.jpg', 'brice-marden_the-propitious-garden-of-plane-image-version-one-2005.jpg', 'jack-youngerman_changes-5-1970.jpg', 'frank-stella_yellow-journal-1982.jpg', 'miriam-schapiro_we-live-in-her-dreams.jpg', 'frank-stella_riallaro-1995.jpg', 'howard-finster_elvis-and-the-arpitaun-world-1980.jpg', 'andy-warhol_rebel-without-a-cause.jpg'].
+[non-fatal] Tracing client error 400: {
+  "error": {
+    "message": "Invalid 'data[0].span_data.output': string too long. Expected a string with maximum length 1048576, but got a string with length 8454462 instead.",
+    "type": "invalid_request_error",
+    "param": "data[0].span_data.output",
+    "code": "string_above_max_length"
+  }
+}
+[LOG] Sampling for '1960s psychedelic poster vintage ornate typography flat colors psychedelic poster art' in dataset 'artwork' with negative prompt '['watermark', 'text overlay', 'empty frame']' and negative threshold 0.2 between 0.35 and 0.9 for 8 items...
+[LOG] Sampled 8 images from 38 candidates.
+[non-fatal] Tracing client error 400: {
+  "error": {
+    "message": "Invalid 'data[0].span_data.output': string too long. Expected a string with maximum length 1048576, but got a string with length 4963318 instead.",
+    "type": "invalid_request_error",
+    "param": "data[0].span_data.output",
+    "code": "string_above_max_length"
+  }
+}
+[LOG] Rating aesthetics for '1960s psychedelic poster vintage ornate typography flat colors psychedelic poster art' in dataset 'artwork' between 0.35 and 0.9...
+[LOG] Rating all 38 matching images.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/andy-warhol_muhammad-ali-2.jpg: A person with short dark hair is shown in profile, looking downward against a dark background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/louis-schanker_football-1941.jpg: The image shows two rectangular sections containing geometric shapes in blue, green, pink, and orange on a black background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/andy-warhol_drag-queen.jpg: A person with an open mouth holds a cigarette near their face.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_limanora-1994.jpg: The image shows overlapping shapes and curved lines in multiple colors, including yellow, blue, red, green, black, and white.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/nicholas-krushenick_james-bond-meets-pussy-galore-1965.jpg: The image shows curved purple shapes in the center surrounded by red, yellow, and orange spiral forms on a white background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/peter-max_toulouse-lautrec-1966.jpg: A man in a suit and hat with the words "TOULOUSE LAUTREC" written on the hat.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_the-great-heidelburgh-tun-1988.jpg: A composition of abstract shapes and patterns in various colors, featuring overlapping geometric and irregular forms.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/peter-blake_the-beach-boys-1964.jpg: Five men are standing behind a blue convertible car above a rectangular section displaying the text "THE BEACH BOYS" in large letters.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/brice-marden_the-propitious-garden-of-plane-image-version-one-2005.jpg: The image shows six vertical panels in red, orange, yellow, green, blue, and purple with intersecting curved lines in dark and light colors.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/piero-dorazio_wait-untitled-xix-1968.jpg: The image shows overlapping vertical shapes in red, orange, yellow, green, blue, and purple colors.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/piero-dorazio_cercles-de-nuit-1992.jpg: Multiple red, yellow, green, and white spirals on a dark blue background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/hiro-yamagata_stargazer-1989.jpg: Buildings with bright signs and illuminated windows are shown under a dark blue sky with several airplane contrails above a busy street with cars and people.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/nicholas-krushenick_flying-circus-1965.jpg: The image shows wavy yellow shapes between blue and red sections outlined with black lines.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_the-fountain-1992.jpg: The image shows a composition of overlapping shapes and patterns in various colors, including black, white, red, yellow, purple, and orange.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/cy-twombly_camino-real-ii.jpg: The image shows a green background covered with overlapping red and orange paint strokes that drip downward.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/hiro-yamagata_not-detected-272395.jpg: The image shows a brightly colored city street filled with buildings covered in neon signs and advertisements.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/evelyne-axell_la-cible-1970.jpg: Two seated human figures with overlapping outlines, one wearing blue sunglasses and the other with concentric red, orange, and yellow circles around the head, surrounded by green shapes resembling foliage.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/howard-finster_elvis-and-the-arpitaun-world-1980.jpg: A man with dark hair and a green jacket is depicted against a patterned yellow background with red and purple floral borders.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/peter-blake_red-power-1972.jpg: A person with long dark hair wearing a dark blue garment is shown in front of an orange background with the words “Red Power” written on it.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/paul-jenkins_untitled-3.jpg: The image shows overlapping abstract shapes in dark green, blue, red, orange, and yellow colors on a white background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/pablo-picasso_guitar-sheet-music-and-wine-glass-1912.jpg: The image shows a collage with pieces of paper, including a music sheet, a blue rectangle, a white circle, a drawing, and a black semicircle arranged on a patterned brown background with floral designs and the printed text “LE JOU LA BATAILLE S’EST ENGAGE.”
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/john-hoyland_spirit-night-18-06-98-1998.jpg: The image shows a red S-shaped form with white spots on the left and vertical yellow, green, and pink stripes on the right.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_metropolitan-museum-m-1970.jpg: The image shows a geometric pattern of overlapping, multicolored arcs within a blue-bordered shape.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/jackson-pollock_male-and-female(1).jpg: The image shows an arrangement of abstract shapes, lines, and colors including red, white, black, yellow, and blue, with some geometric patterns and symbols.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/paul-feeley_untitled-1965.jpg: A circular image with alternating red and blue symmetrical shapes on a beige background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/andy-warhol_mick-jagger-2.jpg: A person with long dark hair and red lips is shown from the shoulders up against a light background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/peter-max_untitled-bob-dylan-1967.jpg: A black-and-white face with dark sunglasses is centered within a symmetrical pattern of purple, red, green, orange, and white shapes on a gray background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/alma-woodsey-thomas_air-view-of-a-spring-nursery-1966.jpg: The image shows multiple horizontal rows of irregular colored shapes arranged in parallel lines.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/alphonse-mucha_champagne-printer-publisher-1897.jpg: A woman wearing a beige dress and a floral headpiece is sitting while holding an open book in front of a background with circular floral patterns.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/rafa-nasiri_untitled-1971.jpg: A black abstract shape is placed over diagonal orange, yellow, red, and green stripes on a white background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/carlos-merida_la-m-scara-m-gica-1969.jpg: The image shows an arrangement of multicolored geometric shapes including rectangles, triangles, and curved forms in blue, orange, purple, pink, yellow, black, and white.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_riallaro-1995.jpg: The image shows overlapping abstract shapes and lines in various colors including yellow, red, pink, green, blue, black, and gray on a dotted gray background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/frank-stella_front-cover-from-had-gadya-series-1984.jpg: The image shows overlapping geometric shapes including cones, circles, and curved forms in blue, pink, white, gold, and black colors.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/bridget-riley_dominance-portfolio-blue-1977.jpg: The image shows vertical wavy lines in red, green, purple, and white repeating across a white background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/andy-warhol_jackie-2.jpg: A grid of repeated portraits of the same woman shown in different color tones, primarily blue, black, and gold.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/henri-matisse_the-maritime-wildlife-1950.jpg: The image shows two vertical columns of rectangular colored sections containing abstract shapes in blue, green, yellow, pink, black, and white.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/miriam-schapiro_we-live-in-her-dreams.jpg: A white triangle containing a seated human figure is surrounded by multiple colorful human-shaped figures on a yellow and orange background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/lapis/nicholas-krushenick_untitled-1965.jpg: The image shows wavy bands of red, yellow, blue, purple, and white separated by thick black lines.
+[LOG] Aesthetics scores: Score histogram: [2, 0, 0, 2, 0, 3, 6, 9, 9, 7], bins: [-8.477816581726074, -6.506939506530761, -4.536062431335449, -2.5651853561401374, -0.5943082809448246, 1.3765687942504883, 3.3474458694457994, 5.318322944641112, 7.289200019836425, 9.260077095031736, 11.23095417022705]
+Raw Scores: ['7.7575', '11.2310', '-8.4778', '2.0273', '10.4879', '5.6728', '5.8179', '5.2128', '-7.0266', '5.2106', '-0.9968', '5.6302', '7.6132', '4.4430', '7.8861', '10.6568', '7.6335', '7.1687', '1.4283', '3.0661', '7.1908', '7.8024', '7.8588', '10.1464', '7.0414', '9.7239', '-2.2443', '4.8063', '9.7355', '7.1802', '5.1994', '6.3838', '9.1977', '10.0566', '7.7319', '7.9162', '6.6055', '4.2959']
+[LOG] Committing with message: subelement: 1960s psychedelic poster / vintage typography; tags: poster, vintage, typography, flat colors; aesthetic_direction: high-aesthetic (graphic)
+[LOG] Sampling for '1960s psychedelic poster vintage ornate typography flat colors psychedelic poster art' in dataset 'artwork' with negative prompt '['watermark', 'text overlay', 'empty frame']' and threshold 0.2
+[LOG] Sample results: ['henri-matisse_panel-with-mask-1947.jpg'].
+[LOG] Searching for 'psychedelic portrait double exposure saturated color tie-dye fashion portrait' in dataset 'photos' with negative prompt '['watermark', 'text overlay', 'empty frame']' and threshold 0.3 for 20 items...
+[LOG] Search results: ['149421.jpg', '23506.jpg', '857173.jpg', '291457.jpg', '149519.jpg', '136415.jpg', '819340.jpg', '422427.jpg', '323580.jpg', '190283.jpg', '103887.jpg', '423286.jpg', '776211.jpg', '408490.jpg', '576178.jpg', '326151.jpg', '289672.jpg', '722306.jpg', '688295.jpg', '669713.jpg'].
+[non-fatal] Tracing client error 400: {
+  "error": {
+    "message": "Invalid 'data[0].span_data.output': string too long. Expected a string with maximum length 1048576, but got a string with length 7225846 instead.",
+    "type": "invalid_request_error",
+    "param": "data[0].span_data.output",
+    "code": "string_above_max_length"
+  }
+}
+[LOG] Sampling for 'psychedelic portrait double exposure saturated color tie-dye fashion portrait' in dataset 'photos' with negative prompt '['watermark', 'text overlay', 'empty frame']' and negative threshold 0.2 between 0.35 and 0.9 for 8 items...
+[LOG] Sampled 8 images from 178 candidates.
+[non-fatal] Tracing client error 400: {
+  "error": {
+    "message": "Invalid 'data[0].span_data.output': string too long. Expected a string with maximum length 1048576, but got a string with length 3946546 instead.",
+    "type": "invalid_request_error",
+    "param": "data[0].span_data.output",
+    "code": "string_above_max_length"
+  }
+}
+[LOG] Rating aesthetics for 'psychedelic portrait double exposure saturated color tie-dye fashion portrait' in dataset 'photos' between 0.35 and 0.9...
+[LOG] Sampled 40 images from 178 total candidates for rating.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/90885.jpg: Two interlocking shapes with red, purple, yellow, green, and blue sections are shown against a black background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/158972.jpg: A female mannequin wearing a denim jacket and white shirt stands in front of a large poster showing a man’s face.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/289672.jpg: A pattern of concentric, overlapping oval rings in blue, purple, and pink colors.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/886287.jpg: A woman with red hair wearing a yellow top and a colorful necklace, showing a chest tattoo, stands in front of a blurred background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/229795.jpg: A person sitting cross-legged with their hands raised in front of their face, appearing multiple times due to motion blur.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/874587.jpg: Two mannequin heads with wigs are displayed behind a glass window reflecting outdoor objects and text.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/504554.jpg: A man in a gray shirt is shown in three panels, with his head stationary in the first and third panels and blurred from rapid motion in the middle panel.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/485568.jpg: A person with short dark hair and green eyes wearing a colorful headscarf and looking slightly upward.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/68228.jpg: A partially visible human face with blurred orange and pink areas surrounding it.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/619534.jpg: A man wearing glasses appears three times in overlapping positions against a dark background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/149519.jpg: An abstract pattern of swirling colors including yellow, orange, pink, purple, and blue.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/422427.jpg: A man’s face composed of four color-tinted photo sections arranged together.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/154068.jpg: A shirtless person with a necklace is shown in a color-inverted green and blue image.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/802381.jpg: A person with their hair slicked back stands against a wall covered in red, orange, blue, and white paint, with similar colored paint dripping on their skin and clothing.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/851824.jpg: A person wearing glasses and a black T-shirt is sitting against a pink background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/911816.jpg: A person with blue-toned skin and patterned face paint is surrounded by red, yellow, and orange fabric.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/67650.jpg: A man holds a photo of another person's face covering half of his own face.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/915226.jpg: The image shows a symmetrical arrangement of green, purple, and brown plant parts forming a mirrored pattern on a black background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/883249.jpg: A close-up of a blurry blue and yellow object with a symmetrical pattern.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/875231.jpg: A man is pulling open his plaid shirt to reveal another man’s head emerging from underneath it.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/717740.jpg: Two disassembled dolls with detached limbs and heads are positioned against a dark background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/6981.jpg: A person with green-painted skin and blonde hair wearing a red garment.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/188078.jpg: A person with light skin and shoulder-length hair is shown against a red background, with part of their face and shoulder visible.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/299784.jpg: Multiple overlapping colored shadows of a person are cast on a white surface.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/833860.jpg: The image shows a blurred mix of purple, blue, green, yellow, black, and white colors forming abstract shapes.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/366131.jpg: A person with blue and black lines painted on their face is looking through a square opening.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/705330.jpg: A blurred image showing a person’s face with overlapping features, surrounded by yellow and blue areas.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/458830.jpg: A person’s face with visible eyes is overlaid by multiple overlapping hands in red, blue, and green tones.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/655831.jpg: The image shows a mix of animal figures, including lions, zebras, and blue fish-like shapes, overlapping with each other.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/7643.jpg: The image shows a blurred human face with multiple overlapping profiles facing different directions.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/98523.jpg: The image shows overlapping areas of green, pink, purple, and white light.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/511349.jpg: Three pink flowers with human faces in their centers are attached to green stems tied with a red ribbon against a blue sky background with text reading “FLOWERS EVERYWHERE DAISY POWER LOVE.”
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/676139.jpg: A person wearing a mask and a white shirt is holding a potted cactus.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/291457.jpg: Blurry shapes in blue, purple, and pink colors overlapping on a light background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/724885.jpg: The image shows a dark background with bright, multicolored light bands forming curved shapes.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/651419.jpg: Two people with their bodies and faces painted in black and white stripes are positioned close together against a plain background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/669997.jpg: A blurred close-up of a person’s face with pink and blue lighting against a dark background.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/23506.jpg: The image shows two human faces overlapping with purple, red, and black coloration.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/739484.jpg: Overlapping shapes in black, green, blue, red, yellow, and purple colors.
+[LOG] Generated caption for /home/wg25r/Downloads/ds/train/ava/425870.jpg: A person with short light-colored hair and black dots on their skin stands in front of a wall covered with black dots on a white background.
+[LOG] Aesthetics scores: Score histogram: [4, 5, 6, 3, 1, 4, 9, 7, 0, 1], bins: [-8.625760078430176, -6.162342929840088, -3.69892578125, -1.2355086326599114, 1.2279085159301761, 3.6913256645202637, 6.154742813110353, 8.618159961700439, 11.081577110290528, 13.544994258880617, 16.008411407470703]
+Raw Scores: ['8.7987', '9.7644', '-1.5989', '-4.1239', '6.8446', '6.6412', '5.8398', '10.4226', '-6.4685', '16.0084', '8.2062', '7.5457', '-8.6146', '7.7844', '-7.0335', '-0.3340', '-1.8217', '0.6742', '-1.5545', '7.1315', '10.6095', '4.5327', '10.3715', '1.6862', '-1.5149', '-4.8904', '3.9822', '6.8296', '-5.5809', '5.9047', '0.0425', '6.2146', '8.0859', '-2.0265', '-5.0478', '9.1809', '8.7703', '-5.5325', '-1.3673', '-8.6258']
+Traceback (most recent call last):
+  File "/home/wg25r/aas2/AAv2/agent_main.py", line 46, in <module>
+    result = Runner.run_sync(agent, "Psychedelic art", max_turns=100)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run.py", line 297, in run_sync
+    return runner.run_sync(
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run.py", line 1366, in run_sync
+    return default_loop.run_until_complete(task)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/asyncio/base_events.py", line 636, in run_until_complete
+    self.run_forever()
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/asyncio/base_events.py", line 603, in run_forever
+    self._run_once()
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/asyncio/base_events.py", line 1871, in _run_once
+    event_list = self._selector.select(timeout)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/selectors.py", line 469, in select
+    fd_event_list = self._selector.poll(timeout, max_ev)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/wg25r/aas2/AAv2/agent_main.py", line 46, in <module>
+    result = Runner.run_sync(agent, "Psychedelic art", max_turns=100)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run.py", line 297, in run_sync
+    return runner.run_sync(
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run.py", line 1366, in run_sync
+    return default_loop.run_until_complete(task)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/asyncio/base_events.py", line 636, in run_until_complete
+    self.run_forever()
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/asyncio/base_events.py", line 603, in run_forever
+    self._run_once()
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/asyncio/base_events.py", line 1871, in _run_once
+    event_list = self._selector.select(timeout)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/selectors.py", line 469, in select
+    fd_event_list = self._selector.poll(timeout, max_ev)
+KeyboardInterrupt
+Exception ignored in atexit callback: <function _start_and_connect_service.<locals>.teardown_atexit at 0x77562629c040>
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/wandb/sdk/lib/service/service_connection.py", line 54, in teardown_atexit
+    conn.teardown(hooks.exit_code)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/wandb/sdk/lib/service/service_connection.py", line 182, in teardown
+    self._router.join()
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/wandb/sdk/interface/router.py", line 75, in join
+    self._thread.join()
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt:
+Exception ignored in atexit callback: <bound method DefaultTraceProvider.shutdown of <agents.tracing.provider.DefaultTraceProvider object at 0x7761d3e6a140>>
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/tracing/provider.py", line 374, in shutdown
+    self._multi_processor.shutdown()
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/tracing/provider.py", line 115, in shutdown
+    processor.shutdown()
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/tracing/processors.py", line 304, in shutdown
+    self._worker_thread.join(timeout=timeout)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt:

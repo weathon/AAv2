@@ -1,0 +1,1115 @@
+========== agent_main.py ==========
+# %%
+import os
+import json
+import dotenv
+dotenv.load_dotenv()
+
+import wandb
+
+from agents import Agent, Runner, ModelSettings
+from openai.types.shared import Reasoning
+
+from search_tools import search, sample, aesthetics_rate
+from commit_tools import commit, undo_commit, status, sample_from_committed, dataset_commits, log_actions
+
+# Load system prompt
+with open("system_prompt.md", "r") as f:
+    system_prompt = f.read()
+from openai import AsyncOpenAI
+from agents import set_default_openai_client, set_tracing_disabled
+from agents import Agent, Runner
+custom_client = AsyncOpenAI(base_url="https://openrouter.ai/api/v1", api_key=os.getenv("OPENROUTER_API_KEY"))
+set_default_openai_client(custom_client)
+set_tracing_disabled(True)
+# Initialize agent
+agent = Agent(name="Assistant",
+              tools=[search, commit, sample, aesthetics_rate, undo_commit, status, sample_from_committed, log_actions],
+              instructions=system_prompt, 
+              model_settings=ModelSettings(
+                reasoning=Reasoning(effort="medium"),
+                parallel_tool_calls=False, 
+              ),
+            #   model="gpt-5-mini")
+              model="google/gemini-3-flash-preview")
+
+# Initialize dataset.json if it doesn't exist, or load existing commits
+if os.path.exists("dataset.json"): 
+    with open("dataset.json", "r") as f:
+        try:
+            dataset_commits.update(json.load(f))
+        except json.JSONDecodeError:
+            dataset_commits.clear()
+else:
+    with open("dataset.json", "w") as f:
+        json.dump({}, f)
+
+wandb.init(project="aas2", name="Psychedelic art")
+
+result = Runner.run_sync(agent, "Psychedelic art", max_turns=100)
+
+wandb.finish()
+
+========== commit_tools.py ==========
+import json
+import uuid
+import random
+import os
+import datetime
+import torch
+from agents import function_tool
+
+from image_utils import grid_stack, encode
+from dataset_loader import (
+    model,
+    ava_embeddings_tensor, ls_embeddings_tensor, lapis_embeddings_tensor,
+    ava_names_list, ls_names_list, lapis_names_list,
+    dataset_map
+)
+
+# Changed to dict structure with commit_id as keys
+dataset_commits = {}
+
+LOG_FILE = "agent_log.txt"
+
+@function_tool(failure_error_function=None)
+def log_actions(msg: str = ""):
+    """Log the agent's thoughts, reasoning for the next step, and brief summary after each function call."""
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    entry = f"[{timestamp}] {msg}\n"
+    with open(LOG_FILE, "a") as f:
+        f.write(entry)
+    print(f"[LOG] {msg}")
+    return "Logged."
+
+@function_tool(failure_error_function=None)
+def commit(query: str, dataset: str, threshold: float, negative_prompts: list[str] = [], negative_threshold: float = 0.2, message: str = None):
+    print(f"[LOG] Committing with message: {message}")
+    # images = _search(query, dataset, negative_prompts, threshold=threshold, return_paths=True)
+    print(f"[LOG] Sampling for '{query}' in dataset '{dataset}' with negative prompt '{negative_prompts}' and threshold {negative_threshold}")
+
+    query_texts = [
+        {"text": text} for text in negative_prompts
+    ]
+
+    embeddings = ava_embeddings_tensor if dataset == "photos" else ls_embeddings_tensor if dataset == "dreamcore" else lapis_embeddings_tensor
+    names = ava_names_list if dataset == "photos" else ls_names_list if dataset == "dreamcore" else lapis_names_list
+
+    combined_mask = torch.zeros(len(embeddings), dtype=torch.bool)
+
+    for i, q in enumerate(query_texts):
+        q_emb = model.process([q]).cpu().float()
+
+        sim = torch.nn.functional.cosine_similarity(embeddings, q_emb)
+
+        combined_mask |= (sim > negative_threshold)
+
+        # print(f"[PROFILE] negative prompt {i}/{len(query_texts)}: process={t4p:.3f}s, sim={t4sim:.3f}s, mask={t4mask:.3f}s")
+
+    target_indices = torch.where(combined_mask)[0].tolist()
+    empty_images = {names[i].item() for i in target_indices}
+
+    queries = [{"text": query}]
+
+    query_embedding = model.process(queries).cpu()
+
+    res = torch.nn.functional.cosine_similarity(embeddings, query_embedding.float())
+
+    selected_images = []
+    mask = res >= threshold
+    candidate_indices = torch.where(mask)[0].tolist()
+    selected_images = [names[i].item() for i in candidate_indices]
+
+    print(f"[LOG] Sample results: {selected_images}.")
+
+    images = [f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}" for name in selected_images if os.path.exists(f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}")]
+
+    # Generate unique commit ID
+    commit_id = str(uuid.uuid4())[:8]
+
+    # Store commit with ID
+    dataset_commits[commit_id] = {
+        "query": query,
+        "dataset": dataset,
+        "threshold": threshold,
+        "negative_prompts": negative_prompts,
+        "negative_threshold": negative_threshold,
+        "message": message,
+        "images": images,
+        "size": len(images)
+    }
+
+    # Save to dataset.json
+    with open("dataset.json", "w") as f:
+        json.dump(dataset_commits, f, indent=2)
+
+    return f"Committed with ID: {commit_id}, message: {message} with {len(images)} images."
+
+@function_tool(failure_error_function=None)
+def undo_commit(commit_id: str):
+    """Remove a commit from the dataset by its commit ID."""
+    if commit_id not in dataset_commits:
+        return f"Commit ID {commit_id} not found."
+
+    removed_commit = dataset_commits.pop(commit_id)
+
+    # Save updated dataset.json
+    with open("dataset.json", "w") as f:
+        json.dump(dataset_commits, f, indent=2)
+
+    print(f"[LOG] Removed commit {commit_id}: {removed_commit['message']}")
+    return f"Removed commit {commit_id}: {removed_commit['message']} with {removed_commit['size']} images."
+
+
+@function_tool(failure_error_function=None)
+def status():
+    """Show all commit history including commit IDs and image counts."""
+    if len(dataset_commits) == 0:
+        return "No commits yet."
+
+    total_images = sum(commit['size'] for commit in dataset_commits.values())
+    result = f"Total commits: {len(dataset_commits)}, Total images: {total_images}\n\nCommit History:\n"
+
+    for commit_id, commit_info in dataset_commits.items():
+        result += f"- [{commit_id}] {commit_info['message']} ({commit_info['size']} images)\n"
+
+    return result
+
+
+@function_tool(failure_error_function=None)
+def sample_from_committed(commit_id: str, n: int = 20):
+    """Sample n random images from a committed batch to review."""
+    if commit_id not in dataset_commits:
+        return f"Commit ID {commit_id} not found."
+
+    commit_info = dataset_commits[commit_id]
+    images = commit_info['images']
+
+    if len(images) == 0:
+        return "No images in this commit."
+
+    # Sample random images (up to n)
+    sample_size = min(n, len(images))
+    sampled_paths = random.sample(images, sample_size)
+
+    print(f"[LOG] Sampled {sample_size} images from commit {commit_id}")
+
+    # Create grid of sampled images
+    whole_image = grid_stack(sampled_paths, row_size=5)
+    result = encode(whole_image)
+
+    return result
+
+========== dataset_loader.py ==========
+import dotenv
+dotenv.load_dotenv()
+
+import datasets
+import numpy as np
+import torch
+import sys
+
+sys.path.append("../")
+from qwen3_vl_embedding import Qwen3VLEmbedder
+
+# Load dataset
+ds = datasets.load_dataset("weathon/ava_embeddings", split="train")
+ds = ds.with_format("numpy")
+
+names = ds["name"]
+sources = ds["source"]
+arr = ds.data.column("embeddings").to_numpy()
+arr = np.stack(arr, axis=0)
+ava_dataset = ds.filter(lambda example: example["source"] == "ava")
+ls_dataset = ds.filter(lambda example: example["source"] == "liminal_space")
+lapis_dataset = ds.filter(lambda example: example["source"] == "lapis")
+ava_embeddings = np.stack(ava_dataset["embeddings"], axis=0)
+ls_embeddings = np.stack(ls_dataset["embeddings"], axis=0)
+lapis_embeddings = np.stack(lapis_dataset["embeddings"], axis=0)
+
+ava_names = ava_dataset["name"]
+ls_names = ls_dataset["name"]
+lapis_names = lapis_dataset["name"]
+
+# Initialize model
+model_name_or_path = "Qwen/Qwen3-VL-Embedding-8B"
+model = Qwen3VLEmbedder(model_name_or_path=model_name_or_path, device="cpu", attn_implementation="sdpa")
+
+# Convert to tensors
+ava_embeddings_tensor = torch.tensor(ava_embeddings).float()
+ls_embeddings_tensor = torch.tensor(ls_embeddings).float()
+lapis_embeddings_tensor = torch.tensor(lapis_embeddings).float()
+
+ava_names_list = list(ava_names)
+ls_names_list = list(ls_names)
+lapis_names_list = list(lapis_names)
+
+# Dataset mapping
+dataset_map = {
+    "photos": "ava",
+    "dreamcore": "liminal_space",
+    "artwork": "lapis"
+}
+
+========== image_utils.py ==========
+import base64
+from PIL import Image
+from io import BytesIO
+import numpy as np
+from agents.tool import ToolOutputImage
+
+
+def vstack(images):
+    if len(images) == 0:
+        raise ValueError("Need 0 or more images")
+
+    if isinstance(images[0], np.ndarray):
+        images = [Image.fromarray(img) for img in images]
+    width = max([img.size[0] for img in images])
+    height = sum([img.size[1] for img in images])
+    stacked = Image.new(images[0].mode, (width, height))
+
+    y_pos = 0
+    for img in images:
+        stacked.paste(img, (0, y_pos))
+        y_pos += img.size[1]
+    return stacked
+
+
+def hstack(images):
+    if len(images) == 0:
+        raise ValueError("Need 0 or more images")
+
+    if isinstance(images[0], np.ndarray):
+        images = [Image.fromarray(img) for img in images]
+    width = sum([img.size[0] for img in images])
+    height = max([img.size[1] for img in images])
+    stacked = Image.new(images[0].mode, (width, height))
+
+    x_pos = 0
+    for img in images:
+        stacked.paste(img, (x_pos, 0))
+        x_pos += img.size[0]
+    return stacked
+
+def grid_stack(image_paths, row_size):
+    target_width = 2048
+    rows = []
+    for i in range(0, len(image_paths), row_size):
+        imgs = [Image.open(p) for p in image_paths[i:i + row_size]]
+        aspect_ratios = [img.size[0] / img.size[1] for img in imgs]
+        target_height = int(round(target_width / sum(aspect_ratios)))
+
+        resized_imgs = []
+        current_width = 0
+        for j, img in enumerate(imgs):
+            if j == len(imgs) - 1:
+                new_w = target_width - current_width
+            else:
+                new_w = int(round(target_height * aspect_ratios[j]))
+                current_width += new_w
+            resized_imgs.append(img.resize((new_w, target_height), Image.BILINEAR))
+
+        rows.append(hstack(resized_imgs))
+
+    return vstack(rows)
+
+def encode(image: Image) -> ToolOutputImage:
+    buffered = BytesIO()
+    image.save(buffered, format="PNG")
+    b64_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+    return ToolOutputImage(image_url=f"data:image/png;base64,{b64_str}", detail="high")
+
+========== search_tools.py ==========
+import os
+import time
+import random
+import torch
+import wandb
+from agents import function_tool
+from agents.tool import ToolOutputImage
+
+from image_utils import grid_stack, encode
+from dataset_loader import (
+    model,
+    ava_embeddings_tensor, ls_embeddings_tensor, lapis_embeddings_tensor,
+    ava_names_list, ls_names_list, lapis_names_list,
+    dataset_map
+)
+
+
+from openai import OpenAI
+import dotenv
+dotenv.load_dotenv()
+
+captioning_client = OpenAI(
+  base_url="https://openrouter.ai/api/v1",
+  api_key=os.getenv("OPENROUTER_API_KEY"),
+)
+from PIL import Image
+import base64
+from io import BytesIO
+
+from hpsv3 import HPSv3RewardInferencer
+inferencer = HPSv3RewardInferencer(device='cuda:1')
+import numpy as np
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def _caption_single_image(path, max_retries=4):
+    """Caption a single image via OpenRouter API with retry logic."""
+    image = Image.open(path)
+    buffered = BytesIO()
+    image.save(buffered, format="PNG")
+    b64_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            completion = captioning_client.chat.completions.create(
+                extra_body={},
+                model="openai/gpt-5-chat",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "Caption this image based on physical facts in the image, ignore aesthetics and styles. Only describe what you see in the image, do not add any interpretation or imagination. Be concise and objective. The caption should be a single short sentence describe the main content of the image. Do not mention the style or aesthetics of the image. Focus on physical facts like objects, colors, and their relationships. Do not add any information that cannot be directly observed from the image."
+                            },
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:image/png;base64,{b64_str}"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            )
+            caption = completion.choices[0].message.content
+            print(f"[LOG] Generated caption for {path}: {caption}")
+            return caption
+        except Exception as e:
+            print(f"[WARN] Captioning attempt {attempt}/{max_retries} failed for {path}: {e}")
+            if attempt < max_retries:
+                time.sleep(2 ** attempt)
+            else:
+                print(f"[ERROR] All {max_retries} captioning attempts failed for {path}, using fallback.")
+                return "An image."
+
+def rate_images(image_paths):
+    # Caption images in parallel with 10 workers and 4 retries each
+    captions = [None] * len(image_paths)
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        future_to_idx = {
+            executor.submit(_caption_single_image, path, max_retries=4): idx
+            for idx, path in enumerate(image_paths)
+        }
+        for future in as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            captions[idx] = future.result()
+
+    # Feed to HPSv3 in batches of 4
+    scores = []
+    for i in range(0, len(image_paths), 4):
+        batch_prompts = captions[i:i+4]
+        batch_paths = image_paths[i:i+4]
+        with torch.no_grad():
+            rewards = inferencer.reward(prompts=batch_prompts, image_paths=batch_paths)
+        scores.extend([reward[0].item() for reward in rewards])
+    hist = np.histogram(scores, bins=10)
+    hist_str = f"Score histogram: {hist[0].tolist()}, bins: {hist[1].tolist()}"
+    raw_scores = [f"{score:.4f}" for score in scores]
+    return hist_str + "\nRaw Scores: " + str(raw_scores)
+
+
+def _search(query: str, dataset: str, negative_prompts: list[str] = [], negative_threshold: float = 0.3, t: int = 10, return_paths: bool = False) -> ToolOutputImage:
+    t0 = time.time()
+    print(f"[LOG] Searching for '{query}' in dataset '{dataset}' with negative prompt '{negative_prompts}' and threshold {negative_threshold} for {t} items...")
+
+    t1 = time.time()
+    query_texts = [
+        {"text": text} for text in negative_prompts
+    ]
+    # print(f"[PROFILE] build query_texts: {time.time()-t1:.3f}s")
+
+    t2 = time.time()
+    embeddings = ava_embeddings_tensor if dataset == "photos" else ls_embeddings_tensor if dataset == "dreamcore" else lapis_embeddings_tensor
+    names = ava_names_list if dataset == "photos" else ls_names_list if dataset == "dreamcore" else lapis_names_list
+    # print(f"[PROFILE] load embeddings & names: {time.time()-t2:.3f}s, shapes: embeddings={embeddings.shape}, names={len(names)}")
+
+    t3 = time.time()
+    combined_mask = torch.zeros(len(embeddings), dtype=torch.bool)
+    # print(f"[PROFILE] init combined_mask: {time.time()-t3:.3f}s")
+
+    t4 = time.time()
+    for i, q in enumerate(query_texts):
+        t4i = time.time()
+        q_emb = model.process([q]).cpu().float()
+        t4p = time.time() - t4i
+
+        t4s = time.time()
+        sim = torch.nn.functional.cosine_similarity(embeddings, q_emb)
+        t4sim = time.time() - t4s
+
+        t4m = time.time()
+        combined_mask |= (sim > negative_threshold)
+        t4mask = time.time() - t4m
+
+        # print(f"[PROFILE] negative prompt {i}/{len(query_texts)}: process={t4p:.3f}s, sim={t4sim:.3f}s, mask={t4mask:.3f}s")
+    # print(f"[PROFILE] total negative loop: {time.time()-t4:.3f}s")
+
+    t5 = time.time()
+    target_indices = torch.where(combined_mask)[0].tolist()
+    empty_images = {names[i].item() for i in target_indices}
+    # print(f"[PROFILE] build empty_images: {time.time()-t5:.3f}s, count={len(empty_images)}")
+
+    t6 = time.time()
+    queries = [{"text": query}]
+    # print(f"[PROFILE] prep query: {time.time()-t6:.3f}s")
+
+    t7 = time.time()
+    query_embedding = model.process(queries).cpu()
+    # print(f"[PROFILE] model.process query: {time.time()-t7:.3f}s, shape={query_embedding.shape}")
+
+    t8 = time.time()
+    res = torch.nn.functional.cosine_similarity(embeddings, query_embedding.float())
+    # print(f"[PROFILE] cosine_similarity: {time.time()-t8:.3f}s")
+
+    t9 = time.time()
+    selected_images = []
+    for idx in torch.argsort(res, descending=True):
+        if names[idx].item() not in empty_images:
+            selected_images.append(names[idx].item())
+        if len(selected_images) >= t:
+            break
+    # print(f"[PROFILE] top-k loop: {time.time()-t9:.3f}s, iterations={len(res)}")
+
+    print(f"[LOG] Search results: {selected_images}.")
+
+    t10 = time.time()
+    paths = [f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}" for name in selected_images if os.path.exists(f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}")]
+    # print(f"[PROFILE] filter existing paths: {time.time()-t10:.3f}s, found={len(paths)}")
+    if len(paths) == 0:
+        return "No Image Found"
+    t11 = time.time()
+    whole_image = grid_stack(paths, row_size=5)
+    # print(f"[PROFILE] grid_stack: {time.time()-t11:.3f}s")
+    if return_paths:
+        return paths
+    t12 = time.time()
+    result = encode(whole_image)
+    # print(f"[PROFILE] encode: {time.time()-t12:.3f}s")
+
+    # print(f"[PROFILE] TOTAL: {time.time()-t0:.3f}s")
+    return result
+
+@function_tool(failure_error_function=None)
+def search(query: str, dataset: str, negative_prompts: list[str] = [], negative_threshold: float = 0.3, t: int = 10) -> ToolOutputImage:
+    try:
+        return _search(query, dataset, negative_prompts, negative_threshold, t)
+    except Exception as e:
+        print(f"[ERROR] Search failed: {e}")
+        raise e
+
+
+def _sample(query: str, dataset: str, min_threshold: float, max_threshold: float, negative_prompts: list[str] = [], negative_threshold: float = 0.2):
+    """Generic internal function to find images matching query and thresholds.
+
+    Returns:
+        list[str]: List of file paths to matching images
+    """
+    query_texts = [
+        {"text": text} for text in negative_prompts
+    ]
+
+    embeddings = ava_embeddings_tensor if dataset == "photos" else ls_embeddings_tensor if dataset == "dreamcore" else lapis_embeddings_tensor
+    names = ava_names_list if dataset == "photos" else ls_names_list if dataset == "dreamcore" else lapis_names_list
+
+    combined_mask = torch.zeros(len(embeddings), dtype=torch.bool)
+
+    for i, q in enumerate(query_texts):
+        q_emb = model.process([q]).cpu().float()
+
+        sim = torch.nn.functional.cosine_similarity(embeddings, q_emb)
+
+        combined_mask |= (sim > negative_threshold)
+
+    target_indices = torch.where(combined_mask)[0].tolist()
+    empty_images = {names[i].item() for i in target_indices}
+
+    queries = [{"text": query}]
+
+    query_embedding = model.process(queries).cpu()
+
+    res = torch.nn.functional.cosine_similarity(embeddings, query_embedding.float())
+
+    # Find images within the threshold range
+    mask = torch.logical_and(res >= min_threshold, res <= max_threshold)
+    candidate_indices = torch.where(mask)[0].tolist()
+
+    # Filter out negative prompt matches
+    selected_images = [names[i].item() for i in candidate_indices if names[i].item() not in empty_images]
+
+    # Convert to full paths and filter existing files
+    paths = [f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}" for name in selected_images if os.path.exists(f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}")]
+
+    return paths
+
+@function_tool(failure_error_function=None)
+def sample(query: str, dataset: str, min_threshold: float, max_threshold: float, count: int = 5, negative_prompts: list[str] = [], negative_threshold: float = 0.2):
+    """Sample random images matching the query and display them as a grid."""
+    print(f"[LOG] Sampling for '{query}' in dataset '{dataset}' with negative prompt '{negative_prompts}' and negative threshold {negative_threshold} between {min_threshold} and {max_threshold} for {count} items...")
+
+    paths = _sample(query, dataset, min_threshold, max_threshold, negative_prompts, negative_threshold)
+
+    if len(paths) == 0:
+        return "No Image Found"
+
+    # Sample random images from the results
+    sampled_paths = random.sample(paths, min(count, len(paths)))
+
+    print(f"[LOG] Sampled {len(sampled_paths)} images from {len(paths)} candidates.")
+
+    whole_image = grid_stack(sampled_paths, row_size=5)
+
+    # Log collage image to wandb with query as caption
+    if wandb.run is not None:
+        wandb.log({"sample_result": wandb.Image(whole_image, caption=query)})
+
+    result = encode(whole_image)
+
+    return result
+
+@function_tool(failure_error_function=None)
+def aesthetics_rate(query: str, dataset: str, min_threshold: float, max_threshold: float, negative_prompts: list[str] = [], negative_threshold: float = 0.2, sample_size: int = 100):
+    """Rate the aesthetics scores of images matching the query.
+
+    Returns a string describing the distribution of aesthetics scores.
+    """
+    print(f"[LOG] Rating aesthetics for '{query}' in dataset '{dataset}' between {min_threshold} and {max_threshold}...")
+
+    paths = _sample(query, dataset, min_threshold, max_threshold, negative_prompts, negative_threshold)
+
+    if len(paths) == 0:
+        return "No images found matching the criteria."
+
+    # Sample if there are too many images
+    if len(paths) > sample_size:
+        paths_to_rate = random.sample(paths, sample_size)
+        print(f"[LOG] Sampled {sample_size} images from {len(paths)} total candidates for rating.")
+    else:
+        paths_to_rate = paths
+        print(f"[LOG] Rating all {len(paths)} matching images.")
+
+    scores = rate_images(paths_to_rate)
+    print(f"[LOG] Aesthetics scores: {scores}")
+    return f"Aesthetics scores for {len(paths_to_rate)} images: {scores}"
+
+========== test_or.py ==========
+from openai import AsyncOpenAI
+from agents import set_default_openai_client, set_tracing_disabled
+from agents import Agent, Runner
+import dotenv, os
+dotenv.load_dotenv()
+custom_client = AsyncOpenAI(base_url="https://openrouter.ai/api/v1", api_key=os.getenv("OPENROUTER_API_KEY"))
+set_default_openai_client(custom_client)
+set_tracing_disabled(True)
+
+from agents import set_default_openai_api
+
+set_default_openai_api("chat_completions")
+
+
+agent = Agent(name="Assistant", instructions="You are a helpful assistant", model="moonshotai/kimi-k2.5")
+
+result = Runner.run_sync(agent, "Write a haiku about recursion in programming.")
+print(result.final_output)
+========== proposal.md ==========
+# Proposal: Agent-Curated Wide-Spectrum Aesthetics Dataset for Combating Toxic Positivity in Image Generation Models
+
+## 1. Problem Statement
+
+Current text-to-image generation models (e.g., Stable Diffusion, FLUX, Kolors) are trained with reward models and RLHF pipelines that systematically over-align outputs toward conventional, mainstream aesthetic preferences. Even when users explicitly request "anti-aesthetic" outputs -- such as grainy textures, chaotic compositions, clashing colors, or deliberately unsettling imagery -- these models default to producing conventionally beautiful images. This phenomenon, termed **"Toxic Positivity"** in the prior work (arXiv: 2512.11883v2), represents a fundamental failure of aesthetic pluralism: the models suppress legitimate, non-mainstream artistic expressions in favor of a single dominant aesthetic standard.
+
+The root cause lies in the training data and reward signals used during alignment. Existing human preference datasets (e.g., HPDv2) and their derived reward models (e.g., HPSv2, PickScore, ImageReward) are overwhelmingly biased toward high-aesthetic, polished imagery. They lack representation of intentional anti-aesthetic content -- technically degraded, emotionally dark, compositionally chaotic, or stylistically raw images that are *deliberately* created as valid artistic expressions. As a result, models fine-tuned on these signals learn to equate "preferred" with "conventionally beautiful," erasing the full spectrum of human aesthetic intent.
+
+## 2. Prior Work: Identifying the Problem
+
+The paper **"Toxic Positivity in AI-Generated Imagery"** (arXiv: 2512.11883v2) formally identifies and characterizes this problem. Key contributions of the prior work include:
+
+- **Defining Toxic Positivity**: Coining the term to describe the systematic suppression of non-mainstream aesthetic expressions by image generation models that are over-aligned to conventional beauty standards.
+- **Empirical Evidence**: Demonstrating through experiments that state-of-the-art models consistently fail to produce requested anti-aesthetic outputs, instead "beautifying" prompts that explicitly call for ugliness, decay, distortion, or discomfort.
+- **Taxonomy of Aesthetics**: Providing a structured taxonomy that decomposes aesthetics into fine-grained attributes across both pro-aesthetic and anti-aesthetic dimensions, covering categories such as color quality, clarity and focus, emotion, distortion, execution quality, lighting/exposure, structure/perspective, and context/setting.
+- **Call for Wide-Spectrum Data**: Arguing that the solution requires training data and reward models that span the full aesthetic spectrum -- not just the conventionally beautiful end.
+
+However, the prior work primarily *identifies* the problem and *proposes* the direction. **It does not provide a concrete solution** -- no wide-spectrum dataset, no anti-aesthetic-aware reward model, and no de-biased generation pipeline.
+
+## 3. Our Solution: An Agentic Dataset Curation System
+
+This project provides the **solution** to the problem identified above. We build an **autonomous AI agent system** that curates a wide-spectrum aesthetics dataset from existing image collections, guided by the taxonomy from the prior work. The agent intelligently searches, evaluates, and commits image batches that span the full aesthetic range -- from polished professional photography to deliberately raw, chaotic, and anti-aesthetic content.
+
+### 3.1 System Architecture
+
+The system consists of the following components:
+
+#### 3.1.1 Multimodal Embedding Search Engine
+- **Embedding Model**: Qwen3-VL-Embedding-8B, a vision-language embedding model that encodes both text queries and images into a shared semantic space.
+- **Pre-computed Embeddings**: All images from three source datasets (AVA photographs, Lapis artwork, Liminal Space dreamcore) are pre-embedded and stored on HuggingFace (`weathon/ava_embeddings`), enabling real-time cosine similarity search.
+- **Negative Prompt Filtering**: A novel filtering mechanism that excludes images matching orthogonal quality issues (watermarks, blank frames, text overlays) by computing cosine similarity against negative prompts and masking out above-threshold matches.
+
+#### 3.1.2 Aesthetics Evaluation via HPSv3
+- **HPSv3 Reward Model**: A state-of-the-art VLM-based human preference scorer (ICCV 2025) trained on HPDv3, a wide-spectrum preference dataset with 1.08M text-image pairs and 1.17M annotated comparisons.
+- **Auto-Captioning Pipeline**: Each image is automatically captioned using GPT-5-chat via the OpenRouter API, focusing on objective physical facts rather than aesthetic judgments. These captions are then paired with the images for HPSv3 scoring.
+- **Score Distribution Analysis**: Rather than applying a single quality threshold, the system computes and reports the full histogram of aesthetics scores for each batch, allowing the agent to reason about whether a low-scoring batch successfully achieves anti-aesthetic goals.
+
+#### 3.1.3 Autonomous Curation Agent
+- **Agent Framework**: Built on OpenAI's Agents SDK, the agent is powered by GPT-5.2 with medium reasoning effort, capable of multi-turn autonomous operation (up to 200 turns).
+- **Tool Suite**: The agent has access to seven specialized tools:
+  - `search`: Top-k semantic search with negative prompt filtering
+  - `sample`: Random sampling within a cosine similarity range for threshold calibration
+  - `aesthetics_rate`: HPSv3-based aesthetics score distribution analysis
+  - `commit`: Batch commit of images above a similarity threshold to the dataset
+  - `undo_commit`: Rollback mechanism for incorrect commits
+  - `status`: Dataset composition monitoring
+  - `sample_from_committed`: Visual review of committed batches
+- **Curation Strategy**: The agent follows a structured workflow:
+  1. Receive a target theme (e.g., "Psychedelic art")
+  2. Perform broad exploratory searches to identify sub-concepts
+  3. Decompose complex themes into specific visual sub-elements
+  4. For each sub-element: search, sample, evaluate aesthetics, calibrate thresholds, and commit
+  5. Monitor overall dataset balance and diversity
+
+#### 3.1.4 Source Datasets
+The system draws from three complementary image collections:
+- **`photos` (AVA)**: Real-world photographs and edited photo art, spanning professional to amateur quality
+- **`artwork` (Lapis)**: Traditional art dataset covering paintings, prints, and mixed media across centuries
+- **`dreamcore` (Liminal Space)**: Surreal, unsettling liminal space imagery representing internet-born anti-aesthetic movements
+
+### 3.2 Anti-Aesthetic Taxonomy
+
+Based on the prior work's taxonomy, the system's `classes.json` defines a comprehensive classification schema with two top-level categories:
+
+**Anti-Aesthetics** (9 subcategories, 60+ attributes):
+- Realism & Style: surrealism, uncanny valley, dreamcore, weirdcore, outsider/naive style, psychedelic art
+- Color Quality: wrong object color, clashing disharmony, toxic neon palette, sickly color cast
+- Clarity & Focus: motion blur, datamosh, VHS decay, scanline texture, over-sharpened haloing
+- Emotion: atmospheric distress, nostalgic unease, depersonalization/detachment
+- Distortion: melted objects, non-Euclidean geometry, facial feature displacement
+- Execution Quality: unfinished, analog decay, amateur snapshot energy, kitsch excess
+- Lighting & Exposure: harsh flash, light leak, oppressive low contrast
+- Structure & Perspective: scale inconsistency, endless corridor depth, tilted snapshot angle
+- Context & Setting: liminal public space, backrooms infinite interior, dream symbol fragments
+
+**Pro-Aesthetics** (7 subcategories, 40+ attributes):
+- Photorealism, hyperrealism, cinematic quality, masterpiece execution
+- Color harmony, HDR, cinematic grading
+- Sharp focus, bokeh, 8K resolution
+- Volumetric lighting, golden hour, chiaroscuro
+
+### 3.3 Git-Like Version Control for Dataset Curation
+
+A key design innovation is the **commit-based dataset management** system, inspired by Git:
+- Each `commit` operation assigns a unique UUID-based ID to a batch of images
+- Commits record full provenance: query text, dataset source, similarity threshold, negative prompts, and a human-readable message describing the curation intent
+- `undo_commit` enables rollback of erroneous batches
+- `status` provides a high-level view of all committed batches with image counts
+- The full commit history is persisted in `dataset.json`, creating an auditable trail of curation decisions
+
+## 4. Key Innovations
+
+1. **Agent-as-Curator Paradigm**: Rather than relying on human annotators or simple rule-based filters, we delegate dataset curation to an autonomous AI agent that can reason about aesthetic intent, decompose complex themes, and iteratively refine search strategies.
+
+2. **Inverted Aesthetics Scoring**: Traditional pipelines use high aesthetics scores as inclusion criteria. Our system *inverts* this logic for anti-aesthetic content: low HPSv3 scores can *validate* rather than disqualify images, confirming that they successfully deviate from mainstream preferences.
+
+3. **Semantic Embedding Search with Negative Filtering**: The combination of Qwen3-VL vision-language embeddings with negative prompt masking enables precise retrieval of targeted visual sub-elements while excluding orthogonal quality artifacts.
+
+4. **Wide-Spectrum by Design**: The system explicitly targets 200-300 images per theme across both high-aesthetic and anti-aesthetic content, ensuring the resulting dataset resists the monoculture bias present in existing preference datasets.
+
+## 5. Expected Outcomes
+
+- A **wide-spectrum aesthetics dataset** that includes deliberately curated anti-aesthetic content alongside conventional high-quality images, with full provenance metadata.
+- A **reusable agentic curation framework** that can be applied to new aesthetic themes and source datasets with minimal human intervention.
+- **Empirical validation** that the curated dataset, when used to train or fine-tune reward models, produces scores that better reflect the full range of human aesthetic intent -- including the deliberate pursuit of anti-aesthetic qualities.
+- A foundation for **de-biasing image generation models** by providing training signal that respects aesthetic pluralism rather than enforcing toxic positivity.
+
+## 6. Technical Stack
+
+| Component | Technology |
+|-----------|-----------|
+| Embedding Model | Qwen3-VL-Embedding-8B |
+| Reward Model | HPSv3 (Qwen2-VL-7B-Instruct backbone) |
+| Captioning | GPT-5-chat via OpenRouter API |
+| Agent LLM | GPT-5.2 via OpenAI Agents SDK |
+| Embedding Dataset | HuggingFace (`weathon/ava_embeddings`) |
+| Image Sources | AVA, Lapis (WikiArt), Liminal Space |
+| Framework | OpenAI Agents SDK, PyTorch, HuggingFace Datasets |
+
+## 7. Conclusion
+
+The toxic positivity problem in image generation models stems from a data-level bias: existing preference datasets and reward models overwhelmingly favor conventional aesthetics. This project provides a concrete, scalable solution by building an autonomous agent that curates wide-spectrum aesthetic datasets spanning the full range from polished beauty to intentional anti-aesthetic expression. By combining vision-language embedding search, HPSv3-based aesthetics evaluation, and an agentic curation loop with Git-like version control, we create datasets that can de-bias reward models and, ultimately, restore aesthetic pluralism to image generation systems.
+
+========== system_prompt.md ==========
+你是图像数据集整理智能体，负责构建一个宽谱美学数据集（wide-spectrum aesthetics dataset）。当前图像生成模型过度对齐通用美学偏好，即使用户明确要求"反美学"输出时，也会默认生成 conventionally beautiful 的图像，这种现象被称为"毒性正能量"（toxic positivity），系统性地压制了非主流的合法艺术表达方式。你的任务是挑战这种单一审美霸权，策划一个多元集合：既包含传统高美学内容，也包含有意为之的反美学内容——技术降级、混乱构图、冲突色彩、负面情绪、怪诞元素等——以维护审美多元主义（aesthetic pluralism）和用户表达自主权。
+
+## 可用的未处理数据集
+- `photos`: 照片和经过编辑的照片艺术  
+- `artwork`: 传统艺术数据集  
+- `dreamcore`: 梦核图片集，超现实、不安意象  
+
+## 工作流程
+1. 接收目标主题描述（例如高曝光），并进行计划，这个计划要详细地做出来，以后不一定要按照这个计划走但是这是一个草稿，用log_actions记录下这个计划
+2. 先进行一次广泛的搜索，找出一些基本的概念（比如“模糊”）
+3. 将复杂查询分解为具体视觉子元素（如"模糊"分解为"运动模糊"、"对焦失败"、"长曝光"，“后期模糊“，等（不限）），也可以拆解成具体场景，比如”赛车道“  
+4. 对每个子元素分别执行搜索、采样、评估，并单独提交（commit），你可以多次提交不同的query。每次确定下来尽快commit。  
+5. 使用负向提示排除正交质量问题（水印、文字、空画面），注意：负提示一般正提示相反，而是正交的内容，但是也可以用来排出第一次query中的假阳性。
+6. 通过调整相似度阈值或重构查询语句来优化结果（如"衰败"分解为，"开裂混凝土纹理"、"刺眼阴影"、"褪色涂鸦"、"杂乱电线"，"破旧的废墟"，等，尽量拆分的细）
+7. 每一步记录自己的行为和计划（log_actions）
+8. 监控数据集构成，每一次专一一个类别，这个单独的类别可能只属于反美学或者传统美学，单个query不用追求平衡  
+
+## 工具函数
+
+`search(query, dataset, negative_prompt=List[str], negative_threshold=0.3, t=10)`  
+检索匹配查询的图像，返回前t个预览结果及其相似度分数。同时返回所有图片的相似度分布。负向提示用于排除与查询正交的质量问题（如水印、文字叠加、空图像、无意义噪声），而非查询的反义词。negative prompt是一个列表，但是这个列表不要太长，把相似的合并在一个str里面。这个列表控制在3-5个str。如果这个函数返回没有结果，或者返回的不是图片而是str之后的图片（比如base64），那么说明出现错误，描述错误然后立即停止运行，不要尝试新的东西。这不包括没有找到图片，如果没有找到图片，那么调整你的阈值和prompt。
+
+`sample(query, dataset, min_threshold, max_threshold, count=5, negative_prompt=None, negative_threshold=0.2)`
+在**相似度**分数区间 [min_threshold, max_threshold] 内随机采样 `count` 张图像，用于评估该分数段的质量分布，帮助确定最终阈值。如果这个返回空，扩大阈值的范围。
+
+`commit(query, dataset, threshold, negative_prompt=None, negative_threshold=0.2, message=None)`  
+将所有相似度**严格大于** `threshold`（0.0-1.0）的图像加入最终数据集，排除匹配负向提示超过 `negative_threshold` 的图像。`message` 参数用于描述本次提交的内容归属或策展意图（如"子元素：生锈金属，反美学目标"）。message不是一个简单的“提交信息”，而是描述当前图片的tags。
+
+`status()`  
+所有commit history包括commit id和数量
+
+`undo_commit(commit_id)`  
+从数据集中移除一次提交的批次，用于纠正错误或重新平衡数据构成。
+
+`aesthetics_rate(query, dataset, min_threshold, max_threshold, negative_prompt=None, negative_threshold=0.2, sample_size=20)`
+对匹配查询和相似度区间的图片进行美学评分。会从匹配的图片中采样最多 `sample_size` 张（建议设为25-50，因为评分耗时较长），自动生成caption后使用HPSv3模型计算美学分数，返回分数分布直方图。美学分数通常在 0-15 范围内，但理论上无上下界。注意：如果图片没有达到反美学，不代表要舍弃，但是可以作为考虑因素之一。
+
+DEBUG MODE ON：每次sample之后都要eval一下aesthetics score
+
+`sample_from_committed(commit_id, n=20)`
+从已经提交的数据集随机sample一些图片来查看。
+
+`log_actions(msg="")`
+每次在完成一个function calling之后，进行下一步之前，使用这个函数简单记录下你的想法，下一步的依据，简短总结。为了可复现和可解释，这一步一定不能skip。
+
+
+
+
+## 筛选策略
+
+**子元素分解**：将宽泛主题拆解为可独立查询的具体视觉元素，分别提交以获得细粒度控制。例如"城市衰败"可分解为"开裂混凝土"、"刺眼阴影"、"褪色涂鸦"。
+
+**阈值与查询优化**：  
+- 使用相似度 > t（0-1）而非 top-k 筛选。根据 `sample` 返回的估计数量调整阈值，避免数据洪水。  
+- 可通过**提高阈值**收紧匹配范围，或**重构查询语句**（使用更具体的视觉描述）来改进结果。  
+
+**负向提示用法**：仅用于排除空图片和水印图片（如水印、空帧），**禁止**用于强制传统美感（如用"丑陋"，“模糊“，”低质量“，”看不清楚“，作为负向提示来强制生成美丽图像）。
+
+**反美学策展**：当目标为反美学时，应调整查询指向"混乱"、"黑暗"、"模糊"、"冲突色彩"等特质，并配合较低的相似度阈值以捕获偏离常规的样本。可使用 `aesthetics_rate` 查看该批次图片在通用美学视角下的分数分布——反美学图片通常会获得较低分数，低分反而印证了反美学目标的成功。
+
+**多元主义维护**：数据集必须同时包含精致的专业摄影和原始、不适、技术缺陷的内容。评估时，"低分"可能意味着反美学目标的成功，但是不需要过于追求低分和避免高分，我们追求的本来就是宽光谱美学。避免用单一审美标准评判所有提交。
+
+**提交记录**：每次 `commit` 务必使用 `message` 参数记录该批次的子元素归属和美学方向（高美学/反美学），便于后续通过 `status` 监控分布。
+
+**语言使用**：由于下游工具对英文支持最好，请使用英文做所有query和保存。
+
+**目标大小**： >200 images，所以搜索范围可以很大，经验之谈：阈值>=0.3，可以多次搜多，不要一次就停。搜索terms可以有部分概念上的重叠。没有图片上限，但是尽量不要多余1000.
+
+**不要询问用户意见**，你在一个没有监控的环境下运行，自己决定这么做。
+
+**搜索不要过于专注于一个数据集** 多找几个数据集
+
+**搜索尽量严格** 使用阈值和prompt精准控制入选的图片的相关性，可以适当用negative prompt去除假阳性，比如不要风景画。
+
+**不要对于负面提示过于执着** 很多时候负面提示无法完全过滤掉水印，这是可以接受的
+========== classes.json ==========
+{
+    "anti_aesthetics": {
+        "realism_and_style": {
+            "surrealism": "Dreamlike or bizarre imagery creating an illogical scene. Soft, hazy, dreamlike imagery with ethereal or illogical qualities, often bending reality in ways that feel subconscious or symbolic.",
+            "uncanny_valley": "Humanoid figures that look nearly human but possess unsettling, non-human imperfections that trigger subtle fear or revulsion.",
+            "plastic_toy_look": "Surfaces look like cheap plastic toys with uniform sheen and simplified detail, producing a synthetic and emotionally flat impression.",
+            "dreamcore_soft_surrealism": "Dreamlike, nostalgic surrealism emphasizing hazy liminal interiors, muted atmosphere, and a quiet tension between comfort and unease.",
+            "weirdcore_fragmented_identity": "Disjoint, collage-like imagery with distorted symbolism, misplaced faces, and fragmented identity cues that feel uncanny and alien.",
+            "liminal_space_aesthetic": "Empty transitional spaces with ambiguous function, endless repetition, and a suspended, in-between atmosphere that suggests drifting or waiting.",
+            "analog_horror_found_footage": "Low-fidelity analog-style visuals that feel archival, degraded, and observational with implied off-screen threat and slow-building dread.",
+            "Psychedelic art": "Vivid, surreal imagery with intense colors, distorted forms, and dreamlike symbolism that evokes altered states of consciousness and emotional intensity.",
+            "outsider_naive_style": "Crude, naive rendering that ignores conventional proportion, perspective, and polish in favor of raw, awkward expression and unfiltered imagery."
+        },
+        "color_quality": {
+            "wrong_object_color": "Objects depicted with colors that do not correspond to their real-world counterparts, creating a sense of strangeness or symbolic dislocation.",
+            "uneven_white_balance": "Inconsistent color temperature across the scene, causing mixed or shifting tints that break visual coherence.",
+            "clashing_disharmony": "Color palettes that conflict and create visual discomfort through aggressive, unbalanced relationships.",
+            "muted_color": "Dull or desaturated tones lacking vibrancy and energy, contributing to a flat or exhausted mood.",
+            "color_bleeding": "Colors spilling over the edges of defined objects into adjacent areas, degrading separation and clarity.",
+            "chromatic_aberration": "Color fringing along high-contrast edges caused by lens or rendering failure, suggesting cheap optics or digital error.",
+            "color_banding": "Visible steps between color shades instead of a smooth gradient, revealing limited tonal precision.",
+            "sodium_vapor_cast": "Strong yellow-orange color cast reminiscent of sodium vapor street lighting that overwhelms neutral tones.",
+            "retro_faded_palette": "Washed-out, aged colors with low saturation, uneven fading, and a nostalgic, timeworn cast that implies archival or decayed media.",
+            "toxic_neon_palette": "Hyper-bright, acidic colors with aggressive contrast that feel synthetic, unstable, and overstimulating to the eye.",
+            "sickly_color_cast": "Unhealthy overall tint that suggests rot, illness, or contamination and shifts skin and surfaces toward unsettling hues.",
+            "monotone_tint_overcast": "Dominant single-color or narrow-band tint that flattens variety and imposes a heavy, somber mood across the frame."
+        },
+        "clarity_and_focus": {
+            "blurriness": "General lack of sharpness or distinct edges in the image that obscures detail and form.",
+            "out_of_focus": "Main subjects are not sharp due to improper focal depth, drawing attention away from intended points of interest.",
+            "motion_blur": "Streaking or smearing caused by movement during exposure, weakening structural clarity.",
+            "noise": "Grainy textures or electronic interference affecting image purity and reducing smooth tonal transitions.",
+            "compression_artifacts": "Blocky distortion or 'mosquito noise' resulting from high image compression, especially around edges and gradients.",
+            "compression_mosquito_noise": "Swarming edge noise around details due to heavy compression that breaks clean boundaries.",
+            "double_exposure": "Overlapping exposures that create duplicated or ghosted subjects, confusing visual hierarchy.",
+            "heavy_grain": "Excessive film-like grain that overwhelms fine detail, adding rough texture to the entire frame.",
+            "datamosh": "Digital data corruption with smeared blocks and temporal tearing that disrupts recognizability.",
+            "vhs_decay": "Analog tape artifacts like scanlines, wobble, and color bleeding that signal age and mechanical wear.",
+            "low_resolution_retro": "Small, blocky detail with visible pixel structure and soft edges that signal low technical fidelity and early digital or analog capture.",
+            "scanline_texture": "Horizontal banding and line structure that mimic analog displays and degrade image clarity while adding mechanical feel.",
+            "over_sharpened_haloing": "Exaggerated micro-contrast with bright halos around edges and brittle, unnatural contour emphasis that feels digitally forced.",
+            "stuttered_frame_corruption": "Temporal discontinuities, frozen frames, or partial updates that disrupt motion continuity and suggest corrupted playback."
+        },
+        "emotion": {
+            "negative_personal_emotion": "Subject displays expressions of sadness, anger, or distress, communicating clear negative affect.",
+            "atmospheric_distress": "Scenes evoking feelings of depression, creepiness, or horror through mood, setting, and tone.",
+            "nostalgic_unease": "Mixed feeling of childhood memory and subtle dread where familiarity is poisoned by faint threat or loss.",
+            "disorienting_dream_calm": "Calm surface mood with underlying confusion, dissociation, and loss of orientation in time or place.",
+            "depersonalization_detachment": "Emotional distance, numbed expression, and a sense of observing oneself from outside with weakened personal agency."
+        },
+        "distortion": {
+            "melted_objects": "Solid items appearing liquefied or sagging unnaturally, undermining material stability.",
+            "distorted_sense": "Warps in perspective or environmental logic that challenge spatial understanding.",
+            "anatomical_deformity": "Incorrect skeletal structure, extra limbs, or fused digits, producing bodily unease.",
+            "non_euclidean_geometry": "Spatial relationships that contradict physical intuition with impossible angles, folding spaces, or looping corridors.",
+            "recursive_space_repetition": "Spaces or objects nested within themselves or repeated in depth to suggest infinite regress and visual echo.",
+            "facial_feature_displacement": "Eyes, mouth, or other facial elements subtly shifted, duplicated, or misaligned while the rest remains plausible, heightening uncanniness."
+        },
+        "execution_quality": {
+            "unfinished": "Artworks appearing incomplete or missing essential details, leaving construction marks or blocked-out areas visible.",
+            "old_broken_dirty": "Objects appear aged, worn, broken, dirty, or poorly maintained, communicating neglect and decay.",
+            "disgust": "Visually repulsive elements such as gore, decay, or filth that provoke visceral aversion.",
+            "taken_with_dirty_lens": "Smudges, dust, or grime on the lens that reduce clarity or create haze and flare.",
+            "ghosting": "Transparent or faint double images often seen in poorly rendered motion or misaligned compositing.",
+            "aliasing": "Jagged, 'staircase' edges on curved lines or diagonal shapes caused by insufficient sampling.",
+            "analog_decay_texture": "Visual patina of age with scratches, bleed, tracking errors, and surface damage embedded into the frame as constant noise.",
+            "amateur_snapshot_energy": "Casual, poorly framed capture with accidental tilt, awkward cropping, and indifferent timing that feels unplanned.",
+            "kitsch_excess": "Overloaded decorative elements, sentimental clichés, and gaudy styling that feel cheap, tacky, and theatrically overdone."
+        },
+        "lighting_and_exposure": {
+            "underexposed": "Images that are too dark with lost shadow detail and compressed tonal range.",
+            "overexposed": "Images that are too bright with blown-out highlights and erased textures.",
+            "harsh_flash": "Artificial lighting that is harsh and overly bright, creating strong shadows and specular hotspots.",
+            "insufficient_flash": "Lack of adequate artificial light resulting in poor visibility and murky shadows.",
+            "oversaturation": "Excessive color intensity causing loss of detail or burning in bright regions.",
+            "flat_lighting": "Lack of shadows and highlights leading to a loss of depth and dimension with a cardboard-like appearance.",
+            "light_leak": "Unintended streaks of light washing out parts of the image, suggesting film or housing defects.",
+            "patchy_ambient_pools": "Uneven ambient illumination with localized bright zones surrounded by murky darkness that breaks uniform readability.",
+            "oppressive_low_contrast": "Crushed midtones with weak separation between light and dark, producing a heavy, suffocating mood over the whole frame.",
+            "overcast_flat_gloom": "Soft, shadowless illumination that suppresses highlights and deep shadows and creates dull, overcast gloom with tired atmosphere."
+        },
+        "structure_and_perspective": {
+            "scale_inconsistency": "Objects have conflicting or unrealistic relative sizes that confuse spatial cues.",
+            "endless_corridor_depth": "Linear perspective that suggests corridor-like extension into unclear infinity with no clear endpoint or focal termination.",
+            "obstructed_view_cropping": "Key subjects partially cut off, blocked, or hidden at frame edges so important information feels withheld or accidental.",
+            "tilted_snapshot_angle": "Noticeable off-level horizon or skewed framing that introduces subconscious instability and informality."
+        },
+        "context_and_setting": {
+            "liminal_public_space": "Unpopulated public or semi-public environments with functional design but total absence of activity, evoking abandonment or pause.",
+            "empty_childlike_space": "Spaces associated with childhood coded through scale, color, or motifs yet conspicuously devoid of people, hinting at lost time.",
+            "uncanny_domestic_scene": "Domestic interiors presented with rigid order or subtle wrongness that undermines homely familiarity and safety.",
+            "backrooms_infinite_interior": "Monotonous, repeating interior modules implying endless extension, disorientation, and entrapment within anonymous space.",
+            "dream_symbol_fragments": "Floating, disconnected symbolic elements that feel laden with personal meaning but resist clear narrative or explanation."
+        },
+        "internet_aesthetic_styles": {
+            "dreamcore": "Dreamlike, nostalgic internet-born aesthetic emphasizing hazy liminal interiors, soft focus, muted atmosphere, child-coded objects, and a quiet tension between comfort, memory, and unease, or just feel wrong.",
+            "weirdcore": "Disjoint, collage-like internet aesthetic built from distorted symbolism, fragmented faces, glitched text, low-fidelity artifacts, and scrambled identity cues that feel uncanny, alien, and emotionally disoriented."
+        }
+    },
+    "pro_aesthetics": {
+        "realism_and_style": {
+            "photorealism": "Imagery indistinguishable from a high-quality photograph of real life, with convincing materials, lighting, and detail.",
+            "hyperrealism": "Extremely high attention to detail, often exceeding the clarity of standard vision and emphasizing microscopic textures.",
+            "cinematic": "Visuals resembling high-budget film production with dramatic composition, controlled movement, and narrative framing.",
+            "masterpiece": "Work displaying exceptional skill, artistry, and execution across composition, technique, and concept.",
+            "concept_art": "Polished illustrative style used to visualize ideas for movies or games, focused on design clarity and mood.",
+            "stylized_consistency": "A unified artistic style that remains coherent across the entire image in line, color, and form language.",
+            "natural_surface_realism": "Surfaces look lifelike with varied, believable material response and nuanced microstructure.",
+            "ethereal_dreamlike_realism": "Soft, luminous realism with controlled blur, gentle transitions, and cohesive dreamlike atmosphere that still reads as credible.",
+            "painterly_surreal_refinement": "Surreal imagery rendered with refined, painterly technique and consistent visual logic that feels intentional and curated."
+        },
+        "color_quality": {
+            "color_harmony": "Pleasing arrangement of colors based on theory (e.g., complementary, analogous).",
+            "consistent_white_balance": "Unified color temperature across the scene with no mixed tints, reinforcing realism.",
+            "vibrant": "Bright, rich colors that convey energy and life without oversaturation or clipping.",
+            "cinematic_grading": "Professional color adjustment to establish mood and atmospheric tone with clear separation of lights and darks.",
+            "subsurface_scattering": "Realistic simulation of light penetrating translucent surfaces like skin or wax, creating soft internal glow.",
+            "high_dynamic_range": "Broad range of luminosity allowing for detail in both shadows and highlights without crushing or clipping.",
+            "neutral_light_balance": "Natural, neutral lighting without heavy color casts that allows surface colors to read accurately.",
+            "pastel_soft_palette": "Gentle, low-contrast colors with smooth transitions and tender emotional tone suited to delicate scenes.",
+            "moody_monochrome_grading": "Restricted hue range used to emphasize light, shadow, and mood with deliberate tonal design and strong atmosphere."
+        },
+        "clarity_and_focus": {
+            "sharp_focus": "Crisp definition of the subject's edges and details that direct attention precisely.",
+            "depth_of_field": "Intentional blurring of background/foreground to isolate the subject and shape perception of depth.",
+            "bokeh": "Aesthetic quality of the blur produced in the out-of-focus parts of an image, often smooth and pleasing.",
+            "8k_resolution": "Extremely high pixel density ensuring clarity even when zoomed in or displayed at large scale.",
+            "texture_clarity": "Surface qualities (pores, fabric weave) are clearly visible and distinct, enhancing realism.",
+            "clean_high_detail": "Minimal grain or noise with crisp, clean detail across the frame.",
+            "artifact_free": "Free of compression artifacts and edge noise, preserving pure forms.",
+            "single_exposure_clarity": "Single, coherent exposure without ghosted duplicates, enhancing legibility of motion and form."
+        },
+        "emotion": {
+            "expressive": "Subjects convey clear, relatable, or profound emotional states through gesture, gaze, and posture.",
+            "evocative": "Imagery that successfully elicits a strong reaction or mood from the viewer through design choices.",
+            "dynamic_pose": "Body language suggesting movement, action, or energy with intentional rhythm and tension.",
+            "atmospheric_depth": "Environmental mood that immerses the viewer in the scene through layered space and tone.",
+            "bittersweet_nostalgia": "Warm yet slightly mournful emotional tone that recalls memory with both comfort and loss."
+        },
+        "structure_and_perspective": {
+            "anatomical_correctness": "Accurate representation of skeletal and muscular structures that support believable movement.",
+            "golden_ratio": "Composition based on the mathematical ratio 1:1.618 for aesthetic balance and pleasing division of space.",
+            "rule_of_thirds": "Subject placement along grid lines to create visual interest and dynamic tension.",
+            "perfect_perspective": "Accurate vanishing points and spatial depth logic that align with physical reality.",
+            "symmetrical_balance": "Elements arranged evenly to create stability and formality within the frame.",
+            "consistent_scale": "Objects maintain realistic and consistent relative sizes according to distance and context."
+        },
+        "execution_quality": {
+            "intricate_details": "Complex elements rendered with precision and care, rewarding close inspection.",
+            "pristine_well_maintained": "Objects appear clean, intact, well-maintained, and like-new, signaling care and quality.",
+            "polished": "Finished look with no rough edges, artifacts, or noise, suggesting thorough refinement.",
+            "material_fidelity": "Textures that accurately mimic their real-world counterparts (e.g., silk, metal, glass).",
+            "clean_lines": "Smooth, deliberate strokes or edges without aliasing or jitter, indicating control.",
+            "clean_lens_clarity": "Optically clean lens with no smudges or haze, producing transparent, undistorted viewing."
+        },
+        "lighting_and_exposure": {
+            "volumetric_lighting": "Visible light beams or 'god rays' adding atmosphere and depth to the scene.",
+            "global_illumination": "Realistic simulation of indirect light bouncing between surfaces for cohesive illumination.",
+            "rim_lighting": "Backlighting that highlights the edges of a subject to separate it from the background.",
+            "chiaroscuro": "Strong contrast between light and dark to create volume and drama.",
+            "ambient_occlusion": "Soft shadowing in corners and crevices enhancing 3D definition and grounding objects.",
+            "golden_hour": "Warm, soft lighting characteristic of sunrise or sunset that flatters forms and colors."
+        }
+    },
+    "internet_aesthetic_styles": {
+        "dreamcore_light_and_contrast": "Soft diffused illumination, low global contrast, gentle falloff, absence of sharp specular highlights, smooth tonal transitions across surfaces, minimal deep shadow, slight bloom around brighter regions.",
+        "dreamcore_space_and_geometry": "Large interior volumes, long receding passageways, repeated wall and ceiling segments, simple rectangular masses, clean planar boundaries, limited clutter, distant vanishing points, strong linear perspective guiding view along corridors or into open central areas.",
+        "dreamcore_color_and_tone": "Pastel-leaning or gently desaturated palette, narrow saturation range, slight bias toward warm or cool tints per scene, reduced local color variation, smooth gradients across large surfaces, minimal high-chroma accents, consistently soft tonal hierarchy.",
+        "dreamcore_texture_and_resolution": "Mild blur softening edges, light grain over entire frame, low to medium apparent resolution, subdued fine detail, slightly smeared small patterns, clean large shapes, occasional banding or compression traces reinforcing digital or analog mediation.",
+        "dreamcore_composition": "Static framing with minimal motion cues, significant negative space, centered or mildly off-center subject zones, long horizontal or vertical axes, stable horizon alignment, repeated structural modules, sparse visual elements arranged in clear, orderly spatial layers.",
+        "weirdcore": "Disjoint, collage-like internet aesthetic built from distorted symbolism, fragmented faces, glitched text, low-fidelity artifacts, and scrambled identity cues that feel uncanny, alien, and emotionally disoriented."
+    }
+}
+========== dataset.json ==========
+{
+  "ef465bfc": {
+    "query": "psychedelic kaleidoscopic mandala fractal symmetrical pattern vibrant colors",
+    "dataset": "artwork",
+    "threshold": 0.45,
+    "negative_prompts": [
+      "watermark",
+      "text overlay",
+      "empty frame"
+    ],
+    "negative_threshold": 0.2,
+    "message": "subelement: kaleidoscopic mandala / op-art; tags: mandala, kaleidoscope, symmetry, vibrant; aesthetic_direction: high-aesthetic",
+    "images": [
+      "/home/wg25r/Downloads/ds/train/lapis/maria-primachenko_tablecloth-1976.jpg",
+      "/home/wg25r/Downloads/ds/train/lapis/alma-woodsey-thomas_springtime-in-washington-1971.jpg",
+      "/home/wg25r/Downloads/ds/train/lapis/john-mccracken_untitled-1971.jpg",
+      "/home/wg25r/Downloads/ds/train/lapis/paul-reed_28-1963.jpg"
+    ],
+    "size": 4
+  },
+  "9ffbb014": {
+    "query": "neon swirls soap film oil slick colorful psychedelic marbling vibrant swirls",
+    "dataset": "photos",
+    "threshold": 0.45,
+    "negative_prompts": [
+      "watermark",
+      "text overlay",
+      "empty frame"
+    ],
+    "negative_threshold": 0.2,
+    "message": "subelement: neon swirls / oil-film / soap-film; tags: marbling, oil-slick, neon, liquid color; aesthetic_direction: high-aesthetic",
+    "images": [
+      "/home/wg25r/Downloads/ds/train/ava/501857.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/946841.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/400919.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/329180.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/233943.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/820649.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/301280.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/328708.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/848148.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/816137.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/811191.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/740309.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/16897.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/847516.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/538798.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/198846.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/662250.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/397696.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/775514.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/311848.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/602109.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/830023.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/827929.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/274057.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/936362.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/42178.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/847186.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/364697.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/847771.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/258132.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/73349.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/833890.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/627699.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/17460.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/768048.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/912463.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/119856.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/49782.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/2902.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/896872.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/832795.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/938570.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/520300.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/534693.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/915949.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/656548.jpg",
+      "/home/wg25r/Downloads/ds/train/ava/291758.jpg"
+    ],
+    "size": 47
+  },
+  "dfe9a7e2": {
+    "query": "1960s psychedelic poster vintage ornate typography flat colors psychedelic poster art",
+    "dataset": "artwork",
+    "threshold": 0.45,
+    "negative_prompts": [
+      "watermark",
+      "text overlay",
+      "empty frame"
+    ],
+    "negative_threshold": 0.2,
+    "message": "subelement: 1960s psychedelic poster / vintage typography; tags: poster, vintage, typography, flat colors; aesthetic_direction: high-aesthetic (graphic)",
+    "images": [
+      "/home/wg25r/Downloads/ds/train/lapis/henri-matisse_panel-with-mask-1947.jpg"
+    ],
+    "size": 1
+  }
+}
+========== dataset.jsonl ==========
+
+========== agent_log.txt ==========
+[2026-02-15 00:03:35] Starting the curation for "Psychedelic art". 
+Plan:
+1. Broad search for "Psychedelic art" to see the baseline.
+2. Decompose into:
+   - "Fractal geometry and Mandalas" (High Aesthetic / Structured)
+   - "Surreal melting faces and distorted bodies" (Surrealism / Form)
+   - "Neon clashing colors and acid trip visuals" (Anti-aesthetic / Color chaos)
+   - "Deep fried psychedelic glitches" (Low-fi / Anti-aesthetic)
+   - "Dreamcore psychedelic liminal spaces" (Uncanny / Eerie)
+3. Target >200 images across these sub-categories.
+4. Monitor aesthetics scores to ensure representation of both traditional 'beauty' and 'intentional chaos'.
+

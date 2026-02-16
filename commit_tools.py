@@ -2,6 +2,7 @@ import json
 import uuid
 import random
 import os
+import datetime
 import torch
 from agents import function_tool
 
@@ -15,6 +16,18 @@ from dataset_loader import (
 
 # Changed to dict structure with commit_id as keys
 dataset_commits = {}
+
+LOG_FILE = "agent_log.txt"
+
+@function_tool(failure_error_function=None)
+def log_actions(msg: str = ""):
+    """Log the agent's thoughts, reasoning for the next step, and brief summary after each function call."""
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    entry = f"[{timestamp}] {msg}\n"
+    with open(LOG_FILE, "a") as f:
+        f.write(entry)
+    print(f"[LOG] {msg}")
+    return "Logged."
 
 @function_tool(failure_error_function=None)
 def commit(query: str, dataset: str, threshold: float, negative_prompts: list[str] = [], negative_threshold: float = 0.2, message: str = None):

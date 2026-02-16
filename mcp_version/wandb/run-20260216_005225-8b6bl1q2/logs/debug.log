@@ -1,0 +1,26 @@
+2026-02-16 00:52:25,323 INFO    MainThread:3041180 [wandb_setup.py:_flush():80] Current SDK version is 0.21.0
+2026-02-16 00:52:25,323 INFO    MainThread:3041180 [wandb_setup.py:_flush():80] Configure stats pid to 3041180
+2026-02-16 00:52:25,323 INFO    MainThread:3041180 [wandb_setup.py:_flush():80] Loading settings from /home/wg25r/.config/wandb/settings
+2026-02-16 00:52:25,323 INFO    MainThread:3041180 [wandb_setup.py:_flush():80] Loading settings from /home/wg25r/aas2/AAv2/mcp_version/wandb/settings
+2026-02-16 00:52:25,323 INFO    MainThread:3041180 [wandb_setup.py:_flush():80] Loading settings from environment variables
+2026-02-16 00:52:25,323 INFO    MainThread:3041180 [wandb_init.py:setup_run_log_directory():703] Logging user logs to /home/wg25r/aas2/AAv2/mcp_version/wandb/run-20260216_005225-8b6bl1q2/logs/debug.log
+2026-02-16 00:52:25,323 INFO    MainThread:3041180 [wandb_init.py:setup_run_log_directory():704] Logging internal logs to /home/wg25r/aas2/AAv2/mcp_version/wandb/run-20260216_005225-8b6bl1q2/logs/debug-internal.log
+2026-02-16 00:52:25,323 INFO    MainThread:3041180 [wandb_init.py:init():830] calling init triggers
+2026-02-16 00:52:25,323 INFO    MainThread:3041180 [wandb_init.py:init():835] wandb.init called with sweep_config: {}
+config: {'_wandb': {}}
+2026-02-16 00:52:25,323 INFO    MainThread:3041180 [wandb_init.py:init():871] starting backend
+2026-02-16 00:52:25,562 INFO    MainThread:3041180 [wandb_init.py:init():874] sending inform_init request
+2026-02-16 00:52:25,585 INFO    MainThread:3041180 [wandb_init.py:init():882] backend started and connected
+2026-02-16 00:52:25,586 INFO    MainThread:3041180 [wandb_init.py:init():953] updated telemetry
+2026-02-16 00:52:25,595 INFO    MainThread:3041180 [wandb_init.py:init():977] communicating run to backend with 90.0 second timeout
+2026-02-16 00:52:26,462 INFO    MainThread:3041180 [wandb_init.py:init():1029] starting run threads in backend
+2026-02-16 00:52:27,018 INFO    MainThread:3041180 [wandb_run.py:_console_start():2458] atexit reg
+2026-02-16 00:52:27,019 INFO    MainThread:3041180 [wandb_run.py:_redirect():2306] redirect: wrap_raw
+2026-02-16 00:52:27,019 INFO    MainThread:3041180 [wandb_run.py:_redirect():2375] Wrapping output streams.
+2026-02-16 00:52:27,019 INFO    MainThread:3041180 [wandb_run.py:_redirect():2398] Redirects installed.
+2026-02-16 00:52:27,021 INFO    MainThread:3041180 [wandb_init.py:init():1075] run started, returning control to user process
+2026-02-16 00:55:50,709 INFO    MainThread:3041180 [wandb_run.py:_finish():2224] finishing run 3dsmile/aas2/8b6bl1q2
+2026-02-16 00:55:50,710 INFO    MainThread:3041180 [wandb_run.py:_atexit_cleanup():2423] got exitcode: 0
+2026-02-16 00:55:50,710 INFO    MainThread:3041180 [wandb_run.py:_restore():2405] restore
+2026-02-16 00:55:50,711 INFO    MainThread:3041180 [wandb_run.py:_restore():2411] restore done
+2026-02-16 00:55:51,365 INFO    MsgRouterThr:3041180 [mailbox.py:close():129] [no run ID] Closing mailbox, abandoning 1 handles.

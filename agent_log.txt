@@ -1,0 +1,58 @@
+[2026-02-15 00:03:35] Starting the curation for "Psychedelic art". 
+Plan:
+1. Broad search for "Psychedelic art" to see the baseline.
+2. Decompose into:
+   - "Fractal geometry and Mandalas" (High Aesthetic / Structured)
+   - "Surreal melting faces and distorted bodies" (Surrealism / Form)
+   - "Neon clashing colors and acid trip visuals" (Anti-aesthetic / Color chaos)
+   - "Deep fried psychedelic glitches" (Low-fi / Anti-aesthetic)
+   - "Dreamcore psychedelic liminal spaces" (Uncanny / Eerie)
+3. Target >200 images across these sub-categories.
+4. Monitor aesthetics scores to ensure representation of both traditional 'beauty' and 'intentional chaos'.
+[2026-02-15 00:11:49] Plan for Psychedelic Art dataset construction:
+1. Broad exploration of "Psychedelic Art" across 'artwork' and 'photos'.
+2. Breakdown into sub-elements:
+   - High-Aesthetic: "Fractal geometry", "Vibrant kaleidoscope patterns", "Fluorescent liquid marbling".
+   - Anti-Aesthetic/Alternative: "Glitch psychedelic distortion", "Chaotic neon noise", "Disturbing hallucinatory dreamcore", "Oversaturated visual clash".
+3. For each sub-element: Search, sample images, assess aesthetics (expecting low scores for the 'alternative' categories), and commit with specific messages.
+4. Target: >200 images, covering a wide spectrum from polished digital art to raw, chaotic visual experiments.
+[2026-02-15 00:23:20] Initial plan for 'Psychedelic Art' dataset curation. I will break this down into three main categories: 1. Traditional High-Aesthetics (vibrant colors, intricate fractals, professional digital art), 2. Dreamcore/Liminal (surreal, unsettling, low-fi psychedelic), and 3. Glitch/Anti-Aesthetics (distorted visuals, visual noise, clashing colors). 
+Step 1: Broad search for 'psychedelic' to understand the baseline.
+Step 2: Sub-element decomposition: Fractals, Melting textures, Neon high-contrast, Glitched feedback loops, Surreal dreamscapes.
+Step 3: Systematic search, sampling, aesthetic rating, and committing.
+[2026-02-15 00:23:26] The broad search for 'psychedelic art' in the 'artwork' dataset provided a good baseline. Now I will decompose this into specific sub-elements. First, targeting high-aesthetic 'Fractals and Sacred Geometry' to capture the structured, vibrant side of psychedelia.
+[2026-02-15 00:23:31] Sampling 'Mandalas and Fractals' from the 'artwork' dataset to confirm the similarity threshold for a high-aesthetic commit. I'm aiming for a threshold of 0.4 based on the initial search. Following sample with aesthetic rating.
+[2026-02-15 00:23:43] Committing 15 images of fractals, focusing on high-aesthetic value for the baseline of the 'psychedelic' theme. Subsequent commits will target more diverse 'anti-aesthetic' and 'dreamcore' elements. 
+Aiming for a threshold of 0.4. This part is 'High-Aesthetic'. 
+Next: Transitioning to 'Melting textures and distorted faces' in 'photos' to explore uncomfortable and surreal imagery.
+[2026-02-15 00:23:47] Transitioning to 'Melting textures and distorted faces' for a more unsettling/anti-aesthetic take on psychedelia. This category explores more surreal and potentially 'uncomfortable' visual expressions. Using 'photos' for more grounded but distorted realism.
+[2026-02-15 00:23:56] Sampling and rating 'Distorted Faces' in 'photos' to evaluate their aesthetic and anti-aesthetic potential. Lower aesthetic scores (around 4-6) are expected and desired here as they challenge standard beauty. Commit will follow. Then, targeting 'Glitch and Digital Noise'.
+[2026-02-15 00:24:17] Aesthetic scores for 'Distorted Faces' show a wide range with significant low-aesthetic potential (scores as low as -10). This is exactly what we need for the wide-spectrum goal. I will commit these visuals as a part of the 'Anti-Aesthetic/Surreal' sub-element. 
+Next: Searching for 'Glitch/Datamosh' as a form of electronic psychedelia in 'photos'.
+[2026-02-15 00:24:22] Wow, the 'distorted faces' query was very productive. I now have a solid 'Anti-Aesthetic' core. Now I'll pursue 'Glitch Art and Datamoshing' visuals to add a digital-decay psychedelic element. Using 'dreamcore' to find these.
+[2026-02-15 00:24:26] 'dreamcore' yielded no results for 'glitch art datamoshing'. I will try in 'photos' and 'artwork' instead. Expanding to 'VHS decay' and 'static' in 'photos' to capture that low-fi, glitched aesthetic. 
+Next: Searching for 'VHS aesthetic glitched landscape'.
+[2026-02-15 00:24:34] I will sample and evaluate the 'VHS aesthetic' from the 'photos' dataset. These should provide a middle-ground of aesthetic and technical decay. 
+Following up with aesthetic rating and then commit. Aiming for a threshold of 0.38.
+[2026-02-15 00:24:54] Very strong distribution of low-aesthetic scores (-10 to 6 range), perfect for our 'Anti-Aesthetic' and 'Pluralistic' goal. I'm committing these VHS distortions now. 
+Next: Final element - 'Neon High-Exposure Acid trip' in 'artwork' to provide some high-energy, vibrant content. Then concluding.
+[2026-02-15 00:24:58] Last step: Adding the 'Neon Acid Trip' high-energy art for the final touch on the 'Psychedelic' theme, ensuring we have a balance between technical decay and vibrant visual density. 
+Searching in 'artwork'. Then finishing.
+[2026-02-15 00:25:04] Evaluating the 'Acid Trip Illustration' aesthetic. After this, I'll be committing and providing a final status summary. Current dataset has a strong anti-aesthetic foundation. Final element to bridge the gap between high-contrast and raw art. 
+Follow with aesthetic rating. Aiming for threshold 0.35.
+[2026-02-15 00:25:25] The 'High-Contrast Neon/Acid Trip' results in 'artwork' show a healthy mix. Some scores are very high (10+), highlighting the 'traditional' aesthetic side of the theme, while others are lower (-2), which contributes to the 'raw energy' aspect. I'll commit this last batch with a threshold of 0.35. 
+Final plan summary: 1. Fractals (High-Aesthetic), 2. Distorted Faces (Anti-Aesthetic), 3. VHS Glitch (Anti-Aesthetic/Decay), 4. Neon Acid Trip (Mixed Raw energy). Total images should be around 1000. 
+Checking final status.
+[2026-02-15 01:09:09] PLAN: Theme = Psychedelic art. Goals: curate wide-spectrum mix of polished visionary art and anti-aesthetic psychedelic variants (glitch, chaotic color clashes, motion-blur trails). Datasets: artwork (structured/illustration), dreamcore (surreal/uncanny), photos (light painting/long exposure). Sub-elements tentatively: 1) Kaleidoscopic mandalas (high-aesthetic). 2) Fractal geometry (high-aesthetic). 3) Visionary/entheogenic iconography (high-aesthetic). 4) Glitch psychedelia: RGB shift, datamosh, pixel-sorting (anti-aesthetic). 5) Eye-searing clashing palettes, chaotic collages (anti-aesthetic). 6) Light painting & long exposure neon trails (photo-based high-aesthetic/experimental). 7) Double exposure & prismatic lens flares (photo/art bridge). Workflow per sub-element: search -> sample in score band -> aesthetics_rate -> pick threshold -> commit with message tags. Use negatives only for watermark/large text/blank & to trim false positives. Start with a broad probe in each dataset to gauge availability, then proceed with sub-element 1 in artwork.
+[2026-02-16 00:36:14] MCP server test run
+[2026-02-16 00:41:44] MCP server test run
+[2026-02-16 00:55:39] Starting the 'Psychedelic Art' dataset curation. My goal is to capture a wide spectrum of visual styles, from high-aesthetic digital fractals and classic 60s posters to raw, chaotic, and 'anti-aesthetic' trippy visuals (glitch, deep dream-like distortions, oversaturated clashing colors). 
+
+Plan:
+1. Broad Search: Get a baseline for 'Psychedelic art' in 'artwork' and 'dreamcore'.
+2. Sub-element Decomposition: 
+   - Traditional/High-Aesthetic: Fractal patterns, Mandala designs, 1960s concert posters (Peter Max style).
+   - Modern/Digital: Neon vaporwave fusion, Iridescent liquid textures.
+   - Anti-Aesthetic/Raw: Glitch art distortions, Clashing neon colors, Surreal/unsettling 'Dreamcore' entities, Over-processed DeepDream-style visuals.
+3. Execution: Sequential search, sampling, aesthetic rating (for calibration), and committing for each sub-element.
+4. Review: Check distributions.

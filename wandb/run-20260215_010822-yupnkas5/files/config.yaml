@@ -1,0 +1,88 @@
+_wandb:
+    value:
+        cli_version: 0.21.0
+        e:
+            bi1jdgqn7aps8gtilx6ah76kf65h0k8e:
+                codePath: agent_main.py
+                codePathLocal: agent_main.py
+                cpu_count: 56
+                cpu_count_logical: 112
+                cudaVersion: "12.4"
+                disk:
+                    /:
+                        total: "2005769203712"
+                        used: "1783106441216"
+                email: wguo6358@gmail.com
+                executable: /home/wg25r/miniconda/envs/neg/bin/python3
+                git:
+                    commit: 6ee3e928ea44777055fef0e0d340e0709793d9f9
+                    remote: https://github.com/weathon/AAv2.git
+                gpu: NVIDIA RTX A6000
+                gpu_count: 3
+                gpu_nvidia:
+                    - architecture: Ampere
+                      cudaCores: 10752
+                      memoryTotal: "51527024640"
+                      name: NVIDIA RTX A6000
+                      uuid: GPU-058c2ff8-0e0d-ba79-96b8-99c5bdc85e8e
+                    - architecture: Ampere
+                      cudaCores: 10752
+                      memoryTotal: "51527024640"
+                      name: NVIDIA RTX A6000
+                      uuid: GPU-292c05d7-cef3-261e-b438-24530c206940
+                    - architecture: Ampere
+                      cudaCores: 10752
+                      memoryTotal: "51527024640"
+                      name: NVIDIA RTX A6000
+                      uuid: GPU-223f1d69-b595-dd22-d112-fae575ae6ef4
+                host: shandu.ws.ok.ubc.ca
+                memory:
+                    total: "810125438976"
+                os: Linux-6.8.0-94-generic-x86_64-with-glibc2.35
+                program: /home/wg25r/aas2/AAv2/agent_main.py
+                python: CPython 3.10.17
+                root: /home/wg25r/aas2/AAv2
+                startedAt: "2026-02-15T09:08:22.930297Z"
+                writerId: bi1jdgqn7aps8gtilx6ah76kf65h0k8e
+        m: []
+        python_version: 3.10.17
+        t:
+            "1":
+                - 1
+                - 2
+                - 3
+                - 5
+                - 11
+                - 15
+                - 41
+                - 49
+                - 51
+                - 53
+                - 71
+                - 84
+                - 95
+                - 98
+                - 105
+            "2":
+                - 1
+                - 2
+                - 3
+                - 5
+                - 11
+                - 15
+                - 41
+                - 49
+                - 51
+                - 53
+                - 71
+                - 84
+                - 95
+                - 98
+                - 105
+            "3":
+                - 13
+            "4": 3.10.17
+            "5": 0.21.0
+            "6": 4.57.0
+            "12": 0.21.0
+            "13": linux-x86_64

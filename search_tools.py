@@ -2,6 +2,7 @@ import os
 import time
 import random
 import torch
+import wandb
 from agents import function_tool
 from agents.tool import ToolOutputImage
 
@@ -42,14 +43,14 @@ def _caption_single_image(path, max_retries=4):
         try:
             completion = captioning_client.chat.completions.create(
                 extra_body={},
-                model="openai/gpt-5-chat",
+                model="moonshotai/kimi-k2.5",
                 messages=[
                     {
                         "role": "user",
                         "content": [
                             {
                                 "type": "text",
-                                "text": "Caption this image based on physical facts in the image, ignore aesthetics and styles. Only describe what you see in the image, do not add any interpretation or imagination. Be concise and objective."
+                                "text": "Caption this image based on physical facts in the image, ignore aesthetics and styles. Only describe what you see in the image, do not add any interpretation or imagination. Be concise and objective. The caption should be a single short sentence describe the main content of the image. Do not mention the style or aesthetics of the image. Focus on physical facts like objects, colors, and their relationships. Do not add any information that cannot be directly observed from the image."
                             },
                             {
                                 "type": "image_url",
@@ -247,6 +248,11 @@ def sample(query: str, dataset: str, min_threshold: float, max_threshold: float,
     print(f"[LOG] Sampled {len(sampled_paths)} images from {len(paths)} candidates.")
 
     whole_image = grid_stack(sampled_paths, row_size=5)
+
+    # Log collage image to wandb with query as caption
+    if wandb.run is not None:
+        wandb.log({"sample_result": wandb.Image(whole_image, caption=query)})
+
     result = encode(whole_image)
 
     return result

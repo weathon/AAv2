@@ -1,0 +1,41 @@
+Error getting response; filtered.input=[{'content': 'Psychedelic art', 'role': 'user'}]
+Traceback (most recent call last):
+  File "/home/wg25r/aas2/AAv2/agent_main_debug.py", line 136, in <module>
+    result = Runner.run_sync(agent, "Psychedelic art", max_turns=100)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run.py", line 297, in run_sync
+    return runner.run_sync(
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run.py", line 1366, in run_sync
+    return default_loop.run_until_complete(task)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run.py", line 1027, in run
+    turn_result = await model_task
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run_internal/run_loop.py", line 1370, in run_single_turn
+    new_response = await get_new_response(
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run_internal/run_loop.py", line 1465, in get_new_response
+    new_response = await model.get_response(
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/models/openai_chatcompletions.py", line 73, in get_response
+    response = await self._fetch_response(
+  File "/home/wg25r/aas2/AAv2/agent_main_debug.py", line 68, in _patched_fetch_response
+    converted_tools = Conv.convert_tools(tools, handoffs)
+AttributeError: type object 'Converter' has no attribute 'convert_tools'
+Traceback (most recent call last):
+  File "/home/wg25r/aas2/AAv2/agent_main_debug.py", line 136, in <module>
+    result = Runner.run_sync(agent, "Psychedelic art", max_turns=100)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run.py", line 297, in run_sync
+    return runner.run_sync(
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run.py", line 1366, in run_sync
+    return default_loop.run_until_complete(task)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run.py", line 1027, in run
+    turn_result = await model_task
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run_internal/run_loop.py", line 1370, in run_single_turn
+    new_response = await get_new_response(
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/run_internal/run_loop.py", line 1465, in get_new_response
+    new_response = await model.get_response(
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/agents/models/openai_chatcompletions.py", line 73, in get_response
+    response = await self._fetch_response(
+  File "/home/wg25r/aas2/AAv2/agent_main_debug.py", line 68, in _patched_fetch_response
+    converted_tools = Conv.convert_tools(tools, handoffs)
+AttributeError: type object 'Converter' has no attribute 'convert_tools'

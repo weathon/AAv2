@@ -1,0 +1,27 @@
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "/home/wg25r/miniconda/envs/neg/lib/python3.10/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Flash Attention is not i...alled. Falling to SDPA.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+[INIT] Connected to MCP server. Available tools: ['search', 'sample', 'aesthetics_rate', 'commit', 'undo_commit', 'status', 'sample_from_committed', 'log_actions']
+
+============================================================
+[TURN 1/100]
+============================================================
+[TOOL CALL] log_actions({"msg": "Starting the 'Psychedelic Art' dataset curation. My goal is to capture a wide spectrum of visual styles, from high-aesthetic digital fractals and classic 60s posters to raw, chaotic, and 'ant)
+[TOOL RESULT] Logged.
+
+============================================================
+[TURN 2/100]
+============================================================
+[TOOL CALL] search({"query": "psychedelic art 1960s concert posters vibrant trippy patterns", "t": 10, "dataset": "artwork"})
+[TOOL RESULT] Showing top 10 results for 'psychedelic art 1960s concert posters vibrant trippy patterns' in artwork.
+
+============================================================
+[TURN 3/100]
+============================================================
+[TOOL CALL] sample({"query": "psychedelic art 1960s concert posters vibrant trippy patterns", "count": 5, "max_threshold": 0.8, "negative_prompts": ["watermark, white border, blank page"], "dataset": "artwork", "min_thr)

@@ -1,0 +1,53 @@
+[DEBUG] Monkey-patch installed for Converter.items_to_messages
+======================================================================
+IMAGE VERIFICATION TEST
+======================================================================
+
+[SETUP] Agent configured to:
+  - Use OpenRouter with Gemini 3 Flash
+  - Preserve images in tool outputs (preserve_tool_output_all_content=True)
+  - Tool: get_test_image() returns ToolOutputImage with test image
+
+[TEST] Running agent with prompt to describe image
+
+
+[DEBUG] items_to_messages called with preserve_tool_output_all_content=False
+
+[TOOL OUTPUT] Returning test image with colored shapes
+              Image size: (400, 300), Format: JPEG
+
+[DEBUG] items_to_messages called with preserve_tool_output_all_content=False
+
+✗ [VERIFICATION] Tool message #2 is a string (357 chars) - no images!
+
+======================================================================
+LLM RESPONSE:
+======================================================================
+RunResult:
+- Last agent: Agent(name="ImageDescriber", ...)
+- Final output (str):
+    This test image features a simple set of five basic geometric shapes arranged in a cross-like or plus-sign pattern on a solid neutral gray background.
+    
+    Here is a breakdown of the shapes and their colors:
+    
+    *   **Top:** A **red square** is positioned at the top of the arrangement.
+    *   **Bottom:** A **green triangle** (pointing upwards) is located at the bottom.
+    *   **Left:** A **yellow circle** is centered on the left side.
+    *   **Right:** An **orange star** with five points is on the right side.
+    *   **Center:** A **blue pentagon** (pointing upwards) occupies the center of the composition.
+    
+    The layout is very symmetrical and clean, with each shape being a distinct, vibrant primary or secondary color. All shapes are roughly the same size and are spaced evenly apart.
+- 3 new item(s)
+- 2 raw response(s)
+- 0 input guardrail result(s)
+- 0 output guardrail result(s)
+(See `RunResult` for more details)
+
+======================================================================
+VERIFICATION:
+======================================================================
+✓ SUCCESS: The LLM received and analyzed the image!
+  Found visual vocabulary: red, blue, green, circle, triangle, shape, color
+
+  This confirms the image was successfully passed to the model.
+
