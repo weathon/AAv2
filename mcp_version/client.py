@@ -14,9 +14,12 @@ import json
 import asyncio
 import base64
 import datetime
+import io
 
 import dotenv
 dotenv.load_dotenv()
+
+from PIL import Image
 
 from openai import AsyncOpenAI
 import weave
@@ -37,6 +40,9 @@ WEAVE_PROJECT = os.getenv("WEAVE_PROJECT", "aas2-mcp-client")
 _WEAVE_ENABLED = False
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "4"))
 SAMPLE_LOG_DIR = os.path.join(os.path.dirname(__file__), "sample_logs")
+
+# Track original images for re-compression
+_original_images = {}  # message_index -> [(content_index, original_data_url), ...]
 
 
 # ---------------------------------------------------------------------------
@@ -144,6 +150,70 @@ def _save_data_url_image(data_url: str, output_path: str) -> None:
         f.write(image_bytes)
 
 
+def _compress_image_for_llm(data_url: str, max_width: int = 1536, quality: int = 80) -> str:
+    """Compress image for LLM message (in-memory only, for payload optimization).
+
+    Resizes to max_width and converts to JPEG with quality setting.
+    Returns compressed base64 data URL (~4-10x smaller than original PNG).
+    """
+    if "," not in data_url:
+        return data_url  # Return original if invalid
+    try:
+        _, b64_data = data_url.split(",", 1)
+        image_bytes = base64.b64decode(b64_data)
+        img = Image.open(io.BytesIO(image_bytes))
+
+        # Resize if larger than max_width
+        if img.width > max_width or img.height > max_width:
+            img.thumbnail((max_width, max_width), Image.Resampling.LANCZOS)
+
+        # Compress to JPEG in memory
+        output = io.BytesIO()
+        img.save(output, format="JPEG", quality=quality, optimize=True)
+        compressed_b64 = base64.b64encode(output.getvalue()).decode()
+        return f"data:image/jpeg;base64,{compressed_b64}"
+    except Exception as e:
+        print(f"[WARN] Image compression failed: {e}, using original")
+        return data_url
+
+
+def _recompress_old_images(messages: list, recent_count: int = 10) -> None:
+    """Re-compress images older than recent_count messages to 1024px.
+
+    Scans message history and downgrades images beyond the recent window
+    from 1536px to 1024px to save context window space. Uses stored originals
+    to avoid quality degradation from double-compression.
+    """
+    total_messages = len(messages)
+    cutoff_index = max(0, total_messages - recent_count)
+
+    for msg_idx, image_list in list(_original_images.items()):
+        if msg_idx >= cutoff_index:
+            continue  # This message is still in recent window
+
+        # Message is old, re-compress images to 1024px
+        msg = messages[msg_idx]
+        if not isinstance(msg.get("content"), list):
+            continue
+
+        for content_idx, original_url in image_list:
+            if content_idx >= len(msg["content"]):
+                continue
+
+            part = msg["content"][content_idx]
+            if part.get("type") == "image_url":
+                # Re-compress from original to 1024px (lower quality)
+                downgraded = _compress_image_for_llm(
+                    original_url,
+                    max_width=1024,
+                    quality=75  # Slightly lower JPEG quality for older images
+                )
+                part["image_url"]["url"] = downgraded
+
+        # Remove from tracking - already downgraded
+        del _original_images[msg_idx]
+
+
 def _write_sample_markdown(md_path: str, png_filename: str, llm_description: str, turn: int) -> None:
     timestamp = datetime.datetime.now().isoformat(timespec="seconds")
     content = (
@@ -213,6 +283,8 @@ async def run_agent():
 
                 # Call LLM with retries (network/provider failures are transient)
                 response = None
+                # Re-compress old images to save context window
+                _recompress_old_images(messages, recent_count=10)
                 for attempt in range(1, LLM_MAX_RETRIES + 1):
                     try:
                         response = await llm.chat.completions.create(
@@ -340,11 +412,28 @@ async def run_agent():
                     # If there are images, inject them as a user message so the
                     # model can see them (Gemini supports vision in user turns).
                     if image_parts:
+                        # Store originals for potential re-compression
+                        message_index = len(messages)
+                        _original_images[message_index] = [
+                            (i + 1, part["image_url"]["url"])  # +1 because text part is index 0
+                            for i, part in enumerate(image_parts)
+                        ]
+
+                        # Compress images for LLM (payload + context window optimization)
+                        compressed_image_parts = [
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": _compress_image_for_llm(part["image_url"]["url"])
+                                },
+                            }
+                            for part in image_parts
+                        ]
                         messages.append({
                             "role": "user",
                             "content": [
                                 {"type": "text", "text": f"[Image result from {fn_name}]"},
-                                *image_parts,
+                                *compressed_image_parts,
                             ],
                         })
                         if fn_name == "sample":
