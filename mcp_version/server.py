@@ -56,7 +56,6 @@ WEAVE_PROJECT = os.getenv("WEAVE_PROJECT", "aas2-mcp-server")
 _WEAVE_ENABLED = False
 _IS_INITIALIZED = False
 _INIT_REQUIRED_MSG = "Server resources are not initialized. You need to call `init` first."
-DEBUG_MODE = os.getenv("MCP_DEBUG_MODE", "0").lower() in {"1", "true", "yes", "on"}
 
 # Lazy-loaded resources (populated by `init`)
 model = None
@@ -220,6 +219,8 @@ def _caption_single_image(path: str, max_retries: int = 4) -> str:
                 ],
             )
             caption = completion.choices[0].message.content
+            if caption is None or (isinstance(caption, str) and not caption.strip()):
+                raise RuntimeError("Empty caption content from LLM")
             _trace("caption_success", path=path, attempt=attempt, caption=caption)
             _log(f"[LOG] Generated caption for {path}: {caption}")
             return caption
@@ -402,20 +403,6 @@ def init():
 
     _trace("dataset_loader_summary", **summary)
     _trace("tool_result", tool="init", status="ok", init_seconds=elapsed, **summary)
-
-    if DEBUG_MODE:
-        image_path = os.path.join(os.path.dirname(__file__), "123.jpg")
-        if not os.path.exists(image_path):
-            raise FileNotFoundError(f"Debug init image not found: {image_path}")
-        img = PILImage.open(image_path)
-        _trace("tool_result", tool="init", status="debug_image_returned", width=img.width, height=img.height)
-        return [
-            _pil_to_mcp_image(img),
-            (
-                f"Initialization complete in {elapsed}s. "
-                "Debug mode is ON. Start test: describe this image in exactly one sentence."
-            ),
-        ]
 
     return (
         f"Initialization complete in {elapsed}s. "
@@ -833,4 +820,4 @@ if __name__ == "__main__":
             dataset_commits.clear()
             _trace("dataset_commits_loaded", commit_count=0, warning="json_decode_error")
 
-    mcp.run()
+    mcp.run(transport="sse", host="0.0.0.0", port=8765)

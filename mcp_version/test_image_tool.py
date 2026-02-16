@@ -4,7 +4,6 @@ and print its description.  Verifies end-to-end image transport via MCP.
 """
 
 import os
-import sys
 import json
 import asyncio
 
@@ -12,12 +11,31 @@ import dotenv
 dotenv.load_dotenv()
 
 from openai import AsyncOpenAI
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
+from mcp import ClientSession
+from mcp.client.sse import sse_client
 
-SERVER_SCRIPT = os.path.join(os.path.dirname(__file__), "server.py")
+MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://localhost:8765/sse")
 MODEL = "moonshotai/kimi-k2.5"
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "4"))
+
+
+def _extract_text(content) -> str:
+    if content is None:
+        return ""
+    if isinstance(content, str):
+        return content.strip()
+    if isinstance(content, list):
+        chunks = []
+        for item in content:
+            if isinstance(item, dict):
+                if item.get("type") == "text" and item.get("text"):
+                    chunks.append(str(item["text"]))
+            else:
+                text_value = getattr(item, "text", None)
+                if text_value:
+                    chunks.append(str(text_value))
+        return " ".join(chunks).strip()
+    return str(content).strip()
 
 
 async def test_image_tool():
@@ -26,13 +44,7 @@ async def test_image_tool():
         api_key=os.getenv("OPENROUTER_API_KEY"),
     )
 
-    server_params = StdioServerParameters(
-        command=sys.executable,
-        args=[SERVER_SCRIPT],
-        env={**os.environ},
-    )
-
-    async with stdio_client(server_params) as (read_stream, write_stream):
+    async with sse_client(MCP_SERVER_URL) as (read_stream, write_stream):
         async with ClientSession(read_stream, write_stream) as session:
             await session.initialize()
             print("[TEST] Connected to MCP server.")
@@ -83,6 +95,9 @@ async def test_image_tool():
                             }
                         ],
                     )
+                    description = _extract_text(response.choices[0].message.content)
+                    if not description:
+                        raise RuntimeError("Empty description content from LLM")
                     break
                 except Exception as e:
                     print(f"[WARN] LLM call failed {attempt}/{LLM_MAX_RETRIES}: {e}")
@@ -92,7 +107,6 @@ async def test_image_tool():
                         ) from e
                     await asyncio.sleep(2 ** (attempt - 1))
 
-            description = response.choices[0].message.content
             print(f"\n{'='*60}")
             print(f"MODEL DESCRIPTION:")
             print(f"{'='*60}")

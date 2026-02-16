@@ -26,6 +26,7 @@
 
 `sample(query, dataset, min_threshold, max_threshold, count=5, negative_prompt=None, negative_threshold=0.2)`
 在**相似度**分数区间 [min_threshold, max_threshold] 内随机采样 `count` 张图像，用于评估该分数段的质量分布，帮助确定最终阈值。如果这个返回空，扩大阈值的范围。
+每次 `sample` 返回图片后，下一步必须优先调用一次 `log_actions`，用1-2句客观描述采样图片里可见的内容（objects, scene, color, composition），然后再继续其他工具。
 
 `commit(query, dataset, threshold, negative_prompt=None, negative_threshold=0.2, message=None)`  
 将所有相似度**严格大于** `threshold`（0.0-1.0）的图像加入最终数据集，排除匹配负向提示超过 `negative_threshold` 的图像。`message` 参数用于描述本次提交的内容归属或策展意图（如"子元素：生锈金属，反美学目标"）。message不是一个简单的“提交信息”，而是描述当前图片的tags。
@@ -39,7 +40,7 @@
 `aesthetics_rate(query, dataset, min_threshold, max_threshold, negative_prompt=None, negative_threshold=0.2, sample_size=20)`
 对匹配查询和相似度区间的图片进行美学评分。会从匹配的图片中采样最多 `sample_size` 张（建议设为25-50，因为评分耗时较长），自动生成caption后使用HPSv3模型计算美学分数，返回分数分布直方图。美学分数通常在 0-15 范围内，但理论上无上下界。注意：如果图片没有达到反美学，不代表要舍弃，但是可以作为考虑因素之一。
 
-DEBUG MODE ON：每次sample之后都要eval一下aesthetics score
+每次sample之后都要eval一下aesthetics score，并且先完成上面的 `log_actions` 图片内容描述。
 
 `sample_from_committed(commit_id, n=20)`
 从已经提交的数据集随机sample一些图片来查看。

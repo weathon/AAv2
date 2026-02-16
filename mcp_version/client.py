@@ -1,7 +1,7 @@
 """
 MCP Client / Agent loop for the dataset curation system.
 
-Connects to the MCP tool server (server.py) via stdio transport,
+Connects to the MCP tool server (server.py) via SSE transport,
 discovers available tools, and runs an agentic LLM loop using
 Gemini 3 Flash (via OpenRouter) that autonomously calls MCP tools.
 
@@ -10,7 +10,6 @@ manual tool-calling loop over the MCP protocol.
 """
 
 import os
-import sys
 import json
 import asyncio
 import base64
@@ -21,22 +20,21 @@ dotenv.load_dotenv()
 from openai import AsyncOpenAI
 import weave
 
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
+from mcp import ClientSession
+from mcp.client.sse import sse_client
 
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
 
 SYSTEM_PROMPT_PATH = os.path.join(os.path.dirname(__file__), "system_prompt.md")
-SERVER_SCRIPT = os.path.join(os.path.dirname(__file__), "server.py")
+MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://localhost:8765/sse")
 MAX_TURNS = 100
 MODEL = "google/gemini-3-flash-preview"
 INITIAL_PROMPT = "Psychedelic art"
 WEAVE_PROJECT = os.getenv("WEAVE_PROJECT", "aas2-mcp-client")
 _WEAVE_ENABLED = False
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "4"))
-DEBUG_MODE = os.getenv("MCP_DEBUG_MODE", "0").lower() in {"1", "true", "yes", "on"}
 
 
 # ---------------------------------------------------------------------------
@@ -116,8 +114,23 @@ def parse_mcp_result(result) -> list[dict]:
     return parts
 
 
-def _red(text: str) -> str:
-    return f"\033[31m{text}\033[0m"
+def _extract_assistant_text(content) -> str:
+    if content is None:
+        return ""
+    if isinstance(content, str):
+        return content.strip()
+    if isinstance(content, list):
+        chunks = []
+        for item in content:
+            if isinstance(item, dict):
+                if item.get("type") == "text" and item.get("text"):
+                    chunks.append(str(item["text"]))
+            else:
+                text_value = getattr(item, "text", None)
+                if text_value:
+                    chunks.append(str(text_value))
+        return " ".join(chunks).strip()
+    return str(content).strip()
 
 
 # ---------------------------------------------------------------------------
@@ -136,14 +149,8 @@ async def run_agent():
         api_key=os.getenv("OPENROUTER_API_KEY"),
     )
 
-    # Connect to MCP server
-    server_params = StdioServerParameters(
-        command=sys.executable,
-        args=[SERVER_SCRIPT],
-        env={**os.environ},
-    )
-
-    async with stdio_client(server_params) as (read_stream, write_stream):
+    # Connect to MCP server (SSE transport)
+    async with sse_client(MCP_SERVER_URL) as (read_stream, write_stream):
         async with ClientSession(read_stream, write_stream) as session:
             await session.initialize()
 
@@ -159,23 +166,17 @@ async def run_agent():
                 "Before using any tool other than `init`, call `init` once. "
                 "If a tool says resources are not initialized, call `init` and retry."
             )
+            sample_log_instruction = (
+                "After every `sample` call that returns images, your immediate next tool call "
+                "must be `log_actions`, containing a concise factual description of visible image content."
+            )
             messages = [
                 {"role": "system", "content": system_prompt},
                 {"role": "system", "content": init_first_instruction},
+                {"role": "system", "content": sample_log_instruction},
                 {"role": "user", "content": INITIAL_PROMPT},
             ]
-            if DEBUG_MODE:
-                messages.insert(
-                    2,
-                    {
-                        "role": "system",
-                        "content": (
-                            "Debug mode is ON. The `init` tool will return a test image. "
-                            "As the start test, immediately describe that image in exactly one sentence."
-                        ),
-                    },
-                )
-            awaiting_debug_image_description = False
+            pending_sample_log = False
 
             # Agentic loop
             for turn in range(MAX_TURNS):
@@ -192,6 +193,11 @@ async def run_agent():
                             messages=messages,
                             tools=openai_tools if openai_tools else None,
                         )
+                        first_choice = response.choices[0]
+                        first_message = first_choice.message
+                        first_text = _extract_assistant_text(first_message.content)
+                        if not first_message.tool_calls and not first_text:
+                            raise RuntimeError("Empty assistant response content from LLM")
                         break
                     except Exception as e:
                         print(f"[WARN] LLM call failed {attempt}/{LLM_MAX_RETRIES}: {e}")
@@ -212,18 +218,25 @@ async def run_agent():
 
                 # If no tool calls, agent is done (or just responding)
                 if not assistant_message.tool_calls:
-                    assistant_text = str(assistant_message.content)
-                    if DEBUG_MODE and awaiting_debug_image_description:
-                        print(_red(f"[ASSISTANT][DEBUG_IMAGE_DESC] {assistant_text}"))
-                        awaiting_debug_image_description = False
-                    else:
-                        print(f"[ASSISTANT] {assistant_text}")
+                    assistant_text = _extract_assistant_text(assistant_message.content)
+                    print(f"[ASSISTANT] {assistant_text}")
                     _trace(
                         "assistant_message",
                         turn=turn + 1,
                         has_tool_calls=False,
                         content_preview=assistant_text[:300],
                     )
+                    if pending_sample_log:
+                        print("[WARN] sample log enforcement: assistant must call log_actions next.")
+                        _trace("sample_log_enforcement", turn=turn + 1, status="missing_tool_call")
+                        messages.append({
+                            "role": "system",
+                            "content": (
+                                "Policy reminder: call `log_actions` now with a concise factual "
+                                "description of the latest sampled images before any other action."
+                            ),
+                        })
+                        continue
                     if choice.finish_reason == "stop":
                         print("\n[DONE] Agent finished.")
                         _trace("agent_done", reason="stop", turn=turn + 1)
@@ -231,7 +244,29 @@ async def run_agent():
                     continue
 
                 # Process tool calls
-                for tool_call in assistant_message.tool_calls:
+                if pending_sample_log:
+                    first_tool_name = assistant_message.tool_calls[0].function.name
+                    if first_tool_name != "log_actions":
+                        print(
+                            "[WARN] sample log enforcement: first tool must be log_actions "
+                            f"(got {first_tool_name})."
+                        )
+                        _trace(
+                            "sample_log_enforcement",
+                            turn=turn + 1,
+                            status="wrong_first_tool",
+                            first_tool=first_tool_name,
+                        )
+                        messages.append({
+                            "role": "system",
+                            "content": (
+                                "Policy reminder: your next tool call must be `log_actions` to "
+                                "describe the latest sampled images."
+                            ),
+                        })
+                        continue
+
+                for tool_idx, tool_call in enumerate(assistant_message.tool_calls):
                     fn_name = tool_call.function.name
                     fn_args_str = tool_call.function.arguments
                     try:
@@ -285,8 +320,30 @@ async def run_agent():
                                 *image_parts,
                             ],
                         })
-                        if DEBUG_MODE and fn_name == "init":
-                            awaiting_debug_image_description = True
+                        if fn_name == "sample":
+                            pending_sample_log = True
+                            _trace("sample_log_enforcement", turn=turn + 1, status="required")
+                            messages.append({
+                                "role": "user",
+                                "content": (
+                                    "Now call `log_actions` with 1-2 concise factual sentences "
+                                    "describing visible content in the sampled images."
+                                ),
+                            })
+                            for skipped_call in assistant_message.tool_calls[tool_idx + 1 :]:
+                                messages.append({
+                                    "role": "tool",
+                                    "tool_call_id": skipped_call.id,
+                                    "content": (
+                                        "Skipped by policy: after `sample` image output, "
+                                        "the next tool must be `log_actions`."
+                                    ),
+                                })
+                            break
+
+                    if fn_name == "log_actions" and pending_sample_log:
+                        pending_sample_log = False
+                        _trace("sample_log_enforcement", turn=turn + 1, status="satisfied")
 
             else:
                 print(f"\n[DONE] Reached max turns ({MAX_TURNS}).")

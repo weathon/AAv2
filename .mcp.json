@@ -1,17 +1,8 @@
 {
   "mcpServers": {
     "neg-mcp": {
-      "type": "stdio",
-      "command": "conda",
-      "args": [
-        "run",
-        "-n",
-        "neg",
-        "--no-capture-output",
-        "python",
-        "/home/wg25r/aas2/AAv2/mcp_version/server.py"
-      ],
-      "env": {}
+      "type": "sse",
+      "url": "http://localhost:8765/sse"
     }
   }
 }
