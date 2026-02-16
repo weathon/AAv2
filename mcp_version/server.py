@@ -383,7 +383,7 @@ def _sample_impl(
 # MCP Server
 # ---------------------------------------------------------------------------
 
-mcp = FastMCP("Dataset Curation Server")
+mcp = FastMCP("Dataset Curation Server", host="0.0.0.0", port=8765)
 
 
 @mcp.tool()
@@ -820,4 +820,4 @@ if __name__ == "__main__":
             dataset_commits.clear()
             _trace("dataset_commits_loaded", commit_count=0, warning="json_decode_error")
 
-    mcp.run(transport="sse", host="0.0.0.0", port=8765)
+    mcp.run(transport="sse")

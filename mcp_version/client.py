@@ -13,6 +13,7 @@ import os
 import json
 import asyncio
 import base64
+import datetime
 
 import dotenv
 dotenv.load_dotenv()
@@ -35,6 +36,7 @@ INITIAL_PROMPT = "Psychedelic art"
 WEAVE_PROJECT = os.getenv("WEAVE_PROJECT", "aas2-mcp-client")
 _WEAVE_ENABLED = False
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "4"))
+SAMPLE_LOG_DIR = os.path.join(os.path.dirname(__file__), "sample_logs")
 
 
 # ---------------------------------------------------------------------------
@@ -133,12 +135,36 @@ def _extract_assistant_text(content) -> str:
     return str(content).strip()
 
 
+def _save_data_url_image(data_url: str, output_path: str) -> None:
+    if "," not in data_url:
+        raise ValueError("Invalid data URL for image logging.")
+    _, b64_data = data_url.split(",", 1)
+    image_bytes = base64.b64decode(b64_data)
+    with open(output_path, "wb") as f:
+        f.write(image_bytes)
+
+
+def _write_sample_markdown(md_path: str, png_filename: str, llm_description: str, turn: int) -> None:
+    timestamp = datetime.datetime.now().isoformat(timespec="seconds")
+    content = (
+        "# Sample Debug Log\n\n"
+        f"- turn: {turn}\n"
+        f"- timestamp: {timestamp}\n\n"
+        f"![sample](./{png_filename})\n\n"
+        "## LLM Description\n\n"
+        f"{llm_description.strip()}\n"
+    )
+    with open(md_path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+
 # ---------------------------------------------------------------------------
 # Agent loop
 # ---------------------------------------------------------------------------
 
 async def run_agent():
     _trace("agent_start", model=MODEL, max_turns=MAX_TURNS, initial_prompt=INITIAL_PROMPT)
+    os.makedirs(SAMPLE_LOG_DIR, exist_ok=True)
     # Load system prompt
     with open(SYSTEM_PROMPT_PATH, "r") as f:
         system_prompt = f.read()
@@ -149,7 +175,7 @@ async def run_agent():
         api_key=os.getenv("OPENROUTER_API_KEY"),
     )
 
-    # Connect to MCP server (SSE transport)
+    # Connect to MCP server (SSE transport — start server separately via run.sh)
     async with sse_client(MCP_SERVER_URL) as (read_stream, write_stream):
         async with ClientSession(read_stream, write_stream) as session:
             await session.initialize()
@@ -177,6 +203,7 @@ async def run_agent():
                 {"role": "user", "content": INITIAL_PROMPT},
             ]
             pending_sample_log = False
+            pending_sample_artifact = None
 
             # Agentic loop
             for turn in range(MAX_TURNS):
@@ -322,6 +349,22 @@ async def run_agent():
                         })
                         if fn_name == "sample":
                             pending_sample_log = True
+                            sample_id = f"turn{turn + 1:03d}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+                            png_filename = f"{sample_id}.png"
+                            md_filename = f"{sample_id}.md"
+                            png_path = os.path.join(SAMPLE_LOG_DIR, png_filename)
+                            md_path = os.path.join(SAMPLE_LOG_DIR, md_filename)
+                            try:
+                                _save_data_url_image(image_parts[0]["image_url"]["url"], png_path)
+                                pending_sample_artifact = {
+                                    "turn": turn + 1,
+                                    "png_filename": png_filename,
+                                    "md_path": md_path,
+                                }
+                                print(f"[LOG] Saved sample image to {png_path}")
+                            except Exception as e:
+                                print(f"[WARN] Failed to save sample image artifact: {e}")
+                                pending_sample_artifact = None
                             _trace("sample_log_enforcement", turn=turn + 1, status="required")
                             messages.append({
                                 "role": "user",
@@ -342,6 +385,22 @@ async def run_agent():
                             break
 
                     if fn_name == "log_actions" and pending_sample_log:
+                        if pending_sample_artifact is not None:
+                            llm_description = str(fn_args.get("msg", "")).strip()
+                            if llm_description:
+                                try:
+                                    _write_sample_markdown(
+                                        md_path=pending_sample_artifact["md_path"],
+                                        png_filename=pending_sample_artifact["png_filename"],
+                                        llm_description=llm_description,
+                                        turn=pending_sample_artifact["turn"],
+                                    )
+                                    print(f"[LOG] Saved sample markdown to {pending_sample_artifact['md_path']}")
+                                except Exception as e:
+                                    print(f"[WARN] Failed to write sample markdown artifact: {e}")
+                            else:
+                                print("[WARN] log_actions msg is empty; sample markdown was not written.")
+                        pending_sample_artifact = None
                         pending_sample_log = False
                         _trace("sample_log_enforcement", turn=turn + 1, status="satisfied")
 

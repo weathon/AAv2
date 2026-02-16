@@ -1,10 +1,11 @@
 """
 Test: call the test_image MCP tool, send the returned image to an LLM,
 and print its description.  Verifies end-to-end image transport via MCP.
+
+Requires the MCP server to be running (start via run.sh or manually).
 """
 
 import os
-import json
 import asyncio
 
 import dotenv
