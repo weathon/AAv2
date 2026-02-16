@@ -153,8 +153,14 @@ def _save_data_url_image(data_url: str, output_path: str) -> None:
 def _compress_image_for_llm(data_url: str, max_width: int = 1536, quality: int = 80) -> str:
     """Compress image for LLM message (in-memory only, for payload optimization).
 
-    Resizes to max_width and converts to JPEG with quality setting.
-    Returns compressed base64 data URL (~4-10x smaller than original PNG).
+    Resizes to max_width and converts to WebP (or JPEG fallback) with quality setting.
+    WebP typically achieves 25-35% better compression than JPEG.
+    Returns compressed base64 data URL (~5-15x smaller than original PNG).
+
+    Args:
+        data_url: Base64 data URL of image
+        max_width: Maximum width/height for thumbnail (default 1536px)
+        quality: Quality setting for compression (default 80, valid 0-100)
     """
     if "," not in data_url:
         return data_url  # Return original if invalid
@@ -167,11 +173,19 @@ def _compress_image_for_llm(data_url: str, max_width: int = 1536, quality: int =
         if img.width > max_width or img.height > max_width:
             img.thumbnail((max_width, max_width), Image.Resampling.LANCZOS)
 
-        # Compress to JPEG in memory
+        # Try WebP first, fall back to JPEG if needed
         output = io.BytesIO()
-        img.save(output, format="JPEG", quality=quality, optimize=True)
-        compressed_b64 = base64.b64encode(output.getvalue()).decode()
-        return f"data:image/jpeg;base64,{compressed_b64}"
+        try:
+            # WebP provides ~25-35% better compression than JPEG
+            img.save(output, format="WEBP", quality=quality, optimize=True)
+            compressed_b64 = base64.b64encode(output.getvalue()).decode()
+            return f"data:image/webp;base64,{compressed_b64}"
+        except Exception as webp_error:
+            print(f"[WARN] WebP compression failed: {webp_error}, falling back to JPEG")
+            output = io.BytesIO()
+            img.save(output, format="JPEG", quality=quality, optimize=True)
+            compressed_b64 = base64.b64encode(output.getvalue()).decode()
+            return f"data:image/jpeg;base64,{compressed_b64}"
     except Exception as e:
         print(f"[WARN] Image compression failed: {e}, using original")
         return data_url
