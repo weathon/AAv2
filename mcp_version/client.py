@@ -18,8 +18,8 @@ import base64
 import dotenv
 dotenv.load_dotenv()
 
-import wandb
 from openai import AsyncOpenAI
+import weave
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
@@ -33,11 +33,57 @@ SERVER_SCRIPT = os.path.join(os.path.dirname(__file__), "server.py")
 MAX_TURNS = 100
 MODEL = "google/gemini-3-flash-preview"
 INITIAL_PROMPT = "Psychedelic art"
+WEAVE_PROJECT = os.getenv("WEAVE_PROJECT", "aas2-mcp-client")
+_WEAVE_ENABLED = False
+LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "4"))
+DEBUG_MODE = os.getenv("MCP_DEBUG_MODE", "0").lower() in {"1", "true", "yes", "on"}
 
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
+@weave.op()
+def _weave_event(event_type: str, payload: dict) -> dict:
+    return {"event_type": event_type, **payload}
+
+
+def _init_weave() -> None:
+    global _WEAVE_ENABLED
+    try:
+        weave.init(WEAVE_PROJECT)
+        _WEAVE_ENABLED = True
+        print(f"[INIT] weave enabled for project '{WEAVE_PROJECT}'.")
+    except Exception as e:
+        raise RuntimeError(f"weave.init failed for project '{WEAVE_PROJECT}': {e}") from e
+
+
+def _trace(event_type: str, **payload) -> None:
+    if not _WEAVE_ENABLED:
+        return
+    blocked_keys = {
+        "args",
+        "raw_args",
+        "initial_prompt",
+        "content_preview",
+        "tool_names",
+        "messages",
+    }
+    sanitized = {}
+    for k, v in payload.items():
+        if k in blocked_keys:
+            continue
+        if isinstance(v, (list, tuple, dict)):
+            continue
+        if isinstance(v, str) and len(v) > 120:
+            sanitized[k] = v[:120] + "...(truncated)"
+        else:
+            sanitized[k] = v
+    try:
+        _weave_event(event_type=event_type, payload=sanitized)
+    except Exception as e:
+        print(f"[WARN] weave trace failed for {event_type}: {e}")
+
 
 def mcp_tools_to_openai_tools(mcp_tools) -> list[dict]:
     """Convert MCP tool definitions to OpenAI function-calling format."""
@@ -70,11 +116,16 @@ def parse_mcp_result(result) -> list[dict]:
     return parts
 
 
+def _red(text: str) -> str:
+    return f"\033[31m{text}\033[0m"
+
+
 # ---------------------------------------------------------------------------
 # Agent loop
 # ---------------------------------------------------------------------------
 
 async def run_agent():
+    _trace("agent_start", model=MODEL, max_turns=MAX_TURNS, initial_prompt=INITIAL_PROMPT)
     # Load system prompt
     with open(SYSTEM_PROMPT_PATH, "r") as f:
         system_prompt = f.read()
@@ -101,12 +152,30 @@ async def run_agent():
             openai_tools = mcp_tools_to_openai_tools(tools_result.tools)
             tool_names = [t.name for t in tools_result.tools]
             print(f"[INIT] Connected to MCP server. Available tools: {tool_names}")
+            _trace("mcp_tools_discovered", tool_names=tool_names, tool_count=len(tool_names))
 
             # Conversation history
+            init_first_instruction = (
+                "Before using any tool other than `init`, call `init` once. "
+                "If a tool says resources are not initialized, call `init` and retry."
+            )
             messages = [
                 {"role": "system", "content": system_prompt},
+                {"role": "system", "content": init_first_instruction},
                 {"role": "user", "content": INITIAL_PROMPT},
             ]
+            if DEBUG_MODE:
+                messages.insert(
+                    2,
+                    {
+                        "role": "system",
+                        "content": (
+                            "Debug mode is ON. The `init` tool will return a test image. "
+                            "As the start test, immediately describe that image in exactly one sentence."
+                        ),
+                    },
+                )
+            awaiting_debug_image_description = False
 
             # Agentic loop
             for turn in range(MAX_TURNS):
@@ -114,12 +183,26 @@ async def run_agent():
                 print(f"[TURN {turn + 1}/{MAX_TURNS}]")
                 print(f"{'='*60}")
 
-                # Call LLM
-                response = await llm.chat.completions.create(
-                    model=MODEL,
-                    messages=messages,
-                    tools=openai_tools if openai_tools else None,
-                )
+                # Call LLM with retries (network/provider failures are transient)
+                response = None
+                for attempt in range(1, LLM_MAX_RETRIES + 1):
+                    try:
+                        response = await llm.chat.completions.create(
+                            model=MODEL,
+                            messages=messages,
+                            tools=openai_tools if openai_tools else None,
+                        )
+                        break
+                    except Exception as e:
+                        print(f"[WARN] LLM call failed {attempt}/{LLM_MAX_RETRIES}: {e}")
+                        _trace("llm_retry", turn=turn + 1, attempt=attempt, max_retries=LLM_MAX_RETRIES, error=str(e))
+                        if attempt == LLM_MAX_RETRIES:
+                            raise RuntimeError(
+                                f"LLM call failed after {LLM_MAX_RETRIES} attempts: {e}"
+                            ) from e
+                        await asyncio.sleep(2 ** (attempt - 1))
+
+                _trace("llm_response", turn=turn + 1, finish_reason=response.choices[0].finish_reason)
 
                 choice = response.choices[0]
                 assistant_message = choice.message
@@ -129,9 +212,21 @@ async def run_agent():
 
                 # If no tool calls, agent is done (or just responding)
                 if not assistant_message.tool_calls:
-                    print(f"[ASSISTANT] {assistant_message.content}")
+                    assistant_text = str(assistant_message.content)
+                    if DEBUG_MODE and awaiting_debug_image_description:
+                        print(_red(f"[ASSISTANT][DEBUG_IMAGE_DESC] {assistant_text}"))
+                        awaiting_debug_image_description = False
+                    else:
+                        print(f"[ASSISTANT] {assistant_text}")
+                    _trace(
+                        "assistant_message",
+                        turn=turn + 1,
+                        has_tool_calls=False,
+                        content_preview=assistant_text[:300],
+                    )
                     if choice.finish_reason == "stop":
                         print("\n[DONE] Agent finished.")
+                        _trace("agent_done", reason="stop", turn=turn + 1)
                         break
                     continue
 
@@ -142,16 +237,21 @@ async def run_agent():
                     try:
                         fn_args = json.loads(fn_args_str)
                     except json.JSONDecodeError:
+                        print(f"[WARN] Invalid JSON args for tool {fn_name}: {fn_args_str}")
+                        _trace("tool_args_parse_error", turn=turn + 1, tool=fn_name, raw_args=fn_args_str)
                         fn_args = {}
 
                     print(f"[TOOL CALL] {fn_name}({json.dumps(fn_args, ensure_ascii=False)[:200]})")
+                    _trace("tool_call", turn=turn + 1, tool=fn_name, args=fn_args)
 
                     # Call MCP server
                     try:
                         mcp_result = await session.call_tool(fn_name, fn_args)
                         content_parts = parse_mcp_result(mcp_result)
+                        _trace("tool_result", turn=turn + 1, tool=fn_name, status="ok", part_count=len(content_parts))
                     except Exception as e:
                         print(f"[TOOL ERROR] {fn_name}: {e}")
+                        _trace("tool_result", turn=turn + 1, tool=fn_name, status="error", error=str(e))
                         content_parts = [{"type": "text", "text": f"Error: {e}"}]
 
                     # Log text parts
@@ -185,9 +285,12 @@ async def run_agent():
                                 *image_parts,
                             ],
                         })
+                        if DEBUG_MODE and fn_name == "init":
+                            awaiting_debug_image_description = True
 
             else:
                 print(f"\n[DONE] Reached max turns ({MAX_TURNS}).")
+                _trace("agent_done", reason="max_turns", max_turns=MAX_TURNS)
 
 
 # ---------------------------------------------------------------------------
@@ -195,11 +298,8 @@ async def run_agent():
 # ---------------------------------------------------------------------------
 
 def main():
-    wandb.init(project="aas2", name="Psychedelic art (MCP)")
-    try:
-        asyncio.run(run_agent())
-    finally:
-        wandb.finish()
+    _init_weave()
+    asyncio.run(run_agent())
 
 
 if __name__ == "__main__":

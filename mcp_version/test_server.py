@@ -33,7 +33,7 @@ async def test_server():
             tool_names = [t.name for t in tools_result.tools]
             print(f"  Found {len(tool_names)} tools: {tool_names}")
 
-            expected = {"search", "sample", "commit", "undo_commit", "status",
+            expected = {"init", "search", "sample", "commit", "undo_commit", "status",
                         "sample_from_committed", "aesthetics_rate", "log_actions"}
             missing = expected - set(tool_names)
             extra = set(tool_names) - expected
@@ -42,7 +42,7 @@ async def test_server():
             if extra:
                 print(f"  UNEXPECTED tools: {extra}")
             if not missing and not extra:
-                print("  All 8 expected tools present!")
+                print("  All expected tools present!")
 
             # Print tool schemas
             for tool in tools_result.tools:
@@ -50,18 +50,23 @@ async def test_server():
                 print(f"    Description: {tool.description[:100] if tool.description else 'None'}...")
                 print(f"    Schema keys: {list(tool.inputSchema.get('properties', {}).keys())}")
 
-            # 2. Test log_actions (lightweight, no GPU)
+            # 2. Initialize heavy resources
+            print("\n[TEST] Calling init...")
+            result = await session.call_tool("init", {})
+            print(f"  Result: {result.content[0].text if result.content else 'empty'}")
+
+            # 3. Test log_actions (lightweight, no GPU)
             print("\n[TEST] Calling log_actions...")
             result = await session.call_tool("log_actions", {"msg": "MCP server test run"})
             print(f"  Result: {result.content[0].text if result.content else 'empty'}")
 
-            # 3. Test status (lightweight)
+            # 4. Test status (lightweight)
             print("\n[TEST] Calling status...")
             result = await session.call_tool("status", {})
             text = result.content[0].text if result.content else "empty"
             print(f"  Result: {text[:200]}")
 
-            # 4. Test search (uses embeddings + GPU)
+            # 5. Test search (uses embeddings + GPU)
             print("\n[TEST] Calling search...")
             result = await session.call_tool("search", {
                 "query": "psychedelic mandala",
@@ -76,7 +81,7 @@ async def test_server():
                 elif block.type == "image":
                     print(f"  Image: base64 data ({len(block.data)} chars)")
 
-            # 5. Test sample (uses embeddings)
+            # 6. Test sample (uses embeddings)
             print("\n[TEST] Calling sample...")
             result = await session.call_tool("sample", {
                 "query": "psychedelic mandala",
@@ -91,7 +96,7 @@ async def test_server():
                 elif block.type == "image":
                     print(f"  Image: base64 data ({len(block.data)} chars)")
 
-            # 6. Test commit
+            # 7. Test commit
             print("\n[TEST] Calling commit...")
             result = await session.call_tool("commit", {
                 "query": "psychedelic mandala",
@@ -109,12 +114,12 @@ async def test_server():
             if "Committed with ID:" in commit_text:
                 commit_id = commit_text.split("Committed with ID: ")[1].split(",")[0]
 
-            # 7. Test status after commit
+            # 8. Test status after commit
             print("\n[TEST] Calling status after commit...")
             result = await session.call_tool("status", {})
             print(f"  Result: {result.content[0].text[:300] if result.content else 'empty'}")
 
-            # 8. Test sample_from_committed
+            # 9. Test sample_from_committed
             if commit_id:
                 print(f"\n[TEST] Calling sample_from_committed({commit_id})...")
                 result = await session.call_tool("sample_from_committed", {
@@ -127,7 +132,7 @@ async def test_server():
                     elif block.type == "image":
                         print(f"  Image: base64 data ({len(block.data)} chars)")
 
-            # 9. Test undo_commit
+            # 10. Test undo_commit
             if commit_id:
                 print(f"\n[TEST] Calling undo_commit({commit_id})...")
                 result = await session.call_tool("undo_commit", {"commit_id": commit_id})

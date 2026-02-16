@@ -17,6 +17,7 @@ from mcp.client.stdio import stdio_client
 
 SERVER_SCRIPT = os.path.join(os.path.dirname(__file__), "server.py")
 MODEL = "moonshotai/kimi-k2.5"
+LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "4"))
 
 
 async def test_image_tool():
@@ -35,6 +36,11 @@ async def test_image_tool():
         async with ClientSession(read_stream, write_stream) as session:
             await session.initialize()
             print("[TEST] Connected to MCP server.")
+
+            print("[TEST] Calling init tool...")
+            init_result = await session.call_tool("init", {})
+            if init_result.content:
+                print(f"[TEST] Init: {init_result.content[0].text}")
 
             # Call test_image tool
             print("[TEST] Calling test_image tool...")
@@ -62,18 +68,29 @@ async def test_image_tool():
 
             # Send image to LLM and ask it to describe
             print(f"\n[TEST] Sending image to {MODEL} for description...")
-            response = await llm.chat.completions.create(
-                model=MODEL,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "text", "text": "Describe this image in detail. What do you see?"},
-                            *image_parts,
+            response = None
+            for attempt in range(1, LLM_MAX_RETRIES + 1):
+                try:
+                    response = await llm.chat.completions.create(
+                        model=MODEL,
+                        messages=[
+                            {
+                                "role": "user",
+                                "content": [
+                                    {"type": "text", "text": "Describe this image in detail. What do you see?"},
+                                    *image_parts,
+                                ],
+                            }
                         ],
-                    }
-                ],
-            )
+                    )
+                    break
+                except Exception as e:
+                    print(f"[WARN] LLM call failed {attempt}/{LLM_MAX_RETRIES}: {e}")
+                    if attempt == LLM_MAX_RETRIES:
+                        raise RuntimeError(
+                            f"LLM call failed after {LLM_MAX_RETRIES} attempts: {e}"
+                        ) from e
+                    await asyncio.sleep(2 ** (attempt - 1))
 
             description = response.choices[0].message.content
             print(f"\n{'='*60}")

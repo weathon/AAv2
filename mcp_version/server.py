@@ -2,7 +2,7 @@
 MCP Server exposing dataset curation tools.
 
 Converted from OpenAI Agents SDK to Model Context Protocol (MCP).
-All 8 tools (search, sample, commit, undo_commit, status,
+All 9 tools (`init` + search, sample, commit, undo_commit, status,
 sample_from_committed, aesthetics_rate, log_actions) are exposed
 as MCP tools that any MCP-compatible client can call.
 """
@@ -15,6 +15,7 @@ import time
 import random
 import datetime
 import base64
+import contextlib
 from io import BytesIO
 
 import dotenv
@@ -28,25 +29,16 @@ from mcp.server.fastmcp.utilities.types import Image as MCPImage
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from openai import OpenAI
+import weave
 
 # ---------------------------------------------------------------------------
-# Initialise heavy resources once at import time
+# Lightweight imports at startup; heavy resources are lazy-loaded via `init`
 # ---------------------------------------------------------------------------
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
 from image_utils import grid_stack  # reuse original, no ToolOutputImage dep
-from dataset_loader import (
-    model,
-    ava_embeddings_tensor, ls_embeddings_tensor, lapis_embeddings_tensor,
-    ava_names_list, ls_names_list, lapis_names_list,
-    dataset_map,
-)
-
-from hpsv3 import HPSv3RewardInferencer
-
-inferencer = HPSv3RewardInferencer(device="cuda:1")
 
 captioning_client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
@@ -60,10 +52,127 @@ captioning_client = OpenAI(
 dataset_commits: dict = {}
 LOG_FILE = os.path.join(os.path.dirname(__file__), "..", "agent_log.txt")
 DATASET_JSON = os.path.join(os.path.dirname(__file__), "..", "dataset.json")
+WEAVE_PROJECT = os.getenv("WEAVE_PROJECT", "aas2-mcp-server")
+_WEAVE_ENABLED = False
+_IS_INITIALIZED = False
+_INIT_REQUIRED_MSG = "Server resources are not initialized. You need to call `init` first."
+DEBUG_MODE = os.getenv("MCP_DEBUG_MODE", "0").lower() in {"1", "true", "yes", "on"}
+
+# Lazy-loaded resources (populated by `init`)
+model = None
+inferencer = None
+ava_embeddings_tensor = None
+ls_embeddings_tensor = None
+lapis_embeddings_tensor = None
+ava_names_list = None
+ls_names_list = None
+lapis_names_list = None
+dataset_map = {
+    "photos": "ava",
+    "dreamcore": "liminal_space",
+    "artwork": "lapis",
+}
+_loader_summary: dict = {}
 
 # ---------------------------------------------------------------------------
 # Helpers (not exposed as tools)
 # ---------------------------------------------------------------------------
+
+@weave.op()
+def _weave_event(event_type: str, payload: dict) -> dict:
+    return {"event_type": event_type, **payload}
+
+
+def _log(msg: str) -> None:
+    print(msg, file=sys.stderr, flush=True)
+
+
+def _init_weave() -> None:
+    global _WEAVE_ENABLED
+    try:
+        with contextlib.redirect_stdout(sys.stderr):
+            weave.init(WEAVE_PROJECT)
+        _WEAVE_ENABLED = True
+        _log(f"[INIT] weave enabled for project '{WEAVE_PROJECT}'.")
+    except Exception as e:
+        raise RuntimeError(f"weave.init failed for project '{WEAVE_PROJECT}': {e}") from e
+
+
+def _trace(event_type: str, **payload) -> None:
+    if not _WEAVE_ENABLED:
+        return
+    blocked_keys = {
+        "query",
+        "negative_prompts",
+        "message",
+        "path",
+        "caption",
+    }
+    sanitized = {}
+    for k, v in payload.items():
+        if k in blocked_keys:
+            continue
+        if isinstance(v, (list, tuple, dict)):
+            continue
+        if isinstance(v, str) and len(v) > 120:
+            sanitized[k] = v[:120] + "...(truncated)"
+        else:
+            sanitized[k] = v
+    try:
+        _weave_event(event_type=event_type, payload=sanitized)
+    except Exception as e:
+        _log(f"[WARN] weave trace failed for {event_type}: {e}")
+
+
+def _require_init(tool_name: str):
+    if _IS_INITIALIZED:
+        return None
+    _trace("tool_result", tool=tool_name, status="not_initialized", message=_INIT_REQUIRED_MSG)
+    return _INIT_REQUIRED_MSG
+
+
+def _load_heavy_resources() -> tuple[float, dict]:
+    global _IS_INITIALIZED
+    global model, inferencer
+    global ava_embeddings_tensor, ls_embeddings_tensor, lapis_embeddings_tensor
+    global ava_names_list, ls_names_list, lapis_names_list
+    global dataset_map, _loader_summary
+
+    start = time.time()
+
+    with contextlib.redirect_stdout(sys.stderr):
+        from dataset_loader import (
+            model as loaded_model,
+            ava_embeddings_tensor as loaded_ava_embeddings_tensor,
+            ls_embeddings_tensor as loaded_ls_embeddings_tensor,
+            lapis_embeddings_tensor as loaded_lapis_embeddings_tensor,
+            ava_names_list as loaded_ava_names_list,
+            ls_names_list as loaded_ls_names_list,
+            lapis_names_list as loaded_lapis_names_list,
+            dataset_map as loaded_dataset_map,
+            dataset_loader_summary,
+        )
+        from hpsv3 import HPSv3RewardInferencer
+
+    model = loaded_model
+    ava_embeddings_tensor = loaded_ava_embeddings_tensor
+    ls_embeddings_tensor = loaded_ls_embeddings_tensor
+    lapis_embeddings_tensor = loaded_lapis_embeddings_tensor
+    ava_names_list = loaded_ava_names_list
+    ls_names_list = loaded_ls_names_list
+    lapis_names_list = loaded_lapis_names_list
+    dataset_map = loaded_dataset_map
+
+    inferencer_device = os.getenv("HPS_DEVICE", "cuda:1")
+    with contextlib.redirect_stdout(sys.stderr):
+        inferencer = HPSv3RewardInferencer(device=inferencer_device)
+    _loader_summary = dataset_loader_summary()
+    _loader_summary["inferencer_device"] = inferencer_device
+
+    _IS_INITIALIZED = True
+    elapsed = round(time.time() - start, 2)
+    return elapsed, _loader_summary
+
 
 def _pil_to_mcp_image(image: PILImage.Image) -> MCPImage:
     """Convert a PIL Image to a FastMCP Image (for proper MCP ImageContent)."""
@@ -73,6 +182,7 @@ def _pil_to_mcp_image(image: PILImage.Image) -> MCPImage:
 
 
 def _caption_single_image(path: str, max_retries: int = 4) -> str:
+    _trace("caption_start", path=path, max_retries=max_retries)
     image = PILImage.open(path)
     buffered = BytesIO()
     image.save(buffered, format="PNG")
@@ -110,18 +220,22 @@ def _caption_single_image(path: str, max_retries: int = 4) -> str:
                 ],
             )
             caption = completion.choices[0].message.content
-            print(f"[LOG] Generated caption for {path}: {caption}")
+            _trace("caption_success", path=path, attempt=attempt, caption=caption)
+            _log(f"[LOG] Generated caption for {path}: {caption}")
             return caption
         except Exception as e:
-            print(f"[WARN] Captioning attempt {attempt}/{max_retries} failed for {path}: {e}")
+            _trace("caption_retry", path=path, attempt=attempt, error=str(e))
+            _log(f"[WARN] Captioning attempt {attempt}/{max_retries} failed for {path}: {e}")
             if attempt < max_retries:
                 time.sleep(2**attempt)
             else:
-                print(f"[ERROR] All {max_retries} captioning attempts failed for {path}, using fallback.")
+                _trace("caption_fallback", path=path, reason=str(e))
+                _log(f"[ERROR] All {max_retries} captioning attempts failed for {path}, using fallback.")
                 return "An image."
 
 
 def _rate_images(image_paths: list[str]) -> str:
+    _trace("aesthetics_rate_start", image_count=len(image_paths))
     captions = [None] * len(image_paths)
     with ThreadPoolExecutor(max_workers=10) as executor:
         future_to_idx = {
@@ -143,6 +257,13 @@ def _rate_images(image_paths: list[str]) -> str:
     hist = np.histogram(scores, bins=10)
     hist_str = f"Score histogram: {hist[0].tolist()}, bins: {hist[1].tolist()}"
     raw_scores = [f"{score:.4f}" for score in scores]
+    _trace(
+        "aesthetics_rate_done",
+        image_count=len(image_paths),
+        min_score=float(np.min(scores)) if scores else None,
+        max_score=float(np.max(scores)) if scores else None,
+        mean_score=float(np.mean(scores)) if scores else None,
+    )
     return hist_str + "\nRaw Scores: " + str(raw_scores)
 
 
@@ -173,7 +294,15 @@ def _search_impl(
     t: int,
     return_paths: bool = False,
 ):
-    print(f"[LOG] Searching for '{query}' in dataset '{dataset}' ...")
+    _log(f"[LOG] Searching for '{query}' in dataset '{dataset}' ...")
+    _trace(
+        "search_impl_start",
+        query=query,
+        dataset=dataset,
+        negative_prompts=negative_prompts,
+        negative_threshold=negative_threshold,
+        top_k=t,
+    )
     embeddings, names = _get_embeddings_and_names(dataset)
     excluded = _apply_negative_filter(embeddings, names, negative_prompts, negative_threshold)
 
@@ -192,6 +321,13 @@ def _search_impl(
         for name in selected_images
         if os.path.exists(f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}")
     ]
+    _trace(
+        "search_impl_done",
+        query=query,
+        dataset=dataset,
+        selected_count=len(selected_images),
+        existing_path_count=len(paths),
+    )
 
     if return_paths:
         return paths
@@ -208,6 +344,15 @@ def _sample_impl(
     negative_prompts: list[str],
     negative_threshold: float,
 ) -> list[str]:
+    _trace(
+        "sample_impl_start",
+        query=query,
+        dataset=dataset,
+        min_threshold=min_threshold,
+        max_threshold=max_threshold,
+        negative_prompts=negative_prompts,
+        negative_threshold=negative_threshold,
+    )
     embeddings, names = _get_embeddings_and_names(dataset)
     excluded = _apply_negative_filter(embeddings, names, negative_prompts, negative_threshold)
 
@@ -218,11 +363,19 @@ def _sample_impl(
     candidate_indices = torch.where(mask)[0].tolist()
     selected_images = [names[i].item() for i in candidate_indices if names[i].item() not in excluded]
 
-    return [
+    paths = [
         f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}"
         for name in selected_images
         if os.path.exists(f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}")
     ]
+    _trace(
+        "sample_impl_done",
+        query=query,
+        dataset=dataset,
+        candidate_count=len(selected_images),
+        existing_path_count=len(paths),
+    )
+    return paths
 
 
 # ---------------------------------------------------------------------------
@@ -230,6 +383,45 @@ def _sample_impl(
 # ---------------------------------------------------------------------------
 
 mcp = FastMCP("Dataset Curation Server")
+
+
+@mcp.tool()
+def init():
+    """Initialize embeddings and models. Call this once before using any other tool."""
+    _trace("tool_call", tool="init")
+
+    if _IS_INITIALIZED:
+        _trace("tool_result", tool="init", status="already_initialized")
+        return "Already initialized."
+
+    try:
+        elapsed, summary = _load_heavy_resources()
+    except Exception as e:
+        _trace("tool_error", tool="init", error=str(e))
+        return f"Initialization failed: {e}"
+
+    _trace("dataset_loader_summary", **summary)
+    _trace("tool_result", tool="init", status="ok", init_seconds=elapsed, **summary)
+
+    if DEBUG_MODE:
+        image_path = os.path.join(os.path.dirname(__file__), "123.jpg")
+        if not os.path.exists(image_path):
+            raise FileNotFoundError(f"Debug init image not found: {image_path}")
+        img = PILImage.open(image_path)
+        _trace("tool_result", tool="init", status="debug_image_returned", width=img.width, height=img.height)
+        return [
+            _pil_to_mcp_image(img),
+            (
+                f"Initialization complete in {elapsed}s. "
+                "Debug mode is ON. Start test: describe this image in exactly one sentence."
+            ),
+        ]
+
+    return (
+        f"Initialization complete in {elapsed}s. "
+        f"rows={summary.get('total_rows', 'n/a')}, "
+        f"embedding_dim={summary.get('embedding_dim', 'n/a')}."
+    )
 
 
 @mcp.tool()
@@ -251,16 +443,32 @@ def search(
 
     Returns a grid preview image of the top-k matches.
     """
+    _trace(
+        "tool_call",
+        tool="search",
+        query=query,
+        dataset=dataset,
+        negative_prompts=negative_prompts,
+        negative_threshold=negative_threshold,
+        t=t,
+    )
+    init_error = _require_init("search")
+    if init_error:
+        return init_error
+
     try:
         result = _search_impl(query, dataset, negative_prompts, negative_threshold, t)
         if result is None:
+            _trace("tool_result", tool="search", status="no_image")
             return "No Image Found"
+        _trace("tool_result", tool="search", status="ok", width=result.width, height=result.height, top_k=t)
         return [
             _pil_to_mcp_image(result),
             f"Showing top {t} results for '{query}' in {dataset}.",
         ]
     except Exception as e:
-        print(f"[ERROR] Search failed: {e}")
+        _log(f"[ERROR] Search failed: {e}")
+        _trace("tool_error", tool="search", error=str(e))
         return f"Error: {e}"
 
 
@@ -287,25 +495,42 @@ def sample(
 
     Returns a grid of sampled images for threshold calibration.
     """
-    print(f"[LOG] Sampling for '{query}' in dataset '{dataset}' between {min_threshold} and {max_threshold} ...")
+    _trace(
+        "tool_call",
+        tool="sample",
+        query=query,
+        dataset=dataset,
+        min_threshold=min_threshold,
+        max_threshold=max_threshold,
+        count=count,
+        negative_prompts=negative_prompts,
+        negative_threshold=negative_threshold,
+    )
+    init_error = _require_init("sample")
+    if init_error:
+        return init_error
+
+    _log(f"[LOG] Sampling for '{query}' in dataset '{dataset}' between {min_threshold} and {max_threshold} ...")
 
     paths = _sample_impl(query, dataset, min_threshold, max_threshold, negative_prompts, negative_threshold)
     if len(paths) == 0:
+        _trace("tool_result", tool="sample", status="no_image")
         return "No Image Found"
 
     sampled_paths = random.sample(paths, min(count, len(paths)))
-    print(f"[LOG] Sampled {len(sampled_paths)} images from {len(paths)} candidates.")
+    _log(f"[LOG] Sampled {len(sampled_paths)} images from {len(paths)} candidates.")
 
     whole_image = grid_stack(sampled_paths, row_size=5)
 
-    # wandb logging if active
-    try:
-        import wandb
-        if wandb.run is not None:
-            wandb.log({"sample_result": wandb.Image(whole_image, caption=query)})
-    except Exception:
-        pass
-
+    _trace(
+        "tool_result",
+        tool="sample",
+        status="ok",
+        candidate_count=len(paths),
+        sampled_count=len(sampled_paths),
+        width=whole_image.width,
+        height=whole_image.height,
+    )
     return [
         _pil_to_mcp_image(whole_image),
         f"Sampled {len(sampled_paths)} from {len(paths)} candidates.",
@@ -335,21 +560,44 @@ def aesthetics_rate(
 
     Returns a string describing the distribution of aesthetics scores.
     """
-    print(f"[LOG] Rating aesthetics for '{query}' in dataset '{dataset}' between {min_threshold} and {max_threshold} ...")
+    _trace(
+        "tool_call",
+        tool="aesthetics_rate",
+        query=query,
+        dataset=dataset,
+        min_threshold=min_threshold,
+        max_threshold=max_threshold,
+        negative_prompts=negative_prompts,
+        negative_threshold=negative_threshold,
+        sample_size=sample_size,
+    )
+    init_error = _require_init("aesthetics_rate")
+    if init_error:
+        return init_error
+
+    _log(f"[LOG] Rating aesthetics for '{query}' in dataset '{dataset}' between {min_threshold} and {max_threshold} ...")
 
     paths = _sample_impl(query, dataset, min_threshold, max_threshold, negative_prompts, negative_threshold)
     if len(paths) == 0:
+        _trace("tool_result", tool="aesthetics_rate", status="no_image")
         return "No images found matching the criteria."
 
     if len(paths) > sample_size:
         paths_to_rate = random.sample(paths, sample_size)
-        print(f"[LOG] Sampled {sample_size} images from {len(paths)} total candidates for rating.")
+        _log(f"[LOG] Sampled {sample_size} images from {len(paths)} total candidates for rating.")
     else:
         paths_to_rate = paths
-        print(f"[LOG] Rating all {len(paths)} matching images.")
+        _log(f"[LOG] Rating all {len(paths)} matching images.")
 
     scores = _rate_images(paths_to_rate)
-    print(f"[LOG] Aesthetics scores: {scores}")
+    _log(f"[LOG] Aesthetics scores: {scores}")
+    _trace(
+        "tool_result",
+        tool="aesthetics_rate",
+        status="ok",
+        candidate_count=len(paths),
+        rated_count=len(paths_to_rate),
+    )
     return f"Aesthetics scores for {len(paths_to_rate)} images: {scores}"
 
 
@@ -374,7 +622,21 @@ def commit(
 
     Returns confirmation with commit ID and image count.
     """
-    print(f"[LOG] Committing with message: {message}")
+    _trace(
+        "tool_call",
+        tool="commit",
+        query=query,
+        dataset=dataset,
+        threshold=threshold,
+        negative_prompts=negative_prompts,
+        negative_threshold=negative_threshold,
+        message=message,
+    )
+    init_error = _require_init("commit")
+    if init_error:
+        return init_error
+
+    _log(f"[LOG] Committing with message: {message}")
 
     embeddings, names = _get_embeddings_and_names(dataset)
     excluded = _apply_negative_filter(embeddings, names, negative_prompts, negative_threshold)
@@ -407,6 +669,13 @@ def commit(
     with open(DATASET_JSON, "w") as f:
         json.dump(dataset_commits, f, indent=2)
 
+    _trace(
+        "tool_result",
+        tool="commit",
+        status="ok",
+        commit_id=commit_id,
+        image_count=len(images),
+    )
     return f"Committed with ID: {commit_id}, message: {message} with {len(images)} images."
 
 
@@ -417,27 +686,48 @@ def undo_commit(commit_id: str) -> str:
     Args:
         commit_id: The 8-character commit ID to remove.
     """
+    _trace("tool_call", tool="undo_commit", commit_id=commit_id)
+    init_error = _require_init("undo_commit")
+    if init_error:
+        return init_error
+
     if commit_id not in dataset_commits:
+        _trace("tool_result", tool="undo_commit", status="not_found", commit_id=commit_id)
         return f"Commit ID {commit_id} not found."
 
     removed_commit = dataset_commits.pop(commit_id)
     with open(DATASET_JSON, "w") as f:
         json.dump(dataset_commits, f, indent=2)
 
-    print(f"[LOG] Removed commit {commit_id}: {removed_commit['message']}")
+    _log(f"[LOG] Removed commit {commit_id}: {removed_commit['message']}")
+    _trace(
+        "tool_result",
+        tool="undo_commit",
+        status="ok",
+        commit_id=commit_id,
+        message=removed_commit["message"],
+        image_count=removed_commit["size"],
+    )
     return f"Removed commit {commit_id}: {removed_commit['message']} with {removed_commit['size']} images."
 
 
 @mcp.tool()
 def status() -> str:
     """Show all commit history including commit IDs and image counts."""
+    _trace("tool_call", tool="status")
+    init_error = _require_init("status")
+    if init_error:
+        return init_error
+
     if len(dataset_commits) == 0:
+        _trace("tool_result", tool="status", status="empty")
         return "No commits yet."
 
     total_images = sum(c["size"] for c in dataset_commits.values())
     result = f"Total commits: {len(dataset_commits)}, Total images: {total_images}\n\nCommit History:\n"
     for cid, info in dataset_commits.items():
         result += f"- [{cid}] {info['message']} ({info['size']} images)\n"
+    _trace("tool_result", tool="status", status="ok", commit_count=len(dataset_commits), total_images=total_images)
     return result
 
 
@@ -449,19 +739,36 @@ def sample_from_committed(commit_id: str, n: int = 20) -> list:
         commit_id: The 8-character commit ID to sample from.
         n: Number of images to sample.
     """
+    _trace("tool_call", tool="sample_from_committed", commit_id=commit_id, n=n)
+    init_error = _require_init("sample_from_committed")
+    if init_error:
+        return init_error
+
     if commit_id not in dataset_commits:
+        _trace("tool_result", tool="sample_from_committed", status="not_found", commit_id=commit_id)
         return f"Commit ID {commit_id} not found."
 
     commit_info = dataset_commits[commit_id]
     images = commit_info["images"]
     if len(images) == 0:
+        _trace("tool_result", tool="sample_from_committed", status="empty", commit_id=commit_id)
         return "No images in this commit."
 
     sample_size = min(n, len(images))
     sampled_paths = random.sample(images, sample_size)
-    print(f"[LOG] Sampled {sample_size} images from commit {commit_id}")
+    _log(f"[LOG] Sampled {sample_size} images from commit {commit_id}")
 
     whole_image = grid_stack(sampled_paths, row_size=5)
+    _trace(
+        "tool_result",
+        tool="sample_from_committed",
+        status="ok",
+        commit_id=commit_id,
+        sampled_count=sample_size,
+        commit_size=len(images),
+        width=whole_image.width,
+        height=whole_image.height,
+    )
     return [
         _pil_to_mcp_image(whole_image),
         f"Sampled {sample_size} images from commit {commit_id}.",
@@ -474,8 +781,14 @@ def test_image() -> list:
 
     Returns the image so the model can describe what it sees.
     """
+    _trace("tool_call", tool="test_image")
+    init_error = _require_init("test_image")
+    if init_error:
+        return init_error
+
     image_path = os.path.join(os.path.dirname(__file__), "123.jpg")
     img = PILImage.open(image_path)
+    _trace("tool_result", tool="test_image", status="ok", width=img.width, height=img.height)
     return [
         _pil_to_mcp_image(img),
         "This is the test image. Please describe what you see.",
@@ -489,11 +802,17 @@ def log_actions(msg: str = "") -> str:
     Args:
         msg: The message to log.
     """
+    _trace("tool_call", tool="log_actions", message=msg)
+    init_error = _require_init("log_actions")
+    if init_error:
+        return init_error
+
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     entry = f"[{timestamp}] {msg}\n"
     with open(LOG_FILE, "a") as f:
         f.write(entry)
-    print(f"[LOG] {msg}")
+    _log(f"[LOG] {msg}")
+    _trace("tool_result", tool="log_actions", status="ok")
     return "Logged."
 
 
@@ -502,12 +821,16 @@ def log_actions(msg: str = "") -> str:
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    _init_weave()
+    _trace("server_start", initialized=_IS_INITIALIZED)
     # Load existing dataset commits
     if os.path.exists(DATASET_JSON):
         try:
             with open(DATASET_JSON, "r") as f:
                 dataset_commits.update(json.load(f))
+            _trace("dataset_commits_loaded", commit_count=len(dataset_commits))
         except json.JSONDecodeError:
             dataset_commits.clear()
+            _trace("dataset_commits_loaded", commit_count=0, warning="json_decode_error")
 
     mcp.run()

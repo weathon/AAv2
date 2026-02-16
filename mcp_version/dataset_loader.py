@@ -60,3 +60,15 @@ dataset_map = {
     "dreamcore": "liminal_space",
     "artwork": "lapis",
 }
+
+
+def dataset_loader_summary() -> dict:
+    """Return lightweight loader metadata for external logging/tracing."""
+    return {
+        "model_name_or_path": model_name_or_path,
+        "total_rows": int(len(names)),
+        "ava_count": int(len(ava_names_list)),
+        "dreamcore_count": int(len(ls_names_list)),
+        "artwork_count": int(len(lapis_names_list)),
+        "embedding_dim": int(ava_embeddings_tensor.shape[1]) if len(ava_embeddings_tensor.shape) > 1 else 0,
+    }

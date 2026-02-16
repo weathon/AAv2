@@ -11,7 +11,7 @@ The original system used the **OpenAI Agents SDK** (`agents` package) with:
 - `set_default_openai_client()` to route through OpenRouter
 
 This version uses the **Model Context Protocol (MCP)** instead:
-- **`server.py`** — An MCP server (via `FastMCP`) that exposes all 8 curation tools over stdio transport
+- **`server.py`** — An MCP server (via `FastMCP`) that exposes all 9 curation tools over stdio transport (`init` + 8 curation tools)
 - **`client.py`** — An MCP client that connects to the server, discovers tools, and runs an agentic LLM loop with Gemini 3 Flash via OpenRouter
 - Tool definitions use MCP's JSON Schema format instead of `@function_tool`
 - Images are returned as base64-encoded MCP content blocks instead of `ToolOutputImage`
@@ -32,15 +32,15 @@ This version uses the **Model Context Protocol (MCP)** instead:
 │                  server.py   │                   │
 │              ┌───────────────▼────────────────┐  │
 │              │         FastMCP Server         │  │
-│              │  8 tools: search, sample,      │  │
+│              │  9 tools: init, search, sample,│  │
 │              │  commit, undo_commit, status,  │  │
 │              │  sample_from_committed,         │  │
 │              │  aesthetics_rate, log_actions   │  │
 │              └───────────────┬────────────────┘  │
 │                              │                   │
 │  ┌──────────────┐  ┌────────▼───────┐  ┌─────┐  │
-│  │ Qwen3-VL-Emb │  │ HPSv3 Reward  │  │wandb│  │
-│  │ (embeddings) │  │ (aesthetics)  │  │     │  │
+│  │ Qwen3-VL-Emb │  │ HPSv3 Reward  │  │Weave│  │
+│  │ (embeddings) │  │ (aesthetics)  │  │Trace│  │
 │  └──────────────┘  └───────────────┘  └─────┘  │
 └─────────────────────────────────────────────────┘
 ```
@@ -49,7 +49,7 @@ This version uses the **Model Context Protocol (MCP)** instead:
 
 | File | Description |
 |------|-------------|
-| `server.py` | MCP server exposing all 8 dataset curation tools |
+| `server.py` | MCP server exposing 9 tools (`init` + 8 dataset curation tools) |
 | `client.py` | Agent client — connects to server, runs LLM tool-call loop |
 | `image_utils.py` | Image grid/stacking utilities (no SDK dependency) |
 | `dataset_loader.py` | Loads embeddings from HuggingFace, initialises Qwen3-VL |
@@ -58,24 +58,27 @@ This version uses the **Model Context Protocol (MCP)** instead:
 
 ## Usage
 
-### Install MCP dependency
+### Install dependencies
 
 ```bash
-pip install mcp
+pip install mcp weave
 ```
 
 ### Run the agent
 
 ```bash
 # From the mcp_version/ directory:
+export WEAVE_PROJECT=your-project-name  # optional, default: aas2-mcp-client/server
 python client.py
 ```
 
 This will:
 1. Spawn `server.py` as a subprocess (MCP stdio transport)
-2. Connect and discover the 8 tools
-3. Start the agentic loop with Gemini 3 Flash
-4. Log to wandb under project `aas2`
+2. Connect and discover the 9 tools
+3. Start the agentic loop with Gemini 3 Flash (model will call `init` first)
+4. Trace LLM calls + MCP tool activity in Weave
+
+> Note: all tools except `init` will return an error until initialization is done.
 
 ### Run just the server (for use with other MCP clients)
 
@@ -96,6 +99,7 @@ This connects to the MCP server, calls the `test_image` tool (which returns `123
 ## Environment Variables
 
 - `OPENROUTER_API_KEY` — Required for LLM calls (Gemini) and image captioning (Kimi-K2.5)
+- `WEAVE_PROJECT` — Optional Weave project name (default: `aas2-mcp-client` in client, `aas2-mcp-server` in server)
 
 ## Key Differences from Original
 
