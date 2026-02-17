@@ -14,6 +14,8 @@ from dataset_loader import (
     dataset_map
 )
 
+DATASET_ROOT = os.getenv("DATASET_ROOT", "/home/wg25r/Downloads/ds/train")
+
 # Changed to dict structure with commit_id as keys
 dataset_commits = {}
 
@@ -69,7 +71,7 @@ def commit(query: str, dataset: str, threshold: float, negative_prompts: list[st
 
     print(f"[LOG] Sample results: {selected_images}.")
 
-    images = [f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}" for name in selected_images if os.path.exists(f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}")]
+    images = [f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}" for name in selected_images if os.path.exists(f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}")]
 
     # Generate unique commit ID
     commit_id = str(uuid.uuid4())[:8]

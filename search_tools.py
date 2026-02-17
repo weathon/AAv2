@@ -14,6 +14,8 @@ from dataset_loader import (
     dataset_map
 )
 
+DATASET_ROOT = os.getenv("DATASET_ROOT", "/home/wg25r/Downloads/ds/train")
+
 
 from openai import OpenAI
 import dotenv
@@ -43,7 +45,7 @@ def _caption_single_image(path, max_retries=4):
         try:
             completion = captioning_client.chat.completions.create(
                 extra_body={},
-                model="moonshotai/kimi-k2.5",
+                model="qwen/qwen3-vl-30b-a3b-instruct",
                 messages=[
                     {
                         "role": "user",
@@ -63,6 +65,8 @@ def _caption_single_image(path, max_retries=4):
                 ]
             )
             caption = completion.choices[0].message.content
+            if caption is None or (isinstance(caption, str) and not caption.strip()):
+                raise RuntimeError("Empty caption content from LLM")
             print(f"[LOG] Generated caption for {path}: {caption}")
             return caption
         except Exception as e:
@@ -152,22 +156,35 @@ def _search(query: str, dataset: str, negative_prompts: list[str] = [], negative
     res = torch.nn.functional.cosine_similarity(embeddings, query_embedding.float())
     # print(f"[PROFILE] cosine_similarity: {time.time()-t8:.3f}s")
 
+    # Compute similarity distribution histogram (excluding negatively-filtered images)
+    valid_mask = torch.ones(len(res), dtype=torch.bool)
+    for i in range(len(names)):
+        if names[i].item() in empty_images:
+            valid_mask[i] = False
+    valid_scores = res[valid_mask].numpy()
+    hist = np.histogram(valid_scores, bins=10)
+    sim_distribution = f"Similarity distribution: counts={hist[0].tolist()}, bins=[{', '.join(f'{b:.3f}' for b in hist[1].tolist())}]"
+
     t9 = time.time()
     selected_images = []
+    top_scores = []
     for idx in torch.argsort(res, descending=True):
         if names[idx].item() not in empty_images:
             selected_images.append(names[idx].item())
+            top_scores.append(f"{res[idx].item():.4f}")
         if len(selected_images) >= t:
             break
     # print(f"[PROFILE] top-k loop: {time.time()-t9:.3f}s, iterations={len(res)}")
 
+    score_info = f"Top-{len(top_scores)} scores: [{', '.join(top_scores)}]\n{sim_distribution}"
     print(f"[LOG] Search results: {selected_images}.")
+    print(f"[LOG] {score_info}")
 
     t10 = time.time()
-    paths = [f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}" for name in selected_images if os.path.exists(f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}")]
+    paths = [f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}" for name in selected_images if os.path.exists(f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}")]
     # print(f"[PROFILE] filter existing paths: {time.time()-t10:.3f}s, found={len(paths)}")
     if len(paths) == 0:
-        return "No Image Found"
+        return f"No Image Found\n{score_info}"
     t11 = time.time()
     whole_image = grid_stack(paths, row_size=5)
     # print(f"[PROFILE] grid_stack: {time.time()-t11:.3f}s")
@@ -178,7 +195,7 @@ def _search(query: str, dataset: str, negative_prompts: list[str] = [], negative
     # print(f"[PROFILE] encode: {time.time()-t12:.3f}s")
 
     # print(f"[PROFILE] TOTAL: {time.time()-t0:.3f}s")
-    return result
+    return [result, score_info]
 
 @function_tool(failure_error_function=None)
 def search(query: str, dataset: str, negative_prompts: list[str] = [], negative_threshold: float = 0.3, t: int = 10) -> ToolOutputImage:
@@ -228,7 +245,7 @@ def _sample(query: str, dataset: str, min_threshold: float, max_threshold: float
     selected_images = [names[i].item() for i in candidate_indices if names[i].item() not in empty_images]
 
     # Convert to full paths and filter existing files
-    paths = [f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}" for name in selected_images if os.path.exists(f"/home/wg25r/Downloads/ds/train/{dataset_map[dataset]}/{name}")]
+    paths = [f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}" for name in selected_images if os.path.exists(f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}")]
 
     return paths
 

@@ -7,7 +7,7 @@ from agents.tool import ToolOutputImage
 
 def vstack(images):
     if len(images) == 0:
-        raise ValueError("Need 0 or more images")
+        raise ValueError("Need 1 or more images")
 
     if isinstance(images[0], np.ndarray):
         images = [Image.fromarray(img) for img in images]
@@ -24,7 +24,7 @@ def vstack(images):
 
 def hstack(images):
     if len(images) == 0:
-        raise ValueError("Need 0 or more images")
+        raise ValueError("Need 1 or more images")
 
     if isinstance(images[0], np.ndarray):
         images = [Image.fromarray(img) for img in images]
