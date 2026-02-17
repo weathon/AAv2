@@ -325,3 +325,68 @@ ANTI-AESTHETICS targets:
 - Distorted proportions, grotesque figures (artwork)
 
 WORKFLOW: Start with broad searches per dataset, then decompose into specific sub-elements, sample to calibrate thresholds, rate aesthetics, commit each sub-batch separately. Use negative prompts only for watermarks/text/empty frames. Cover all 3 datasets.
+[2026-02-16 17:39:37] Broad search results:
+1. PHOTOS "overexposed bright washed out": Top scores 0.38-0.44. Images show heavily overexposed scenes with blown-out highlights, motion blur, lens flare, abstract light streaks, and barely visible silhouettes. Very strong anti-aesthetic content. Distribution shows most images cluster at 0.06-0.17.
+2. ARTWORK "dark gloomy chaotic": Top scores 0.54-0.59. Rich dark abstract expressionist paintings with heavy impasto, chaotic brushwork, somber palettes of black/brown/dark green/red. Strong anti-aesthetic art.
+3. DREAMCORE returned "No Image Found" for preview but scores exist (0.43-0.45). Will retry with different query.
+
+Next: Retry dreamcore, then begin systematic sub-element decomposition for photos dataset first.
+[2026-02-16 17:39:52] Dreamcore search preview still shows "No Image Found" but scores exist (top: 0.53). Will try using sample() to view actual images from dreamcore dataset instead of search().
+[2026-02-16 18:11:42] 计划：为"破败的街道"构建宽谱美学数据集。分解策略：1) 混凝土裂缝与破碎纹理；2) 废弃建筑与涂鸦；3) 杂乱电线与管道；4) 褪色广告牌与剥落的墙皮；5) 垃圾与废墟；6) 阴郁光影与阴影。将分别搜索 photos/artwork/dreamcore 三个数据集，确保正负美学双向覆盖。
+[2026-02-16 18:12:05] 初步搜索完成。观察：1) photos数据集的裂缝混凝土相关图片丰富（最高0.566），显示裂缝人行道、台阶、沥青纹理；2) 废弃建筑涂鸦在photos中结果很好（0.619），有黑白和彩色涂鸦墙；3) artwork数据集的废墟绘画相对较少（0.441）。开始细分搜索各个子元素。
+[2026-02-16 18:12:29] Sample结果：5张裂缝混凝土图片。内容观察：1) 沥青/沥青路面深色裂缝纹理；2) 混凝土接缝处长出绿色苔藓；3) 粗糙的鹅卵石混凝土纹理；4) 黄蓝色表面上的网状裂缟；5) 网格状铺路石图案。
+[2026-02-16 18:13:59] Sample结果：5张废弃建筑图片。内容观察：1) 蓝底粉色泡沫涂鸦样式字母；2) 废弃房屋内部，剥落的天花板、窗户透入光线、绿色涂鸦；3) 暗色调工业建筑，外墙彩色涂鸦画；4) 灰色混凝土建筑外观带涂鸦；5) 黑白照片显示楼梯与大型涂鸦字母（高对比度）。
+[2026-02-16 18:16:34] Sample结果：5张杂乱电线图片。内容观察：1) 黑白照片，电线杆与密集电线，前景人影剪影；2) 纯白背景下电线上的人影构图；3) 蓝天下的木质电线杆，多条电线向各方向延伸；4) 灰天空下的交叉电线与几个小分支；5) 蓝天下电线上悬挂的干枯植物藤蔓。
+[2026-02-16 18:35:37] 计划：构建"破败的街道"主题数据集
+1. 分解子元素：
+   - decayed buildings (建筑衰败): 开裂墙面、破损窗户、剥落的油漆
+   - urban decay (城市衰败): 废弃街道、破败基础设施
+   - graffiti & vandalism (涂鸦与破坏): 街头涂鸦、褪色标记、损坏的标牌
+   - trash & debris (垃圾与杂物): 街头垃圾、废弃物堆积
+   - harsh lighting (刺眼光影): 强烈阴影、昏暗街道
+   - abandoned places (废弃场所): 空无一人的街道、废弃商店
+2. 搜索策略：
+   - 先广泛搜索验证概念存在
+   - 对每个子元素分别采样、评分、提交
+   - 使用负向提示排除水印/文字/空画面
+3. 数据集平衡：主要关注反美学/衰败主题，但保留不同层次的破败感
+[2026-02-16 18:36:15] 搜索结果分析：
+1. photos数据集: 高相关度内容(0.49-0.54)，包含废弃建筑/涂鸦/破败房屋/废墟场景，图片数量充足
+2. artwork数据集: 中低相关度(0.36-0.44)，以绘画形式表现衰败场景
+3. dreamcore: 图片文件缺失错误
+
+现在分解为子元素进行分别搜索和提交：
+1. 开裂墙面/剥落的油漆 (cracked walls peeling paint)
+2. 涂鸦/街头标记 (graffiti street art)
+3. 废弃建筑/破损窗户 (abandoned building broken windows)
+4. 城市阴景/昏暗街道 (urban shadows dark street)
+5. 街头垃圾/废墟 (street trash rubble)
+[2026-02-16 18:36:39] 子元素1: 开裂墙面/剥落油漆 craked wall peeling paint
+- photos: 高质量纹理图片，相似度0.55-0.62，显示破损的纹理、剥落的油漆、曝露的砖块/红铆
+- artwork: 艺术表达形式，76f4似度0.46-0.56，破解风格绘画，涂层纹理
+违移行采样评估后提交
+[2026-02-16 18:37:12] 采样的破损墙面图片内容：多种剥落油漆纹理，包括红色/棕色/绿色油漆从基材上大片剥落，暴露底层网状物和砖块；部分图像显示风化的建筑外墙与老旧窗户，呈现不同阶段的衰败状态。现在进行artwork数据集采样。
+[2026-02-16 18:37:36] Artwork采样显示：抽象/半抽象画作呈现剥落的纹理，包括带裂纹的白色/淡紫色墙面效果、绿色背景上的破碎几何形状、风化的画布纹理、以及有滴落痕迹的墙壁表现；风格偏向表现主义和抽象表现主义，强调材质老化过程的艺术诠释。
+[2026-02-16 18:38:30] 美学评分结果：
+- photos: 分布在1.02-8.19区间，中位数5.32-6.76，大多数中等分数，有少数高分(12.49)和低分(-1.84)
+- artwork: 分布更广(-5.00到7.29)，尤其是有负分（-4.58, -3.39, -5.01），反映出表现主义/抽象作品在通用美学下的"反美学"特征
+
+开始提交数据（1、cracked wall子元素）
+[2026-02-16 18:38:53] 子元素1提交完成：
+- photos: 128 images (ID: 985069e1) - 斑驳油漆纹理与开裂墙面
+- artwork: 39 images (ID: c0cf1b53) - 抽象的破损纹理艺术
+
+开始子元素2：涂鸦/街头样记 graffiti street markings
+[2026-02-16 18:39:57] Photos涂鸦采样显示：废弃建筑内的五彩斑斓航空涂鸦（绿色/粉色/紫色/蓝色），包括红色"连锁时钟"style装饰字体；经典城市地下通道图片展示广泛多彩格雷菲特style标记；碑硅建筑/万年殴道道路的远景；以及涂鸦者在差精导航道上创作的场景。部分地点有坐移/废墟/污垢。继续采样artwork。
+[2026-02-16 18:40:33] Artwork采样显示：纳西涂鸦类型的动态涂鸦表现，包括淡绿色基调上的白色奸娘书写，猾客风格a红/黄/绿色洒落阵，朱六色到橙色本千字，以及深绿色背景上的白色闪亮刮漆效果。消耗有经典后表现主义和奸娘艺术特征。
+[2026-02-16 18:41:29] 美学评分：
+- photos: 4.04-14.23分区间，中高分综合（多为精选城市涂鸦摄影）
+- artwork: -4.18到10.61分区间，存在负分，平均颜色较低，符合表现主义/涂鸦艺术的反美学特征
+
+提交子元素2数据
+[2026-02-16 18:42:16] 子元素2提交完成：
+- photos: 147 images - 城市涂鸦habitar
+- artwork: 20 images - 表现主义涂鸦艺术
+
+开始子元素3: 废弃建筑/破损窗户 abandoned building broken windows
+[2026-02-16 18:43:12] Photos采样显示：废弃建筑的石梳全色调：后院废弃工厂群，破碎玻璃大窗的内部景观和结构钢筋，封闭城市建筑上的佛德式涂鸦，8破屏风格的升级屋顶；红砖拱形窗户被钢桩包围，破损的白艺术窗户，以及黑夜萨影和涂鸦的南部产术风景，得展现废弃儒的多重表现形式。

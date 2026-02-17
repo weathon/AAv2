@@ -38,8 +38,7 @@ MAX_TURNS = 100
 MODEL = "moonshotai/kimi-k2.5"
 INITIAL_PROMPT = "破败的街道"
 WEAVE_PROJECT = os.getenv("WEAVE_PROJECT", "aas2-mcp-client")
-_WEAVE_ENABLED = False
-LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "4"))
+LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "20"))
 SAMPLE_LOG_DIR = os.path.join(os.path.dirname(__file__), "sample_logs")
 
 # Track original images for re-compression
@@ -49,48 +48,6 @@ _original_images = {}  # message_index -> [(content_index, original_data_url), .
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-
-@weave.op()
-def _weave_event(event_type: str, payload: dict) -> dict:
-    return {"event_type": event_type, **payload}
-
-
-def _init_weave() -> None:
-    global _WEAVE_ENABLED
-    try:
-        weave.init(WEAVE_PROJECT)
-        _WEAVE_ENABLED = True
-        print(f"[INIT] weave enabled for project '{WEAVE_PROJECT}'.")
-    except Exception as e:
-        raise RuntimeError(f"weave.init failed for project '{WEAVE_PROJECT}': {e}") from e
-
-
-def _trace(event_type: str, **payload) -> None:
-    if not _WEAVE_ENABLED:
-        return
-    blocked_keys = {
-        "args",
-        "raw_args",
-        "initial_prompt",
-        "content_preview",
-        "tool_names",
-        "messages",
-    }
-    sanitized = {}
-    for k, v in payload.items():
-        if k in blocked_keys:
-            continue
-        if isinstance(v, (list, tuple, dict)):
-            continue
-        if isinstance(v, str) and len(v) > 120:
-            sanitized[k] = v[:120] + "...(truncated)"
-        else:
-            sanitized[k] = v
-    try:
-        _weave_event(event_type=event_type, payload=sanitized)
-    except Exception as e:
-        print(f"[WARN] weave trace failed for {event_type}: {e}")
-
 
 def mcp_tools_to_openai_tools(mcp_tools) -> list[dict]:
     """Convert MCP tool definitions to OpenAI function-calling format."""
@@ -249,7 +206,6 @@ def _write_sample_markdown(md_path: str, png_filename: str, llm_description: str
 # ---------------------------------------------------------------------------
 
 async def run_agent():
-    _trace("agent_start", model=MODEL, max_turns=MAX_TURNS, initial_prompt=INITIAL_PROMPT)
     os.makedirs(SAMPLE_LOG_DIR, exist_ok=True)
     # Create run-specific log directory with UUID
     run_id = str(uuid.uuid4())
@@ -276,7 +232,6 @@ async def run_agent():
             openai_tools = mcp_tools_to_openai_tools(tools_result.tools)
             tool_names = [t.name for t in tools_result.tools]
             print(f"[INIT] Connected to MCP server. Available tools: {tool_names}")
-            _trace("mcp_tools_discovered", tool_names=tool_names, tool_count=len(tool_names))
 
             # Conversation history
             init_first_instruction = (
@@ -329,14 +284,11 @@ async def run_agent():
                         break
                     except Exception as e:
                         print(f"[WARN] LLM call failed {attempt}/{LLM_MAX_RETRIES}: {e}")
-                        _trace("llm_retry", turn=turn + 1, attempt=attempt, max_retries=LLM_MAX_RETRIES, error=str(e))
                         if attempt == LLM_MAX_RETRIES:
                             raise RuntimeError(
                                 f"LLM call failed after {LLM_MAX_RETRIES} attempts: {e}"
                             ) from e
                         await asyncio.sleep(2 ** (attempt - 1))
-
-                _trace("llm_response", turn=turn + 1, finish_reason=response.choices[0].finish_reason)
 
                 choice = response.choices[0]
                 assistant_message = choice.message
@@ -348,15 +300,8 @@ async def run_agent():
                 if not assistant_message.tool_calls:
                     assistant_text = _extract_assistant_text(assistant_message.content)
                     print(f"[ASSISTANT] {assistant_text}")
-                    _trace(
-                        "assistant_message",
-                        turn=turn + 1,
-                        has_tool_calls=False,
-                        content_preview=assistant_text[:300],
-                    )
                     if pending_sample_log:
                         print("[WARN] sample log enforcement: assistant must call log_actions next.")
-                        _trace("sample_log_enforcement", turn=turn + 1, status="missing_tool_call")
                         messages.append({
                             "role": "system",
                             "content": (
@@ -367,7 +312,6 @@ async def run_agent():
                         continue
                     if choice.finish_reason == "stop":
                         print("\n[DONE] Agent finished.")
-                        _trace("agent_done", reason="stop", turn=turn + 1)
                         break
                     continue
 
@@ -378,12 +322,6 @@ async def run_agent():
                         print(
                             "[WARN] sample log enforcement: first tool must be log_actions "
                             f"(got {first_tool_name})."
-                        )
-                        _trace(
-                            "sample_log_enforcement",
-                            turn=turn + 1,
-                            status="wrong_first_tool",
-                            first_tool=first_tool_name,
                         )
                         messages.append({
                             "role": "system",
@@ -401,20 +339,16 @@ async def run_agent():
                         fn_args = json.loads(fn_args_str)
                     except json.JSONDecodeError:
                         print(f"[WARN] Invalid JSON args for tool {fn_name}: {fn_args_str}")
-                        _trace("tool_args_parse_error", turn=turn + 1, tool=fn_name, raw_args=fn_args_str)
                         fn_args = {}
 
                     print(f"[TOOL CALL] {fn_name}({json.dumps(fn_args, ensure_ascii=False)[:200]})")
-                    _trace("tool_call", turn=turn + 1, tool=fn_name, args=fn_args)
 
                     # Call MCP server
                     try:
                         mcp_result = await session.call_tool(fn_name, fn_args)
                         content_parts = parse_mcp_result(mcp_result)
-                        _trace("tool_result", turn=turn + 1, tool=fn_name, status="ok", part_count=len(content_parts))
                     except Exception as e:
                         print(f"[TOOL ERROR] {fn_name}: {e}")
-                        _trace("tool_result", turn=turn + 1, tool=fn_name, status="error", error=str(e))
                         content_parts = [{"type": "text", "text": f"Error: {e}"}]
 
                     # Log text parts
@@ -483,7 +417,6 @@ async def run_agent():
                             except Exception as e:
                                 print(f"[WARN] Failed to save sample image artifact: {e}")
                                 pending_sample_artifact = None
-                            _trace("sample_log_enforcement", turn=turn + 1, status="required")
                             messages.append({
                                 "role": "user",
                                 "content": (
@@ -520,11 +453,9 @@ async def run_agent():
                                 print("[WARN] log_actions msg is empty; sample markdown was not written.")
                         pending_sample_artifact = None
                         pending_sample_log = False
-                        _trace("sample_log_enforcement", turn=turn + 1, status="satisfied")
 
             else:
                 print(f"\n[DONE] Reached max turns ({MAX_TURNS}).")
-                _trace("agent_done", reason="max_turns", max_turns=MAX_TURNS)
 
 
 # ---------------------------------------------------------------------------
@@ -532,7 +463,7 @@ async def run_agent():
 # ---------------------------------------------------------------------------
 
 def main():
-    _init_weave()
+    weave.init(WEAVE_PROJECT)
     asyncio.run(run_agent())
 
 

@@ -181,7 +181,7 @@ def _search(query: str, dataset: str, negative_prompts: list[str] = [], negative
     print(f"[LOG] {score_info}")
 
     t10 = time.time()
-    paths = [f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}" for name in selected_images if os.path.exists(f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}")]
+    paths = [f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}" for name in selected_images]
     # print(f"[PROFILE] filter existing paths: {time.time()-t10:.3f}s, found={len(paths)}")
     if len(paths) == 0:
         return f"No Image Found\n{score_info}"

@@ -54,7 +54,6 @@ LOG_FILE = os.path.join(os.path.dirname(__file__), "..", "agent_log.txt")
 DATASET_JSON = os.path.join(os.path.dirname(__file__), "..", "dataset.json")
 DATASET_ROOT = os.getenv("DATASET_ROOT", "/home/wg25r/Downloads/ds/train")
 WEAVE_PROJECT = os.getenv("WEAVE_PROJECT", "aas2-mcp-server")
-_WEAVE_ENABLED = False
 _IS_INITIALIZED = False
 _INIT_REQUIRED_MSG = "Server resources are not initialized. You need to call `init` first."
 
@@ -78,56 +77,13 @@ _loader_summary: dict = {}
 # Helpers (not exposed as tools)
 # ---------------------------------------------------------------------------
 
-@weave.op()
-def _weave_event(event_type: str, payload: dict) -> dict:
-    return {"event_type": event_type, **payload}
-
-
 def _log(msg: str) -> None:
     print(msg, file=sys.stderr, flush=True)
-
-
-def _init_weave() -> None:
-    global _WEAVE_ENABLED
-    try:
-        with contextlib.redirect_stdout(sys.stderr):
-            weave.init(WEAVE_PROJECT)
-        _WEAVE_ENABLED = True
-        _log(f"[INIT] weave enabled for project '{WEAVE_PROJECT}'.")
-    except Exception as e:
-        raise RuntimeError(f"weave.init failed for project '{WEAVE_PROJECT}': {e}") from e
-
-
-def _trace(event_type: str, **payload) -> None:
-    if not _WEAVE_ENABLED:
-        return
-    blocked_keys = {
-        "query",
-        "negative_prompts",
-        "message",
-        "path",
-        "caption",
-    }
-    sanitized = {}
-    for k, v in payload.items():
-        if k in blocked_keys:
-            continue
-        if isinstance(v, (list, tuple, dict)):
-            continue
-        if isinstance(v, str) and len(v) > 120:
-            sanitized[k] = v[:120] + "...(truncated)"
-        else:
-            sanitized[k] = v
-    try:
-        _weave_event(event_type=event_type, payload=sanitized)
-    except Exception as e:
-        _log(f"[WARN] weave trace failed for {event_type}: {e}")
 
 
 def _require_init(tool_name: str):
     if _IS_INITIALIZED:
         return None
-    _trace("tool_result", tool=tool_name, status="not_initialized", message=_INIT_REQUIRED_MSG)
     return _INIT_REQUIRED_MSG
 
 
@@ -187,7 +143,6 @@ def _pil_to_mcp_image(image: PILImage.Image) -> MCPImage:
 
 
 def _caption_single_image(path: str, max_retries: int = 4) -> str:
-    _trace("caption_start", path=path, max_retries=max_retries)
     image = PILImage.open(path)
     buffered = BytesIO()
     image.save(buffered, format="PNG")
@@ -227,22 +182,18 @@ def _caption_single_image(path: str, max_retries: int = 4) -> str:
             caption = completion.choices[0].message.content
             if caption is None or (isinstance(caption, str) and not caption.strip()):
                 raise RuntimeError("Empty caption content from LLM")
-            _trace("caption_success", path=path, attempt=attempt, caption=caption)
             _log(f"[LOG] Generated caption for {path}: {caption}")
             return caption
         except Exception as e:
-            _trace("caption_retry", path=path, attempt=attempt, error=str(e))
             _log(f"[WARN] Captioning attempt {attempt}/{max_retries} failed for {path}: {e}")
             if attempt < max_retries:
                 time.sleep(2**attempt)
             else:
-                _trace("caption_fallback", path=path, reason=str(e))
                 _log(f"[ERROR] All {max_retries} captioning attempts failed for {path}, using fallback.")
                 return "An image."
 
 
 def _rate_images(image_paths: list[str]) -> str:
-    _trace("aesthetics_rate_start", image_count=len(image_paths))
     captions = [None] * len(image_paths)
     with ThreadPoolExecutor(max_workers=10) as executor:
         future_to_idx = {
@@ -264,13 +215,6 @@ def _rate_images(image_paths: list[str]) -> str:
     hist = np.histogram(scores, bins=10)
     hist_str = f"Score histogram: {hist[0].tolist()}, bins: {hist[1].tolist()}"
     raw_scores = [f"{score:.4f}" for score in scores]
-    _trace(
-        "aesthetics_rate_done",
-        image_count=len(image_paths),
-        min_score=float(np.min(scores)) if scores else None,
-        max_score=float(np.max(scores)) if scores else None,
-        mean_score=float(np.mean(scores)) if scores else None,
-    )
     return hist_str + "\nRaw Scores: " + str(raw_scores)
 
 
@@ -304,14 +248,6 @@ def _search_impl(
     return_paths: bool = False,
 ):
     _log(f"[LOG] Searching for '{query}' in dataset '{dataset}' ...")
-    _trace(
-        "search_impl_start",
-        query=query,
-        dataset=dataset,
-        negative_prompts=negative_prompts,
-        negative_threshold=negative_threshold,
-        top_k=t,
-    )
     embeddings, names = _get_embeddings_and_names(dataset)
     excluded = _apply_negative_filter(embeddings, names, negative_prompts, negative_threshold)
 
@@ -343,13 +279,6 @@ def _search_impl(
             raise FileNotFoundError(f"Image file missing: {path}")
         paths.append(path)
 
-    _trace(
-        "search_impl_done",
-        query=query,
-        dataset=dataset,
-        selected_count=len(selected_images),
-    )
-
     score_info = f"Top-{len(top_scores)} scores: [{', '.join(top_scores)}]\n{sim_distribution}"
 
     if return_paths:
@@ -365,15 +294,6 @@ def _sample_impl(
     negative_prompts: list[str],
     negative_threshold: float,
 ) -> list[str]:
-    _trace(
-        "sample_impl_start",
-        query=query,
-        dataset=dataset,
-        min_threshold=min_threshold,
-        max_threshold=max_threshold,
-        negative_prompts=negative_prompts,
-        negative_threshold=negative_threshold,
-    )
     embeddings, names = _get_embeddings_and_names(dataset)
     excluded = _apply_negative_filter(embeddings, names, negative_prompts, negative_threshold)
 
@@ -390,12 +310,6 @@ def _sample_impl(
         if not os.path.exists(path):
             raise FileNotFoundError(f"Image file missing: {path}")
         paths.append(path)
-    _trace(
-        "sample_impl_done",
-        query=query,
-        dataset=dataset,
-        candidate_count=len(selected_images),
-    )
     return paths
 
 
@@ -409,20 +323,13 @@ mcp = FastMCP("Dataset Curation Server", host="0.0.0.0", port=8765)
 @mcp.tool()
 def init():
     """Initialize embeddings and models. Call this once before using any other tool."""
-    _trace("tool_call", tool="init")
-
     if _IS_INITIALIZED:
-        _trace("tool_result", tool="init", status="already_initialized")
         return "Already initialized."
 
     try:
         elapsed, summary = _load_heavy_resources()
     except Exception as e:
-        _trace("tool_error", tool="init", error=str(e))
         return f"Initialization failed: {e}"
-
-    _trace("dataset_loader_summary", **summary)
-    _trace("tool_result", tool="init", status="ok", init_seconds=elapsed, **summary)
 
     return (
         f"Initialization complete in {elapsed}s. "
@@ -450,15 +357,6 @@ def search(
 
     Returns a grid preview image of the top-k matches.
     """
-    _trace(
-        "tool_call",
-        tool="search",
-        query=query,
-        dataset=dataset,
-        negative_prompts=negative_prompts,
-        negative_threshold=negative_threshold,
-        t=t,
-    )
     init_error = _require_init("search")
     if init_error:
         return init_error
@@ -469,16 +367,13 @@ def search(
     try:
         result, score_info = _search_impl(query, dataset, negative_prompts, negative_threshold, t)
         if result is None:
-            _trace("tool_result", tool="search", status="no_image")
             return [f"No Image Found\n{score_info}"]
-        _trace("tool_result", tool="search", status="ok", width=result.width, height=result.height, top_k=t)
         return [
             _pil_to_mcp_image(result),
             f"Showing top {t} results for '{query}' in {dataset}.\n{score_info}",
         ]
     except Exception as e:
         _log(f"[ERROR] Search failed: {e}")
-        _trace("tool_error", tool="search", error=str(e))
         return [f"Error: {e}"]
 
 
@@ -505,17 +400,6 @@ def sample(
 
     Returns a grid of sampled images for threshold calibration.
     """
-    _trace(
-        "tool_call",
-        tool="sample",
-        query=query,
-        dataset=dataset,
-        min_threshold=min_threshold,
-        max_threshold=max_threshold,
-        count=count,
-        negative_prompts=negative_prompts,
-        negative_threshold=negative_threshold,
-    )
     init_error = _require_init("sample")
     if init_error:
         return init_error
@@ -527,7 +411,6 @@ def sample(
 
     paths = _sample_impl(query, dataset, min_threshold, max_threshold, negative_prompts, negative_threshold)
     if len(paths) == 0:
-        _trace("tool_result", tool="sample", status="no_image")
         return ["No Image Found"]
 
     sampled_paths = random.sample(paths, min(count, len(paths)))
@@ -535,15 +418,6 @@ def sample(
 
     whole_image = grid_stack(sampled_paths, row_size=5)
 
-    _trace(
-        "tool_result",
-        tool="sample",
-        status="ok",
-        candidate_count=len(paths),
-        sampled_count=len(sampled_paths),
-        width=whole_image.width,
-        height=whole_image.height,
-    )
     return [
         _pil_to_mcp_image(whole_image),
         f"Sampled {len(sampled_paths)} from {len(paths)} candidates.",
@@ -573,17 +447,6 @@ def aesthetics_rate(
 
     Returns a string describing the distribution of aesthetics scores.
     """
-    _trace(
-        "tool_call",
-        tool="aesthetics_rate",
-        query=query,
-        dataset=dataset,
-        min_threshold=min_threshold,
-        max_threshold=max_threshold,
-        negative_prompts=negative_prompts,
-        negative_threshold=negative_threshold,
-        sample_size=sample_size,
-    )
     init_error = _require_init("aesthetics_rate")
     if init_error:
         return init_error
@@ -595,7 +458,6 @@ def aesthetics_rate(
 
     paths = _sample_impl(query, dataset, min_threshold, max_threshold, negative_prompts, negative_threshold)
     if len(paths) == 0:
-        _trace("tool_result", tool="aesthetics_rate", status="no_image")
         return "No images found matching the criteria."
 
     if len(paths) > sample_size:
@@ -607,13 +469,6 @@ def aesthetics_rate(
 
     scores = _rate_images(paths_to_rate)
     _log(f"[LOG] Aesthetics scores: {scores}")
-    _trace(
-        "tool_result",
-        tool="aesthetics_rate",
-        status="ok",
-        candidate_count=len(paths),
-        rated_count=len(paths_to_rate),
-    )
     return f"Aesthetics scores for {len(paths_to_rate)} images: {scores}"
 
 
@@ -638,16 +493,6 @@ def commit(
 
     Returns confirmation with commit ID and image count.
     """
-    _trace(
-        "tool_call",
-        tool="commit",
-        query=query,
-        dataset=dataset,
-        threshold=threshold,
-        negative_prompts=negative_prompts,
-        negative_threshold=negative_threshold,
-        message=message,
-    )
     init_error = _require_init("commit")
     if init_error:
         return init_error
@@ -689,13 +534,6 @@ def commit(
     with open(DATASET_JSON, "w") as f:
         json.dump(dataset_commits, f, indent=2)
 
-    _trace(
-        "tool_result",
-        tool="commit",
-        status="ok",
-        commit_id=commit_id,
-        image_count=len(images),
-    )
     return f"Committed with ID: {commit_id}, message: {message} with {len(images)} images."
 
 
@@ -706,13 +544,11 @@ def undo_commit(commit_id: str) -> str:
     Args:
         commit_id: The 8-character commit ID to remove.
     """
-    _trace("tool_call", tool="undo_commit", commit_id=commit_id)
     init_error = _require_init("undo_commit")
     if init_error:
         return init_error
 
     if commit_id not in dataset_commits:
-        _trace("tool_result", tool="undo_commit", status="not_found", commit_id=commit_id)
         return f"Commit ID {commit_id} not found."
 
     removed_commit = dataset_commits.pop(commit_id)
@@ -720,34 +556,23 @@ def undo_commit(commit_id: str) -> str:
         json.dump(dataset_commits, f, indent=2)
 
     _log(f"[LOG] Removed commit {commit_id}: {removed_commit['message']}")
-    _trace(
-        "tool_result",
-        tool="undo_commit",
-        status="ok",
-        commit_id=commit_id,
-        message=removed_commit["message"],
-        image_count=removed_commit["size"],
-    )
     return f"Removed commit {commit_id}: {removed_commit['message']} with {removed_commit['size']} images."
 
 
 @mcp.tool()
 def status() -> str:
     """Show all commit history including commit IDs and image counts."""
-    _trace("tool_call", tool="status")
     init_error = _require_init("status")
     if init_error:
         return init_error
 
     if len(dataset_commits) == 0:
-        _trace("tool_result", tool="status", status="empty")
         return "No commits yet."
 
     total_images = sum(c["size"] for c in dataset_commits.values())
     result = f"Total commits: {len(dataset_commits)}, Total images: {total_images}\n\nCommit History:\n"
     for cid, info in dataset_commits.items():
         result += f"- [{cid}] {info['message']} ({info['size']} images)\n"
-    _trace("tool_result", tool="status", status="ok", commit_count=len(dataset_commits), total_images=total_images)
     return result
 
 
@@ -759,19 +584,16 @@ def sample_from_committed(commit_id: str, n: int = 20) -> list:
         commit_id: The 8-character commit ID to sample from.
         n: Number of images to sample.
     """
-    _trace("tool_call", tool="sample_from_committed", commit_id=commit_id, n=n)
     init_error = _require_init("sample_from_committed")
     if init_error:
         return init_error
 
     if commit_id not in dataset_commits:
-        _trace("tool_result", tool="sample_from_committed", status="not_found", commit_id=commit_id)
         return [f"Commit ID {commit_id} not found."]
 
     commit_info = dataset_commits[commit_id]
     images = commit_info["images"]
     if len(images) == 0:
-        _trace("tool_result", tool="sample_from_committed", status="empty", commit_id=commit_id)
         return ["No images in this commit."]
 
     sample_size = min(n, len(images))
@@ -779,16 +601,6 @@ def sample_from_committed(commit_id: str, n: int = 20) -> list:
     _log(f"[LOG] Sampled {sample_size} images from commit {commit_id}")
 
     whole_image = grid_stack(sampled_paths, row_size=5)
-    _trace(
-        "tool_result",
-        tool="sample_from_committed",
-        status="ok",
-        commit_id=commit_id,
-        sampled_count=sample_size,
-        commit_size=len(images),
-        width=whole_image.width,
-        height=whole_image.height,
-    )
     return [
         _pil_to_mcp_image(whole_image),
         f"Sampled {sample_size} images from commit {commit_id}.",
@@ -801,14 +613,12 @@ def test_image() -> list:
 
     Returns the image so the model can describe what it sees.
     """
-    _trace("tool_call", tool="test_image")
     init_error = _require_init("test_image")
     if init_error:
         return init_error
 
     image_path = os.path.join(os.path.dirname(__file__), "123.jpg")
     img = PILImage.open(image_path)
-    _trace("tool_result", tool="test_image", status="ok", width=img.width, height=img.height)
     return [
         _pil_to_mcp_image(img),
         "This is the test image. Please describe what you see.",
@@ -822,7 +632,6 @@ def log_actions(msg: str = "") -> str:
     Args:
         msg: The message to log.
     """
-    _trace("tool_call", tool="log_actions", message=msg)
     init_error = _require_init("log_actions")
     if init_error:
         return init_error
@@ -832,7 +641,6 @@ def log_actions(msg: str = "") -> str:
     with open(LOG_FILE, "a") as f:
         f.write(entry)
     _log(f"[LOG] {msg}")
-    _trace("tool_result", tool="log_actions", status="ok")
     return "Logged."
 
 
@@ -841,16 +649,16 @@ def log_actions(msg: str = "") -> str:
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    _init_weave()
-    _trace("server_start", initialized=_IS_INITIALIZED)
+    with contextlib.redirect_stdout(sys.stderr):
+        weave.init(WEAVE_PROJECT)
+    _log(f"[INIT] weave enabled for project '{WEAVE_PROJECT}'.")
+
     # Load existing dataset commits
     if os.path.exists(DATASET_JSON):
         try:
             with open(DATASET_JSON, "r") as f:
                 dataset_commits.update(json.load(f))
-            _trace("dataset_commits_loaded", commit_count=len(dataset_commits))
         except json.JSONDecodeError:
             dataset_commits.clear()
-            _trace("dataset_commits_loaded", commit_count=0, warning="json_decode_error")
 
     mcp.run(transport="sse")
