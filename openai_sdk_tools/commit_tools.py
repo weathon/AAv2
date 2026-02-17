@@ -2,11 +2,13 @@ import json
 import uuid
 import random
 import os
+import sys
 import datetime
 import torch
 from agents import function_tool
 
 from image_utils import grid_stack, encode
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dataset_loader import (
     model,
     ava_embeddings_tensor, ls_embeddings_tensor, lapis_embeddings_tensor,

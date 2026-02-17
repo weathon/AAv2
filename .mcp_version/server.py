@@ -37,6 +37,7 @@ import weave
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../openai_sdk_tools"))
 
 from image_utils import grid_stack  # reuse original, no ToolOutputImage dep
 
