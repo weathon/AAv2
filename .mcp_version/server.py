@@ -336,25 +336,24 @@ def _search_impl(
         if len(selected_images) >= t:
             break
 
-    paths = [
-        f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}"
-        for name in selected_images
-        if os.path.exists(f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}")
-    ]
+    paths = []
+    for name in selected_images:
+        path = f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}"
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"Image file missing: {path}")
+        paths.append(path)
+
     _trace(
         "search_impl_done",
         query=query,
         dataset=dataset,
         selected_count=len(selected_images),
-        existing_path_count=len(paths),
     )
 
     score_info = f"Top-{len(top_scores)} scores: [{', '.join(top_scores)}]\n{sim_distribution}"
 
     if return_paths:
         return paths, score_info
-    if len(paths) == 0:
-        return None, score_info
     return grid_stack(paths, row_size=5), score_info
 
 
@@ -385,17 +384,17 @@ def _sample_impl(
     candidate_indices = torch.where(mask)[0].tolist()
     selected_images = [names[i].item() for i in candidate_indices if names[i].item() not in excluded]
 
-    paths = [
-        f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}"
-        for name in selected_images
-        if os.path.exists(f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}")
-    ]
+    paths = []
+    for name in selected_images:
+        path = f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}"
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"Image file missing: {path}")
+        paths.append(path)
     _trace(
         "sample_impl_done",
         query=query,
         dataset=dataset,
         candidate_count=len(selected_images),
-        existing_path_count=len(paths),
     )
     return paths
 
@@ -668,11 +667,12 @@ def commit(
     candidate_indices = torch.where(mask)[0].tolist()
     selected_images = [names[i].item() for i in candidate_indices if names[i].item() not in excluded]
 
-    images = [
-        f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}"
-        for name in selected_images
-        if os.path.exists(f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}")
-    ]
+    images = []
+    for name in selected_images:
+        path = f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}"
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"Image file missing: {path}")
+        images.append(path)
 
     commit_id = str(uuid.uuid4())[:8]
     dataset_commits[commit_id] = {
