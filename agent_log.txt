@@ -56,3 +56,272 @@ Plan:
    - Anti-Aesthetic/Raw: Glitch art distortions, Clashing neon colors, Surreal/unsettling 'Dreamcore' entities, Over-processed DeepDream-style visuals.
 3. Execution: Sequential search, sampling, aesthetic rating (for calibration), and committing for each sub-element.
 4. Review: Check distributions.
+[2026-02-16 01:35:07] Starting collection for 'Psychedelic Art'.
+Plan:
+1. Broad search for 'Psychedelic Art' across all datasets.
+2. Deconstruct into sub-elements:
+   - High Aesthetics/Modern: Fractal patterns, neon fluid art, kaleidoscopic geometry.
+   - Anti-Aesthetic/Raw: Glitch psychedelic, visual noise, clashing neon colors, distorted faces, 'bad trip' imagery.
+   - Conceptual: Surreal dreamscapes (dreamcore), optical illusions.
+3. Target 200+ images by iterating through these sub-elements with appropriate thresholds and negative prompts (watermarks, text).
+4. Monitor aesthetics scores to ensure wide-spectrum coverage.
+[2026-02-16 01:35:17] Initial search in 'artwork' showed a mix of abstract and psychedelic styles. However, 'dreamcore' returned no images for the specific query. I'll broaden the search in 'photos' and 'dreamcore' using more specific visual keywords like 'glitch', 'neon', 'kaleidoscope', and 'distorted visuals'. Starting with high-aesthetic fractal and fluid art.
+[2026-02-16 01:49:18] Plan for 'Psychedelic art' dataset curation: 
+1. Initial broad search to identify core aesthetics in 'artwork' and 'dreamcore'.
+2. Deconstruct into sub-elements: 
+   - High Aesthetics/Intricate: 'Fractal patterns', 'Vibrant mandalas', 'Fluid neon colors', 'Surreal visionary art'.
+   - Anti-Aesthetics/Disorienting: 'Glitchy hallucinations', 'Distorted faces', 'Clashing high-contrast patterns', 'Nauseating optical illusions'.
+3. Execute search, sample, and aesthetic rating for each sub-element.
+4. Aim for >200 images, balancing technical perfection with raw/unsettling expressions.
+[2026-02-16 01:51:48] Committed first batch of 48 images from 'artwork' focusing on geometric psychedelic patterns. Next: Dive into 'dreamcore' for more unsettling, anti-aesthetic psychedelic visuals.
+[2026-02-16 02:00:33] The test image features a young girl with a subtle, knowing smile looking at the camera while a house burns in the background. 
+
+Plan for 'Psychedelic Art' Dataset Curation:
+1. Broad Exploration: Search 'psychedelic art' across 'artwork' and 'dreamcore' datasets to establish a baseline.
+2. Decomposition into Sub-elements:
+   - High Aesthetics/Conventional: 'fractal patterns', 'neon vibrant colors', 'surreal digital landscape', 'kaleidoscope patterns'.
+   - Anti-Aesthetic/Raw: 'glitch art distortion', 'over-saturated clashing colors', 'disturbing dreamcore surrealism', 'blurry hallucinogenic visuals', 'messy hand-drawn psychedelic sketches'.
+3. Iterative Commit: For each sub-element, perform search -> sample/aesthetics_rate -> commit (threshold > 0.35 typical).
+4. Goal: Collect 200+ images covering both visually pleasing geometry and unsettling, raw sensory overload.
+[2026-02-16 02:00:59] The first search returned a good mix of organized patterns and chaotic abstract works. 
+Refining plan:
+- Broadly commit decorative/high-aesthetic psychedelic art first to ensure coverage.
+- Then specifically target the 'anti-aesthetic' side: clashing colors, technical degradation, and unsettling hallucinations.
+Sub-element 1: Intricate/Decorative (Artwork)
+Sub-element 2: Chaotic/Aggressive (Artwork)
+Sub-element 3: Surreal/Distorting (Dreamcore)
+Sub-element 4: Neon/Light trails (Photos)
+Starting with Sub-element 1.
+[2026-02-16 02:12:28] Plan: Build a wide-spectrum psychedelic art dataset. 
+1. General search for 'Psychedelic art' across 'artwork' and 'dreamcore' to understand the baseline.
+2. Deconstruct into sub-elements:
+   - High Aesthetics/Traditional: Fractal patterns, vibrant neon mandalas, surreal oil paintings, visionary art.
+   - Anti-Aesthetics/Raw/Distorted: Glitchy visuals, sensory overload (clashing colors), melted textures, unsettling/dark psychedelia, 'bad trip' imagery.
+3. Use 'photos' for light painting and long exposure effects.
+4. Filter out text and watermarks using negative prompts.
+5. Aim for 200+ images with a mix of aesthetic scores.
+[2026-02-16 02:21:55] Plan for Psychedelic Art: 1. Explore general concepts in 'artwork' and 'dreamcore' datasets. 2. Decompose into sub-elements: 'trippy fractal patterns', 'vibrant neon colors', 'surreal digital melting', 'kaleidoscopic symmetry', and 'glitch/lo-fi distortions'. 3. Apply both high-aesthetic (intricate) and anti-aesthetic (chaotic, low-res style) samples. 4. Target >200 images.
+[2026-02-16 02:22:13] The sample contains abstract expressionist paintings with chaotic brushwork, vibrant graphic patterns in grid layouts, and surreal collages with high-contrast organic shapes. Colors range from earthy, muddy tones to bright, saturated primaries.
+[2026-02-16 02:25:18] The images show night-time long exposure photography featuring light trails from cars on highways, blurry city skylines with bokeh effects, and colorful neon amusement park rides with motion blur. The colors are predominantly dark blacks contrasted with streaks of white, red, yellow, and green.
+[2026-02-16 02:27:29] The images display radial kaleidoscopic patterns with folk-art influences, geometric symmetry, and intricate, hand-drawn floral and abstract motifs. Colors are varied, including both vibrant primaries and soft, muted pastels.
+[2026-02-16 02:30:43] The sampled images feature highly abstract and distorted visuals, including circular motion blur in vibrant greens and reds, iridescent liquid textures, and macro shots of colorful drops on a metal grid. The overall feel is one of technical artifacts and sensory intensity.
+[2026-02-16 02:57:51] Starting curation for 'Psychedelic Art'. Plan: 1. Explore broad concepts (swirls, neon, fractal). 2. Decompose into sub-elements: 'Fractal patterns', 'Neon fluid liquid', 'Trippy distorted faces', 'Hallucinatory landscape'. 3. Target both high-aesthetic (intricate, colorful) and anti-aesthetic (jarring contrasts, glitchy/low-res feel). 4. Use datasets: artwork, dreamcore, and photos.
+[2026-02-16 02:58:16] The sampled images show abstract paintings with circular swirls, concentric squares, teal textured backgrounds with a single blue orb, and chaotic layered scribbles in purple and green. The composition ranges from clean geometric lines to messy, expressive brushwork.
+[2026-02-16 03:26:43] **Psychedelic Art Curator Plan**
+
+**Dataset Overview**: Psychedelic art is a perfect candidate for wide-spectrum aesthetics—encompassing both meticulously crafted visionary art and chaotic, perception-altering visuals. This spans from 1960s concert poster art to modern digital fractals, from spiritual mandalas to raw glitch aesthetics.
+
+**Decomposition Strategy**:
+1. **Fractals & Sacred Geometry** - recursive patterns, mathematical beauty
+2. **Neon & Rainbow Palettes** - vibrant, clashing, unconventional color use
+3. **Optical Illusions** - moiré, tunnels, spirals, warping perception
+4. **Liquid/Melting Effects** - fluid distortion, surreal transformations
+5. **Kaleidoscope Symmetry** - mandala patterns, radial designs
+6. **Psychedelic Poster Art** - 60s/70s counter-culture aesthetic
+7. **Visionary/Surreal Scenes** - dreamlike, hallucinatory imagery
+8. **Blacklight/UV Art** - glow effects, reactive colors
+
+**Dataset Focus**: Primarily `artwork` for traditional psychedelic art, `dreamcore` for surreal/distorted aesthetics, and `photos` for blacklight/concert photography.
+
+**Starting with**: Initial broad search to establish baseline, then systematically explore each sub-element.
+[2026-02-16 03:27:11] **Initial Search Results Analysis**
+- Artwork dataset: Strong hits on 60s/70s concert poster art style - wavy lines, mandalas, bold primaries, spirals
+- Photos dataset: Excellent capturing of swirling liquid patterns, blacklight effects, chromatic aberrations, tie-dye
+- No dreamcore results for broad 'psychedelic art' - will need targeted queries
+
+**Next Step**: Begin sub-element decomposition. Starting with fractals and sacred geometry as they bridge traditional and digital psychedelic aesthetics.
+[2026-02-16 03:28:08] **Fractal Search Results**
+- Artwork: Mandala-style sacred geometry, hand-colored intricate patterns, some with Indian/Asian spiritual influences
+- Photos: Digital fractals, rainbow kaleidoscope patterns, recursive mathematical structures, neon symmetry, some with "fractalchallenge.com" watermarks (acceptable)
+- Dreamcore: No results - will need different query strategy
+
+**Visible Patterns**: Metallic rainbow textures, radial symmetry, Sierpinski-like structures, Julia/Mandelbrot-style spirals, light refraction patterns
+
+**Next**: Sample from fractal queries to determine similarity thresholds for commit.
+[2026-02-16 03:29:13] **Sampled Images Content (Photos Dataset)**
+- Image 1: Peacock with feathers spread showing eye-pattern symmetry in natural fractal arrangement, iridescent blue-green-yellow coloration
+- Image 2: Black and white water vortex/swirlpool creating spiral funnel pattern, high contrast monochromatic
+- Image 3: Colorful light refraction/prism effect with pink, green, purple gradient blur
+- Image 4: Abstract stacked sculptural form with faces/heads in totem-like arrangement, white on dark gray
+- Image 5: Psychedelic lion/face statue overlaid with rainbow star patterns and chromatic distortion effects
+[2026-02-16 03:30:08] **Sampled Images Content (Artwork Dataset)**
+- Image 1: Abstract Miro-style painting with anthropomorphic figures, primary colors (red, blue, yellow, black), splatter technique
+- Image 2: Two concentric square patterns (op art style) with rainbow gradient color progression from center outward
+- Image 3: Circular floral/radial design with layered blue-green petals and yellow center on blue field
+- Image 4: Geometric grid of four squares with diagonal striped patterns in yellow, pink, blue, creating optical illusion
+- Image 5: Blueprint-style geometric drawing with two vertical totem-like structures featuring red and blue circles, network of fine lines
+
+**Observation**: Artwork samples lean more toward op art and geometric abstraction than traditional psychedelic art; similarity threshold should be calibrated carefully.
+[2026-02-16 03:31:42] **Aesthetics Analysis**
+- Photos fractal query: Range -10.29 to 13.67, histogram peaks at 6-8 range (positive traditional aesthetic). One very low outlier at -10.29 suggests some genuinely challenging/repulsive content which serves the anti-aesthetic goal.
+- Artwork fractal query: Range -2.68 to 11.58, bimodal distribution with some low-scores (-2.68, -1.39) and many high scores (8-11 range).
+
+Both show good diversity in aesthetic scores - some receive low marks (anti-aesthetic success) and some high (traditional beauty). This aligns with wide-spectrum goals.
+**Decision**: Commit both queries with threshold ~0.30 to include substantial volume while maintaining relevance.
+[2026-02-16 03:32:18] **Commits Complete**
+- Photos fractal: 638 images (532a58b6)
+- Artwork sacred geometry: 131 images (c6fb0b9f)
+
+**Total so far**: 769 images
+
+**Next Phase**: Exploring 1960s-70s counterculture poster art, liquid/marble patterns, and neon/blacklight aesthetics. These will add historical context and counter-cultural legitimacy to the dataset.
+[2026-02-16 03:33:43] **60s Psychedelic Poster Searches**
+Three related queries all showing excellent results:
+- Classic Fillmore poster style with wavy rainbow lines and bold primary colors
+- Matisse-like "Tree of Life" 4-panel color grid designs
+- Warhol-style repeated portraits (Marilyn, political figures) in color grids
+- Neon linear optical effects and purple/gold flame motifs
+- Bold black outlines, saturated primaries, counterculture aesthetic
+
+Some less relevant: Minimalist color field paintings (Carmen Herrera style), abstract gradients
+
+Next: Sample to calibrate thresholds for vintage psychedelic poster commit.
+[2026-02-16 03:35:13] **Sample 1960s Psychedelic Poster Art Content**
+- Image 1: Abstract expressionist chaotic composition with pink/beige brushstrokes, Picasso-esque distorted figures, graffiti-like marks, high energy fragmentation
+- Image 2: Bright neon Vegas/Hollywood illusion with kaleidoscopic signage, washed-out retro coloring, dense urban visual overload
+- Image 3: Mixed blue-red curvilinear abstract forms, earthy ochre wash, sumi-e ink influence with western pop colors
+- Image 4: Sunset Boulevard pop art collage, movie billboards (Some Like It Hot, Jaws, Casablanca), deep blue sky, neon casino aesthetic
+- Image 5: Purple field with stylized female figure in sunglasses, flowing hair, bell-bottoms with tie-dye pattern, retro-mod commercial illustration style
+
+Most capture vintage psychedelic essence but some more pop art than overtly psychedelic.
+[2026-02-16 04:09:17] Plan: Build a Psychedelic Art dataset covering both high-aesthetic (intricate, vibrant, balanced) and anti-aesthetic (glitchy, jarring colors, distorted, messy) spectrums. 
+Sub-elements to explore:
+1. High Aesthetic: Fractal patterns, Sacred geometry, Vibrant oil flow, Ethereal nebula.
+2. Anti-Aesthetic/Raw: Glitch art, High contrast neon clash, Distorted faces, Low-fidelity trippy textures.
+Datasets: 'artwork', 'dreamcore', 'photos'.
+Target: ~200+ images.
+[2026-02-16 04:09:31] Sampled images show geometric nested squares, colorful floral mandalas with stylized faces, abstract swirling patterns in primary colors, and a dusty pink diamond-shaped composition. Low density but high relevance to geometric psychedelic sub-element.
+[2026-02-16 04:12:34] Sampled images feature macro textures like cracked surfaces with a red/green glow, white light swirls, vertical fiber-like textures, glowing pink droplets on a dark surface, and blurry blue water ripples. Large candidate pool available for light-based experimental art.
+[2026-02-16 04:14:40] Sampled abstract works show varied styles: a vibrant hilly landscape with a red sky, textured impressionistic forest, dark purple/maroon color field, bright yellow textured abstract, and minimalist diagonal rainbow stripes. Good diversity for the chaotic/clashing sub-element.
+[2026-02-16 14:17:19] 【计划草案】主题：战乱之后 (Post-War/Aftermath of Conflict)
+
+目标：收集展现战后废墟、破坏、衰败场景的图片，包含传统高美学（宏大叙事、光影对比）和反美学（混乱、破损、荒凉）内容
+
+子元素分解策略：
+1. 建筑废墟 - collapsed buildings, destroyed architecture
+2. 废弃车辆/武器 - abandoned tanks, military vehicles
+3. 破损街道/基础设施 - rubble, debris, broken infrastructure
+4. 荒凉城市景观 - deserted city, ghost town
+5. 残垣断壁 - crumbling walls, exposed rebar
+6. 战后废弃室内 - abandoned interiors, looted rooms
+7. 焦土/烧毁痕迹 - scorched earth, burn marks
+8. 废墟中的人 - survivors in ruins (human element)
+
+执行策略：
+- 跨三个数据集搜索：photos, artwork, dreamcore
+- 使用负向提示排除：水印、文字、空画面、无关风景
+- 为每个子元素分别commit，记录美学方向
+- 预计总目标 >200 images
+[2026-02-16 14:18:01] 【初步搜索结果】
+photos数据集：获得高质量战后建筑废墟照片，包含倒塌的墙体、钢筋混凝土结构、黑白与彩色摄影并存，真实感强烈
+artwork数据集：获得战争废墟主题的艺术作品，包括历史油画、版画、表现主义风格，部分带有崇高美学（ruin aesthetics）
+dreamcore数据集：无匹配结果，需要调整查询策略
+
+可见内容分析：
+- photos: 倒塌的多层建筑骨架、瓦砾堆积、破损窗户、钢筋暴露、残存墙体结构、黑白纪实摄影
+- artwork: 古典废墟油画（带有崇高感）、表现主义战争场景、版画风格城市化破坏
+
+下一步：细化子元素搜索，从建筑废墟和瓦砾开始
+[2026-02-16 14:18:40] 采样图片观察（collapsed building ruins）：
+1. 岩石纹理局部特写，带白色老虎图案
+2. 冬季枯树前的废弃多层建筑，部分窗户破损
+3. 严重风化的混凝土圆形建筑结构，墙面斑驳
+4. 废弃工业仓库内部，钢梁框架，地面涂鸦，蓝天透入
+5. 拱门形石质废墟结构，室内光线昏暗
+
+候选数1048表明有大量匹配图片。接下来进行美学评分来确认阈值选择。
+[2026-02-16 14:19:51] 美学评分分析（collapsed building ruins, n=30）：
+- 低分区（0-4）：5张，最低0.53，显示强烈反美学特征
+- 中分区（5-8）：6张，平均水平
+- 高分区（9-15）：19张，最高15.85，带有崇高美学感
+
+分布范围广，符合宽谱美学数据集目标。决定使用阈值0.35进行commit，确保相关性。
+[2026-02-16 14:20:33] 【子元素1完成】collapsed building ruins
+- Commit ID: 4ce14e22
+- 数量: 425 images
+- 内容: 建筑废墟、混凝土碎片、结构破坏，混合反美学与废墟美学
+
+【子元素2开始】abandoned military vehicles - abandoned tanks, destroyed military trucks, rusted war machines
+[2026-02-16 14:21:46] 采样图片观察（abandoned military vehicles）：
+1. 工业废弃机械部件，莱色金属结构
+2. 草中生锈的乐森蓝色老式汽车
+3. Point Reyes倾斜的废弃船只"POINT REYES"
+4. 工业金属表面黄色地衣和锈斑特写
+5. 黑白风格的影像
+
+在取953候选图中有部分假阳性（需要排除老式汽车和废船）。需要调整query更精确匹配军事装甲车辆。
+[2026-02-16 14:37:06] 计划制定：针对'战乱之后'主题，构建宽谱美学数据集。
+
+子元素分解：
+1. 废墟建筑 (ruined buildings) - 反美学：坍塌结构、破碎墙体、瓦砾堆
+2. 火灾与烟雾 (fire and smoke) - 反美学：烧焦痕迹、浓烟滚滚、灰烬
+3. 废弃军事装备 (abandoned military vehicles) - 反美学：生锈坦克、破损装甲、残骸
+4. 荒芜城市景观 (desolate urban landscape) - 反美学：空荡街道、破败基础设施
+5. 爆炸破坏痕迹 (explosion damage, craters) - 反美学：弹坑、碎片飞溅
+6. 战争遗迹诗意呈现 (poetic war ruins) - 传统美学：光影构图、历史沧桑感
+
+策略：使用photos和artwork数据集，负向提示排除水印/文字/空画面。每个子元素独立搜索、采样、评估后提交。
+[2026-02-16 14:37:20] 初步搜索结果显示丰富的战争废墟图像，包括瓦砾堆、坍塌建筑结构、破损墙体。黑白与彩色照片均有，展现不同质感。开始第一个子元素'ruined buildings'的采样与评估。
+[2026-02-16 14:37:44] 采样图片展示：废弃工厂内部带有弹孔和剥落的墙面、生锈金属楼梯、破损窗户透入光线；还有破损屋顶建筑、堆满杂物的院落、以及黑白废墟照片。整体呈现破败、荒废、工业废墟质感。
+[2026-02-16 14:38:26] 美学评分显示宽谱分布：最低-5.68（强烈反美学），最高14.82（传统高美学），大部分集中在5-12分区间。废墟主题成功捕获从破败混乱到诗意记录的全谱内容。准备提交该批次。
+[2026-02-16 14:38:47] 第一个子元素提交成功：commit ID 5691ffac，1731张图片。开始第二个子元素'fire and smoke'（火灾与烟雾）的探索。
+[2026-02-16 14:39:19] 采样图片展示：士兵剪影对抗巨大爆炸火光、装甲车周围烈焰与浓烟、以及烟雾抽象形态。画面呈现强烈橙黄色火焰与黑色剪影的对比，战争场景的暴力美学与混乱感。
+[2026-02-16 14:39:51] 美学评分分布：-1.67至13.88分，大部分集中在4-10分区间。爆炸火光主题呈现暴力美学特质，既有强烈视觉冲击的高分，也有混乱无序的低分。准备提交。
+[2026-02-16 14:40:11] 第二个子元素提交成功：commit ID 3cf16245，1909张图片。开始第三个子元素'abandoned military vehicles'（废弃军事装备）的探索。
+[2026-02-16 14:40:50] 采样图片展示：废弃草地中的生锈金属残骸、锈蚀老式卡车、沙漠中报废车辆、生锈螺栓特写。主图为草丛中废弃的工业/军事金属设备，呈现铁锈质感与自然侵蚀的对比。
+[2026-02-16 14:41:30] 美学评分分布：-1.10至16.06分，高分集中在12-14分区间（废墟诗意摄影），低分（-1.10, -1.00）代表纯粹的腐朽破败感。废弃装备主题呈现铁锈质感与自然侵蚀的对比美学。准备提交。
+[2026-02-16 14:41:57] 第三个子元素提交成功：commit ID 291ecf92，1554张图片。开始第四个子元素'desolate urban landscape'（荒芜城市景观）的探索。
+[2026-02-16 14:42:41] 采样图片展示：铁路旁废弃红色砖房、黑白街头摄影（人物与阴影建筑）、破损遮阳篷建筑、毁坏的房屋屋顶。画面呈现阴郁色调、高对比度光影、废弃城市空间的压抑氛围。
+[2026-02-16 14:43:26] 美学评分分布：-5.93至15.71分，展现极宽谱分布。低分(-5.93, -3.11等)代表强烈压抑反美学，高分(15.71, 14.81)呈现废墟诗意摄影。荒芜城市主题成功捕获从绝望到美感的完整光谱。准备提交。
+[2026-02-16 14:43:53] 第四个子元素提交成功：commit ID 06034434，3168张图片。开始第五个子元素'explosion damage craters'（爆炸破坏痕迹/弹坑）的探索。
+[2026-02-16 14:44:37] 采样图片展示：黑白古代石砌废墟遗迹（拱门结构）、地面弹坑坑洞、破损陶瓷碎片、埋在土中的废弃管道。主图为历史建筑残骸与植物共生的废墟场景，呈现时间侵蚀的纹理质感。
+[2026-02-16 14:45:30] 美学评分分布：-3.38至14.39分，大部分集中在4-12分区间。低分(-3.38, -3.02)代表纯粹的破坏混乱，高分(14.39, 13.45)呈现废墟艺术摄影的构图美感。爆炸破坏主题捕获了从碎片混乱到纹理诗意的光谱。准备提交。
+[2026-02-16 14:46:00] 第五个子元素提交成功：commit ID 11e1659e，1424张图片。当前总计超过9000张图片。现在探索artwork数据集，添加战争主题的传统艺术作品，以丰富数据集的多样性。
+[2026-02-16 14:46:42] 采样图片展示：蓝色调抽象表现主义绘画（中心长条形、模糊形态）、黄色底表现主义人物场景、立体拼贴艺术作品、黄色抽象风景画、村舍主题油画。主图为忧郁蓝色调抽象作品，呈现模糊的垂直形态与水平线条，具有战后艺术的心理创伤氛围。
+[2026-02-16 14:47:34] 美学评分分布：-6.69至11.23分，分布较分散。低分(-6.69, -4.75)代表抽象表现主义的混乱与创伤表达，高分(11.23, 10.89)呈现传统绘画构图。战争艺术主题捕获从心理创伤表达到古典美学的宽谱内容。准备提交。
+[2026-02-16 14:48:18] 计划：主题"破败的街道"(Decaying/Dilapidated Streets)。将分解为以下子元素进行策展：
+1. 破败建筑/废弃建筑 - crumbling buildings, abandoned structures
+2. 涂鸦/街头艺术 - graffiti, street art (as sign of urban decay)
+3. 垃圾/废弃物 - trash, debris, urban waste
+4. 老旧路面/裂缝 - cracked pavement, potholes
+5. 阴暗/昏暗街道 - dark alleys, shadows
+6. 生锈金属/废弃车辆 - rusted metal, abandoned cars
+7. 褪色/剥落墙面 - peeling paint, weathered walls
+
+将在多个数据集(photos, artwork, dreamcore)中搜索，使用负向提示排除水印、空画面等。目标：捕捉反美学特质，同时保留多元审美表达。
+[2026-02-16 14:48:33] 搜索结果：展示了多种破败街道场景——左上角是破旧的多层建筑与剥落的墙面；中间是废弃室内空间与倒塌的自行车；右侧有黑白小巷与老旧门廊。下排包括阴暗的后巷、烧毁的建筑、泛黄的老式店铺门面、以及墙皮大面积脱落的街景。图像风格多元：从纪实摄影到艺术化黑白处理，符合宽谱美学目标。"}  }
+[2026-02-16 14:48:51] 采样图像内容：上排展示被植被侵蚀的废弃红色电话亭、斑驳红墙与交通灯、烟雾弥漫的城市灾难场景、石栏上的人形雕塑、标有"KEEP OUT"的废弃房屋。下排包含带有紫红十字架的涂鸦墙面、剥落的腐朽木板、以及废墟瓦砾堆与树影投射。图像呈现强烈的衰败、荒废与反美学特质。
+[2026-02-16 14:49:22] 美学评分显示分数分布在1.1-15.7之间，峰值集中在4-9分区间（中等偏低美学分数），符合反美学目标。现在将开始分别搜索子元素并单独提交，以获得更精细的控制。首先处理'abandoned buildings'和'urban graffiti'两个子元素。
+[2026-02-16 14:51:54] 废弃建筑搜索结果：展示多种废弃建筑状态——左侧为砖墙剥落、窗户破损的联排房屋；中间有带涂鸦的老旧砖房建筑、外墙斑驳脱落的白色建筑；右侧包括烧毁的屋顶、空荡的废弃大厅，以及倒塌的混凝土结构。涂鸦搜索结果：展示丰富的街头艺术——上排包括长满苔藓的桥墩涂鸦、水泥建筑上的多彩气泡字、红底涂鸦墙；下排展现密集覆盖的 tags、抽象彩色壁画、黑白涂鸦和楼梯阴影下的创作者身影。
+[2026-02-16 14:52:25] 废弃建筑采样：展示波纹铁皮屋顶破损、红色烟囱残存的老旧建筑；夜间涂鸦的废弃工业厂房内部；空旷破败的工业园区与废弃房屋；雪地中半埋在雪里的粗糙木楼梯。涂鸦采样：多样街头艺术——单色气泡字母、多彩抽象风格、黑白风格等。
+[2026-02-16 14:52:42] Graffiti采样图像内容：上排展示橡皮管道上的蓝色涂鸦、雪地中的水泥桥墩涂鸦（多色书法与橡皮管道结合）、红底灯光照射下的涂鸦墙面与人物轮廓、火星风格的颜面涂鸦。下排展现海淀为底的 tags、充满能量的彩色波普艺术、成人在彩虹颜色纹路理创作的角度。
+[2026-02-16 14:53:32] 成功提交两个子元素：
+- 废弃建筑 (abandoned buildings): 4281张，ID: 384e8d9b
+- 城市涂鸦 (urban graffiti): 556张，ID: 446f1848
+
+继续搜索其他子元素：破损路面(crack pavement)、生锈金属(rusted metal)、昏暗小巷(dark alleys)、剥落的漆面(peeling paint)等。
+[2026-02-16 14:54:07] 搜索结果：破损路面(cracked pavement)展示沥青裂缝路面、腐埭土地、沥青破裂抽象纹理；生锈金属(rusted metal)展示锈蚀的金属表面、陷孔标识牌、铁路轨道结构；明暗小巷(dark alley)展示独特通道、低照明环境、高对比度影调处理的巷子。
+[2026-02-16 14:54:36] 破损路面采样：左至右分别展示老化砖碎导角、落叶覆盖的样丛小径、鲜明的剥落墙面纹理、F-35黑白混凝土废墟、高对比度的黑白网格地面。
+[2026-02-16 14:55:00] 生锈金属采样：向栽旗发动机组件、刻有"波多黎各"字样的巴拿马井盖、长摯合内的朱蒜铁丝、被极搞的深红色自行车车架、工业馬达抽象细节。
+[2026-02-16 14:55:27] 明暗小巷采样：逮蔽通道、废弃弥山灯光打亮的房屋内部、黑白砖墙前的人物背影、暖黄色路灯下的人物剪影、高对比度的银虽银地面。
+[2026-02-16 14:55:57] 即将提交三个新子元素：破损路面(cracked pavement)、生锈金属(rusted metal)、明暗小巷(dark alley)。同时计划在artwork和dreamcore数据集中搜索相关内容，并寻找"剥落的漆面(peeling paint)"等子元素。
+[2026-02-16 17:38:44] PLAN: Building a wide-spectrum aesthetics dataset targeting 200-1000 images. Strategy:
+
+HIGH-AESTHETICS targets:
+- Golden hour landscapes, dramatic lighting (photos)
+- Renaissance/classical masterpieces (artwork)
+- Serene dreamlike beauty (dreamcore)
+- Professional portrait photography (photos)
+- Vibrant color harmonies in painting (artwork)
+
+ANTI-AESTHETICS targets:
+- Overexposure / blown-out highlights (photos)
+- Motion blur / focus failure (photos)
+- Urban decay: cracked concrete, rust, peeling paint (photos)
+- Chaotic compositions, clashing colors (artwork)
+- Unsettling surreal imagery, liminal spaces (dreamcore)
+- Glitch art, digital artifacts (artwork/dreamcore)
+- Dark/gloomy atmospheres (all datasets)
+- Distorted proportions, grotesque figures (artwork)
+
+WORKFLOW: Start with broad searches per dataset, then decompose into specific sub-elements, sample to calibrate thresholds, rate aesthetics, commit each sub-batch separately. Use negative prompts only for watermarks/text/empty frames. Cover all 3 datasets.

@@ -1,0 +1,42 @@
+Traceback (most recent call last):
+  File "/home/wg25r/aas2/AAv2/mcp_version/client.py", line 54, in _init_weave
+    weave.init(WEAVE_PROJECT)
+  File "/home/wg25r/.local/lib/python3.10/site-packages/weave/trace/api.py", line 79, in init
+    initialized_client = weave_init.init_weave(
+  File "/home/wg25r/.local/lib/python3.10/site-packages/weave/trace/weave_init.py", line 106, in init_weave
+    weave_client.check_wandb_run_matches(wandb_run_id, entity_name, project_name)
+  File "/home/wg25r/.local/lib/python3.10/site-packages/weave/trace/weave_client.py", line 2297, in check_wandb_run_matches
+    raise ValueError(
+ValueError: Project Mismatch: weave and wandb must be initialized using the same project. Found wandb.init targeting project "3dsmile/aas2" and weave.init targeting project "3dsmile/agent". To fix, please use the same project for both library initializations.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/wg25r/aas2/AAv2/mcp_version/client.py", line 269, in <module>
+    main()
+  File "/home/wg25r/aas2/AAv2/mcp_version/client.py", line 261, in main
+    _init_weave()
+  File "/home/wg25r/aas2/AAv2/mcp_version/client.py", line 58, in _init_weave
+    raise RuntimeError(f"weave.init failed for project '{WEAVE_PROJECT}': {e}") from e
+RuntimeError: weave.init failed for project 'agent': Project Mismatch: weave and wandb must be initialized using the same project. Found wandb.init targeting project "3dsmile/aas2" and weave.init targeting project "3dsmile/agent". To fix, please use the same project for both library initializations.
+Traceback (most recent call last):
+  File "/home/wg25r/aas2/AAv2/mcp_version/client.py", line 54, in _init_weave
+    weave.init(WEAVE_PROJECT)
+  File "/home/wg25r/.local/lib/python3.10/site-packages/weave/trace/api.py", line 79, in init
+    initialized_client = weave_init.init_weave(
+  File "/home/wg25r/.local/lib/python3.10/site-packages/weave/trace/weave_init.py", line 106, in init_weave
+    weave_client.check_wandb_run_matches(wandb_run_id, entity_name, project_name)
+  File "/home/wg25r/.local/lib/python3.10/site-packages/weave/trace/weave_client.py", line 2297, in check_wandb_run_matches
+    raise ValueError(
+ValueError: Project Mismatch: weave and wandb must be initialized using the same project. Found wandb.init targeting project "3dsmile/aas2" and weave.init targeting project "3dsmile/agent". To fix, please use the same project for both library initializations.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/wg25r/aas2/AAv2/mcp_version/client.py", line 269, in <module>
+    main()
+  File "/home/wg25r/aas2/AAv2/mcp_version/client.py", line 261, in main
+    _init_weave()
+  File "/home/wg25r/aas2/AAv2/mcp_version/client.py", line 58, in _init_weave
+    raise RuntimeError(f"weave.init failed for project '{WEAVE_PROJECT}': {e}") from e
+RuntimeError: weave.init failed for project 'agent': Project Mismatch: weave and wandb must be initialized using the same project. Found wandb.init targeting project "3dsmile/aas2" and weave.init targeting project "3dsmile/agent". To fix, please use the same project for both library initializations.
