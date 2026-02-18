@@ -128,8 +128,8 @@ def _score_pil_images(images: list) -> list:
     """Score PIL images with HPSv3. Returns list of float aesthetic scores.
 
     Captions each image via Qwen3-VL (physical description, no aesthetics),
-    then feeds caption + image to HPSv3 in batches of 5.
-    Score range has no hard bounds; good images typically score 8-15.
+    then feeds caption + image to HPSv3.
+    Score range has no hard bounds; good images typically score 10-15.
     For anti-aesthetic goals, lower scores indicate success.
     """
     captions = []
@@ -198,20 +198,22 @@ def generate_flux(
     Args:
         prompt: Text description of the desired image.
         negative_prompt: Text describing what to avoid in the generated image.
-        nag_scale: Strength of NAG effect (1-15). Higher = stronger negative guidance.
-            Recommended starting value: 7.
+        nag_scale: Strength of NAG effect (1-12). Higher = stronger negative guidance.
+            Recommended starting value: 5. 
         nag_alpha: Blending coefficient for NAG (0-1). Higher = stronger effect.
-            Recommended starting value: 0.5.
+            Recommended starting value: 0.3.
         nag_tau: Threshold controlling which tokens NAG applies to (0-10).
             Higher = weaker/more selective effect. Recommended starting value: 5.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             requires a full inference pass and generation time grows linearly.
         return_aesthetic_score: If True, score each image with HPSv3 and append scores
-            to the result. Good images score 8-15; low scores = anti-aesthetic success.
+            to the result. Good images score 10-15; low scores = anti-aesthetic success.
 
     Returns:
         List of generated images as MCPImage objects, optionally followed by a
         text entry with HPSv3 aesthetic scores.
+
+    Hint: When the scale is > 8, set tau to around 5 and alpha < 0.5 to avoid overly harsh guidance that can lead to failed generations.
     """
     if DEBUG:
         return [_debug_image() for _ in range(num_of_images)] + ["[DEBUG] Fake scores: ['9.0000'] * n"]

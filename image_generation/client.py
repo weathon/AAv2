@@ -27,6 +27,8 @@ import sys
 from pathlib import Path
 
 import dotenv
+import weave
+weave.init(project_name="img_gen")
 dotenv.load_dotenv()
 
 from openai import AsyncOpenAI
@@ -280,7 +282,7 @@ async def run_agent(initial_prompt: str):
                             if "," in url:
                                 header, b64 = url.split(",", 1)
                                 ext = header.split("/")[1].split(";")[0]
-                                out = OUT_DIR / f"{fn_name}_t{turn+1}_{tc.id[:6]}_{i}.{ext}"
+                                out = OUT_DIR / f"{fn_name}_{turn+1}_{tc.id[:6]}_{i}.{ext}"
                                 out.write_bytes(base64.b64decode(b64))
                                 print(f"[SAVED] {out}")
                 if finished:
