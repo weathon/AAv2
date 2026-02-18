@@ -257,6 +257,7 @@ def generate_flux(
             "(Good images typically score 8-15; low scores indicate anti-aesthetic success.)"
         )
 
+    results.append(f"Cost this call: $0.0000 (local GPU) | Session total: ${cost:.4f}")
     return results
 
 
@@ -423,6 +424,24 @@ def commit(entries: list) -> str:
         json.dump(commits, f, indent=2)
 
     return f"Committed {len(entries)} entries with ID: {commit_id}"
+
+
+@mcp.tool()
+def add_agent_cost(amount: float) -> str:
+    """Add external agent (LLM) cost to the session cost tracker.
+
+    The MCP client should call this after each LLM inference to keep the
+    server-side total in sync with actual spend.
+
+    Args:
+        amount: Cost in USD to add.
+
+    Returns:
+        Updated session total cost string.
+    """
+    global cost
+    cost += amount
+    return f"Added ${amount:.6f} | Session total: ${cost:.4f}"
 
 
 @mcp.tool()

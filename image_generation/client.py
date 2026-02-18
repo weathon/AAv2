@@ -10,12 +10,13 @@ Usage:
     uv run image_generation/client.py "generate 3 anti-aesthetic city images"
 
 Env vars (all optional):
-    MCP_SERVER_URL    default http://127.0.0.1:8000/mcp
-    LLM_BASE_URL      default https://openrouter.ai/api/v1
-    LLM_API_KEY       falls back to OPENAI_API_KEY
-    LLM_MODEL         default qwen/qwen3.5-plus-02-15
-    LLM_MAX_RETRIES   default 20
-    MAX_TURNS         default 100
+    MCP_SERVER_URL       default http://127.0.0.1:8000/mcp
+    LLM_BASE_URL         default https://openrouter.ai/api/v1
+    OPENROUTER_API_KEY   for OpenRouter auth (preferred)
+    OPENAI_API_KEY       fallback for OpenAI API
+    LLM_MODEL            default qwen/qwen3.5-plus-02-15
+    LLM_MAX_RETRIES      default 20
+    MAX_TURNS            default 100
 """
 
 import asyncio
@@ -39,7 +40,7 @@ from mcp.client.streamable_http import streamable_http_client
 MCP_URL         = os.getenv("MCP_SERVER_URL", "http://127.0.0.1:8000/mcp")
 MODEL           = os.getenv("LLM_MODEL", "qwen/qwen3.5-plus-02-15")
 LLM_BASE_URL    = os.getenv("LLM_BASE_URL", "https://openrouter.ai/api/v1")
-LLM_API_KEY     = os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY")
+LLM_API_KEY     = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "20"))
 MAX_TURNS       = int(os.getenv("MAX_TURNS", "100"))
 OUT_DIR         = Path(__file__).parent / "client_output"
@@ -71,6 +72,31 @@ def parse_mcp_result(result) -> tuple[str, list[dict]]:
     return "\n".join(texts) or "(done)", images
 
 
+def _parse_tool_cost(text: str) -> float | None:
+    """Extract 'Session total: $X.XXXX' from MCP tool result text."""
+    marker = "Session total: $"
+    idx = text.find(marker)
+    if idx == -1:
+        return None
+    start = idx + len(marker)
+    end = start
+    while end < len(text) and (text[end].isdigit() or text[end] == "."):
+        end += 1
+    return float(text[start:end]) if end > start else None
+
+
+def _extract_llm_cost(response) -> float:
+    """Extract cost from an OpenRouter/OpenAI chat completion response."""
+    usage = getattr(response, "usage", None)
+    if usage is None:
+        return 0.0
+    # OpenRouter returns cost in usage or usage.model_extra
+    api_cost = getattr(usage, "cost", None)
+    if api_cost is None and hasattr(usage, "model_extra"):
+        api_cost = usage.model_extra.get("cost")
+    return float(api_cost) if api_cost is not None else 0.0
+
+
 def _extract_text(content) -> str:
     if isinstance(content, str):
         return content.strip()
@@ -90,13 +116,14 @@ def _extract_text(content) -> str:
 
 async def run_agent(initial_prompt: str):
     llm = AsyncOpenAI(base_url=LLM_BASE_URL, api_key=LLM_API_KEY)
+    total_cost: float = 0.0          # client-side running total
 
     messages: list[dict] = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user",   "content": initial_prompt},
     ]
 
-    async with streamable_http_client(MCP_URL) as (read_stream, write_stream):
+    async with streamable_http_client(MCP_URL) as (read_stream, write_stream, _):
         async with ClientSession(read_stream, write_stream) as session:
             await session.initialize()
 
@@ -135,13 +162,23 @@ async def run_agent(initial_prompt: str):
                 msg = choice.message
                 messages.append(msg.model_dump())
 
+                # --- Track agent LLM cost ---
+                llm_cost = _extract_llm_cost(response)
+                if llm_cost > 0:
+                    total_cost += llm_cost
+                    print(f"[COST] Agent LLM: ${llm_cost:.6f} | Running total: ${total_cost:.4f}")
+                    try:
+                        await session.call_tool("add_agent_cost", {"amount": llm_cost})
+                    except Exception:
+                        pass  # non-critical
+
                 text = _extract_text(msg.content)
                 if text:
                     print(f"[ASSISTANT] {text}")
 
                 if not msg.tool_calls:
                     if choice.finish_reason == "stop":
-                        print("\n[DONE] Agent finished.")
+                        print(f"\n[DONE] Agent finished. Total session cost: ${total_cost:.4f}")
                         break
                     continue
 
@@ -163,6 +200,12 @@ async def run_agent(initial_prompt: str):
                         text_out, img_parts = f"Error: {exc}", []
 
                     print(f"[TOOL RESULT] {text_out[:300]}")
+
+                    # Parse cost from tool result (format: "... Session total: $X.XXXX")
+                    tool_cost = _parse_tool_cost(text_out)
+                    if tool_cost is not None:
+                        total_cost = tool_cost  # server total is authoritative
+                        print(f"[COST] Server session total: ${total_cost:.4f}")
 
                     # Text result → tool role message
                     messages.append({
@@ -191,7 +234,7 @@ async def run_agent(initial_prompt: str):
                                 out.write_bytes(base64.b64decode(b64))
                                 print(f"[SAVED] {out}")
             else:
-                print(f"\n[DONE] Reached max turns ({MAX_TURNS}).")
+                print(f"\n[DONE] Reached max turns ({MAX_TURNS}). Total session cost: ${total_cost:.4f}")
 
 
 # ---------------------------------------------------------------------------
