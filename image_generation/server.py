@@ -173,7 +173,7 @@ def generate_flux(
     nag_alpha: float,
     nag_tau: float,
     num_of_images: int,
-    return_aesthetic_score: bool = False,
+    return_aesthetic_score: bool = True,
 ) -> list[MCPImage | str]:
     """Generate images using FLUX.1-Krea-dev with NAG (Negative-prompt Aligned Guidance).
 
@@ -254,7 +254,7 @@ def generate_z_image(
     negative_prompt: str,
     scale: float,
     num_of_images: int,
-    return_aesthetic_score: bool = False,
+    return_aesthetic_score: bool = True,
 ) -> list[MCPImage | str]:
     """Generate images using Z-image via the Replicate API.
 
@@ -311,7 +311,7 @@ def generate_z_image(
 def generate_using_nano_banana(
     prompt: str,
     num_of_images: int,
-    return_aesthetic_score: bool = False,
+    return_aesthetic_score: bool = True,
 ) -> list[MCPImage | str]:
     """Generate images using Nano Banana via the Replicate API.
 

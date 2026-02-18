@@ -1,0 +1,40 @@
+{
+  "79423fc3": {
+    "entries": [
+      {
+        "model": "flux",
+        "prompt": "test image",
+        "negative_prompt": "blurry",
+        "other_parameters": {
+          "nag_scale": 7,
+          "nag_alpha": 0.5,
+          "nag_tau": 5
+        }
+      }
+    ],
+    "size": 1
+  },
+  "f9b795ce": {
+    "entries": [
+      {
+        "model": "flux",
+        "prompt": "a serene forest with morning light",
+        "negative_prompt": "blurry, low quality",
+        "other_parameters": {
+          "nag_scale": 7,
+          "nag_alpha": 0.5,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "z_image",
+        "prompt": "abstract colorful swirls",
+        "negative_prompt": "monochrome",
+        "other_parameters": {
+          "scale": 5
+        }
+      }
+    ],
+    "size": 2
+  }
+}
