@@ -38,7 +38,7 @@ from mcp.client.streamable_http import streamable_http_client
 # ---------------------------------------------------------------------------
 
 MCP_URL         = os.getenv("MCP_SERVER_URL", "http://127.0.0.1:8000/mcp")
-MODEL           = os.getenv("LLM_MODEL", "qwen/qwen3.5-plus-02-15")
+MODEL           = os.getenv("LLM_MODEL", "moonshotai/kimi-k2.5")
 LLM_BASE_URL    = os.getenv("LLM_BASE_URL", "https://openrouter.ai/api/v1")
 LLM_API_KEY     = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "20"))
@@ -149,6 +149,11 @@ async def run_agent(initial_prompt: str):
                                 model=MODEL,
                                 messages=messages,
                                 tools=openai_tools,
+                                extra_body={
+                                    "provider": {
+                                        "order": ["moonshotai/int4"],
+                                    }
+                                },
                             ),
                             timeout=120,
                         )
