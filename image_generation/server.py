@@ -8,7 +8,7 @@ Exposes three image-generation tools:
 - generate_using_nano_banana: Cloud-based Nano Banana model via Replicate API.
 
 All tools return MCP Image objects that can be viewed directly in the client.
-Optionally returns HPSv3 aesthetic scores (good images: 8-15; low = anti-aesthetic success).
+Optionally returns HPSv3 aesthetic scores (good images: 10-15; low = anti-aesthetic success).
 
 Run with:
     # Start Flux server (separate terminal):
@@ -24,7 +24,6 @@ import os
 import sys
 import uuid
 import base64
-import time
 
 import dotenv
 import replicate
@@ -32,7 +31,6 @@ import torch
 import requests
 from fastmcp import FastMCP
 from fastmcp.utilities.types import Image as MCPImage
-from openai import OpenAI
 from PIL import Image
 
 dotenv.load_dotenv()
@@ -50,7 +48,6 @@ COMMITS_JSON = os.path.join(os.path.dirname(__file__), "commits.json")
 cost: float = 0.0
 
 COST_PER_REPLICATE_IMAGE = 0.03       # z_image and nano_banana
-COST_PER_CAPTION = 0.000156           # Qwen3-VL captioning via OpenRouter
 
 FLUX_SERVER_URL = os.getenv("FLUX_SERVER_URL", "http://127.0.0.1:5001")
 
@@ -65,78 +62,14 @@ from hpsv3 import HPSv3RewardInferencer
 
 _inferencer = HPSv3RewardInferencer(device=os.getenv("HPS_DEVICE", "cuda:1"))
 
-_captioning_client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("OPENROUTER_API_KEY"),
-)
-
-
-def _caption_pil_image(image: Image.Image, max_retries: int = 4) -> str:
-    """Caption a PIL image using Qwen3-VL via OpenRouter (physical facts only)."""
-    buffered = io.BytesIO()
-    image.save(buffered, format="PNG")
-    b64_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
-
-    for attempt in range(1, max_retries + 1):
-        try:
-            completion = _captioning_client.chat.completions.create(
-                extra_body={},
-                model="qwen/qwen3-vl-30b-a3b-instruct",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": (
-                                    "Caption this image based on physical facts in the image, "
-                                    "ignore aesthetics and styles. Only describe what you see in "
-                                    "the image, do not add any interpretation, imagination, or styles. Be "
-                                    "concise and objective. The caption should be a single short "
-                                    "sentence describe the main content of the image. Do not "
-                                    "mention the style or aesthetics (or bad aesthetics) of the image. Focus on "
-                                    "physical facts like objects, colors, and their relationships. "
-                                    "Do not add any information that cannot be directly observed "
-                                    "from the image."
-                                ),
-                            },
-                            {
-                                "type": "image_url",
-                                "image_url": {"url": f"data:image/png;base64,{b64_str}"},
-                            },
-                        ],
-                    }
-                ],
-            )
-            caption = completion.choices[0].message.content
-            if caption is None or (isinstance(caption, str) and not caption.strip()):
-                raise RuntimeError("Empty caption content from LLM")
-            global cost
-            api_cost = getattr(completion.usage, "cost", None)
-            if api_cost is None and hasattr(completion.usage, "model_extra"):
-                api_cost = completion.usage.model_extra.get("cost")
-            cost += float(api_cost) if api_cost is not None else COST_PER_CAPTION
-            return caption
-        except Exception as e:
-            if attempt < max_retries:
-                time.sleep(2 ** attempt)
-            else:
-                return "An image."
-
-
-def _score_pil_images(images: list) -> list:
+def _score_pil_images(images: list, eval_prompt: str) -> list:
     """Score PIL images with HPSv3. Returns list of float aesthetic scores.
 
-    Captions each image via Qwen3-VL (physical description, no aesthetics),
-    then feeds caption + image to HPSv3.
+    Uses the provided eval_prompt as the caption for all images.
     Score range has no hard bounds; good images typically score 10-15.
     For anti-aesthetic goals, lower scores indicate success.
     """
-    captions = []
-    for i, img in enumerate(images):
-        caption = _caption_pil_image(img)
-        captions.append(caption)
-        print(f"[CAPTION {i+1}] {caption}", flush=True)
+    captions = [eval_prompt] * len(images)
 
     scores = []
     for i in range(0, len(images), 5):
@@ -186,7 +119,7 @@ def generate_flux(
     nag_alpha: float,
     nag_tau: float,
     num_of_images: int,
-    return_aesthetic_score: bool = True,
+    eval_prompt: str,
 ) -> list[MCPImage | str]:
     """Generate images using FLUX.1-Krea-dev with NAG (Negative-prompt Aligned Guidance).
 
@@ -199,19 +132,21 @@ def generate_flux(
         prompt: Text description of the desired image.
         negative_prompt: Text describing what to avoid in the generated image.
         nag_scale: Strength of NAG effect (1-12). Higher = stronger negative guidance.
-            Recommended starting value: 5. 
+            Recommended starting value: 5.
         nag_alpha: Blending coefficient for NAG (0-1). Higher = stronger effect.
             Recommended starting value: 0.3.
         nag_tau: Threshold controlling which tokens NAG applies to (0-10).
             Higher = weaker/more selective effect. Recommended starting value: 5.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             requires a full inference pass and generation time grows linearly.
-        return_aesthetic_score: If True, score each image with HPSv3 and append scores
-            to the result. Good images score 10-15; low scores = anti-aesthetic success.
+        eval_prompt: Neutral physical description of the image content used for HPSv3
+            scoring. Describe only observable objects.
+            Do NOT include any aesthetic judgements, style words, or quality descriptors.
+            Example: "an apple on a wooden table".
 
     Returns:
-        List of generated images as MCPImage objects, optionally followed by a
-        text entry with HPSv3 aesthetic scores.
+        List of generated images as MCPImage objects followed by a text entry with
+        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
 
     Hint: When the scale is > 8, set tau to around 5 and alpha < 0.5 to avoid overly harsh guidance that can lead to failed generations.
     """
@@ -255,13 +190,12 @@ def generate_flux(
         # Convert to MCPImage
         results.append(MCPImage(data=image_bytes, format="webp"))
 
-    if return_aesthetic_score:
-        scores = _score_pil_images(pil_images)
-        score_strs = [f"{s:.4f}" for s in scores]
-        results.append(
-            f"Aesthetic scores (HPSv3): {score_strs}\n"
-            "(Good images typically score 8-15; low scores indicate anti-aesthetic success.)"
-        )
+    scores = _score_pil_images(pil_images, eval_prompt)
+    score_strs = [f"{s:.4f}" for s in scores]
+    results.append(
+        f"Aesthetic scores (HPSv3): {score_strs}\n"
+        "(Good images typically score 10-15; low scores indicate anti-aesthetic success.)"
+    )
 
     results.append(f"Cost this call: $0.0000 (local GPU) | Session total: ${cost:.4f}")
     return results
@@ -273,7 +207,7 @@ def generate_z_image(
     negative_prompt: str,
     scale: float,
     num_of_images: int,
-    return_aesthetic_score: bool = True,
+    eval_prompt: str,
 ) -> list[MCPImage | str]:
     """Generate images using Z-image via the Replicate API.
 
@@ -285,12 +219,14 @@ def generate_z_image(
             Recommended starting value: 5.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             incurs a separate Replicate API call with associated time and cost.
-        return_aesthetic_score: If True, score each image with HPSv3 and append scores
-            to the result. Good images score 8-15; low scores = anti-aesthetic success.
+        eval_prompt: Neutral physical description of the image content used for HPSv3
+            scoring. Describe only observable objects.
+            Do NOT include any aesthetic judgements, style words, or quality descriptors.
+            Example: "an apple on a wooden table".
 
     Returns:
-        List of generated images as MCPImage objects, optionally followed by a
-        text entry with HPSv3 aesthetic scores.
+        List of generated images as MCPImage objects followed by a text entry with
+        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
     """
     if DEBUG:
         return [_debug_image() for _ in range(num_of_images)] + ["[DEBUG] Fake scores: ['9.0000'] * n"]
@@ -317,13 +253,12 @@ def generate_z_image(
     cost += COST_PER_REPLICATE_IMAGE * num_of_images
     results = [_pil_to_mcp_image(img) for img in pil_images]
 
-    if return_aesthetic_score:
-        scores = _score_pil_images(pil_images)
-        score_strs = [f"{s:.4f}" for s in scores]
-        results.append(
-            f"Aesthetic scores (HPSv3): {score_strs}\n"
-            "(Good images typically score 8-15; low scores indicate anti-aesthetic success.)"
-        )
+    scores = _score_pil_images(pil_images, eval_prompt)
+    score_strs = [f"{s:.4f}" for s in scores]
+    results.append(
+        f"Aesthetic scores (HPSv3): {score_strs}\n"
+        "(Good images typically score 10-15; low scores indicate anti-aesthetic success.)"
+    )
 
     results.append(f"Cost this call: ${COST_PER_REPLICATE_IMAGE * num_of_images:.4f} | Session total: ${cost:.4f}")
     return results
@@ -333,7 +268,7 @@ def generate_z_image(
 def generate_using_nano_banana(
     prompt: str,
     num_of_images: int,
-    return_aesthetic_score: bool = True,
+    eval_prompt: str,
 ) -> list[MCPImage | str]:
     """Generate images using Nano Banana via the Replicate API.
 
@@ -341,12 +276,14 @@ def generate_using_nano_banana(
         prompt: Text description of the desired image.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             incurs a separate Replicate API call with associated time and cost.
-        return_aesthetic_score: If True, score each image with HPSv3 and append scores
-            to the result. Good images score 8-15; low scores = anti-aesthetic success.
+        eval_prompt: Neutral physical description of the image content used for HPSv3
+            scoring. Describe only observable objects.
+            Do NOT include any aesthetic judgements, style words, or quality descriptors.
+            Example: "an apple on a wooden table".
 
     Returns:
-        List of generated images as MCPImage objects, optionally followed by a
-        text entry with HPSv3 aesthetic scores.
+        List of generated images as MCPImage objects followed by a text entry with
+        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
     """
     if DEBUG:
         return [_debug_image() for _ in range(num_of_images)] + ["[DEBUG] Fake scores: ['9.0000'] * n"]
@@ -368,13 +305,12 @@ def generate_using_nano_banana(
     cost += COST_PER_REPLICATE_IMAGE * num_of_images
     results = [_pil_to_mcp_image(img) for img in pil_images]
 
-    if return_aesthetic_score:
-        scores = _score_pil_images(pil_images)
-        score_strs = [f"{s:.4f}" for s in scores]
-        results.append(
-            f"Aesthetic scores (HPSv3): {score_strs}\n"
-            "(Good images typically score 8-15; low scores indicate anti-aesthetic success.)"
-        )
+    scores = _score_pil_images(pil_images, eval_prompt)
+    score_strs = [f"{s:.4f}" for s in scores]
+    results.append(
+        f"Aesthetic scores (HPSv3): {score_strs}\n"
+        "(Good images typically score 10-15; low scores indicate anti-aesthetic success.)"
+    )
 
     results.append(f"Cost this call: ${COST_PER_REPLICATE_IMAGE * num_of_images:.4f} | Session total: ${cost:.4f}")
     return results
