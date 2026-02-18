@@ -1,5 +1,5 @@
-# Environment: neg (MCP server + HPSv3 + Replicate)
-# Python 3.10
+# Environment: main (MCP server + HPSv3 + Replicate)
+# Conda env: neg | Python 3.10
 
 # Core ML
 torch==2.8.0+cu128
@@ -14,9 +14,6 @@ timm==1.0.24
 
 # HPSv3 (aesthetic scoring)
 hpsv3 @ git+https://github.com/MizzenAI/HPSv3.git@bd0c5fcb5f587617b0169c07222ab78d01e2f3c2
-
-# NAG (Negative-prompt Aligned Guidance)
-nag @ git+https://github.com/ChenDarYen/Normalized-Attention-Guidance.git@8bb34a16e517692743fab99bc60838c20f975ded
 
 # MCP server
 fastmcp==2.14.5
