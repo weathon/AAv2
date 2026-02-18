@@ -197,47 +197,75 @@ async def run_agent(initial_prompt: str):
                     continue
 
                 # --- Execute tool calls ---
+                # Group by tool name: different tools run in parallel,
+                # same tool runs sequentially within its group.
                 finished = False
+                tool_calls_parsed = []
                 for tc in msg.tool_calls:
                     fn_name = tc.function.name
                     try:
                         fn_args = json.loads(tc.function.arguments)
                     except json.JSONDecodeError:
                         fn_args = {}
+                    tool_calls_parsed.append((tc, fn_name, fn_args))
 
-                    print(f"[TOOL] {fn_name}({json.dumps(fn_args, ensure_ascii=False)[:200]})")
-
-                    # Client-side finish tool
+                # Check for finish first
+                for tc, fn_name, fn_args in tool_calls_parsed:
                     if fn_name == "finish":
                         summary = fn_args.get("summary", "")
                         print(f"\n[DONE] Agent finished. Summary: {summary}")
                         print(f"[DONE] Total session cost: ${total_cost:.4f}")
                         finished = True
                         break
+                if finished:
+                    break
 
-                    try:
-                        mcp_result = await session.call_tool(fn_name, fn_args)
-                        text_out, img_parts = parse_mcp_result(mcp_result)
-                    except Exception as exc:
-                        print(f"[TOOL ERROR] {exc}")
-                        text_out, img_parts = f"Error: {exc}", []
+                # Group calls by tool name
+                from collections import OrderedDict
+                groups: OrderedDict[str, list] = OrderedDict()
+                for item in tool_calls_parsed:
+                    groups.setdefault(item[1], []).append(item)
 
-                    print(f"[TOOL RESULT] {text_out[:300]}")
+                async def _exec_group(group_calls):
+                    """Execute a group of calls to the same tool sequentially."""
+                    results = []
+                    for tc, fn_name, fn_args in group_calls:
+                        print(f"[TOOL] {fn_name}({json.dumps(fn_args, ensure_ascii=False)[:200]})")
+                        try:
+                            mcp_result = await session.call_tool(fn_name, fn_args)
+                            text_out, img_parts = parse_mcp_result(mcp_result)
+                        except Exception as exc:
+                            print(f"[TOOL ERROR] {exc}")
+                            text_out, img_parts = f"Error: {exc}", []
+                        print(f"[TOOL RESULT] {text_out[:300]}")
+                        results.append((tc, fn_name, text_out, img_parts))
+                    return results
 
-                    # Parse cost from tool result (format: "... Session total: $X.XXXX")
+                # Run different tool groups in parallel
+                group_results = await asyncio.gather(
+                    *[_exec_group(calls) for calls in groups.values()]
+                )
+
+                # Flatten and append results in original order
+                result_map = {}
+                for group in group_results:
+                    for tc, fn_name, text_out, img_parts in group:
+                        result_map[tc.id] = (tc, fn_name, text_out, img_parts)
+
+                for tc, fn_name, fn_args in tool_calls_parsed:
+                    tc_obj, fn_name, text_out, img_parts = result_map[tc.id]
+
                     tool_cost = _parse_tool_cost(text_out)
                     if tool_cost is not None:
-                        total_cost = tool_cost  # server total is authoritative
+                        total_cost = tool_cost
                         print(f"[COST] Server session total: ${total_cost:.4f}")
 
-                    # Text result → tool role message
                     messages.append({
                         "role": "tool",
                         "tool_call_id": tc.id,
                         "content": text_out,
                     })
 
-                    # Images → separate user message (broader model compat)
                     if img_parts:
                         messages.append({
                             "role": "user",
@@ -246,7 +274,6 @@ async def run_agent(initial_prompt: str):
                                 *img_parts,
                             ],
                         })
-                        # Save images to disk for viewing
                         OUT_DIR.mkdir(exist_ok=True)
                         for i, part in enumerate(img_parts):
                             url = part["image_url"]["url"]
