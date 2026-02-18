@@ -662,4 +662,4 @@ if __name__ == "__main__":
         except json.JSONDecodeError:
             dataset_commits.clear()
 
-    mcp.run(transport="sse")
+    mcp.run(transport="streamable-http")

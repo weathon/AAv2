@@ -26,14 +26,14 @@ from openai import AsyncOpenAI
 import weave
 
 from mcp import ClientSession
-from mcp.client.sse import sse_client
+from mcp.client.streamable_http import streamable_http_client
 
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
 
 SYSTEM_PROMPT_PATH = os.path.join(os.path.dirname(__file__), "system_prompt.md")
-MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://localhost:8765/sse")
+MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://localhost:8765")
 MAX_TURNS = 100
 MODEL = "moonshotai/kimi-k2.5"
 INITIAL_PROMPT = "破败的街道"
@@ -222,8 +222,8 @@ async def run_agent():
         api_key=os.getenv("OPENROUTER_API_KEY"),
     )
 
-    # Connect to MCP server (SSE transport — start server separately via run.sh)
-    async with sse_client(MCP_SERVER_URL) as (read_stream, write_stream):
+    # Connect to MCP server (streamable-http transport — start server separately via run.sh)
+    async with streamable_http_client(MCP_SERVER_URL) as (read_stream, write_stream):
         async with ClientSession(read_stream, write_stream) as session:
             await session.initialize()
 
