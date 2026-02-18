@@ -39,6 +39,8 @@ dotenv.load_dotenv()
 
 mcp = FastMCP("Image Generation")
 
+DEBUG = os.getenv("DEBUG", "").lower() in ("1", "true", "yes")
+
 COMMITS_JSON = os.path.join(os.path.dirname(__file__), "commits.json")
 
 # ---------------------------------------------------------------------------
@@ -148,6 +150,13 @@ def _score_pil_images(images: list) -> list:
 # ---------------------------------------------------------------------------
 
 
+_DEBUG_IMAGE_PATH = os.path.join(os.path.dirname(__file__), "..", ".mcp_version", "123.jpg")
+
+def _debug_image() -> MCPImage:
+    with open(_DEBUG_IMAGE_PATH, "rb") as f:
+        return MCPImage(data=f.read(), format="jpeg")
+
+
 def _pil_to_mcp_image(image: Image.Image) -> MCPImage:
     """Convert a PIL Image to a FastMCP Image (WebP for smaller payload)."""
     buffered = io.BytesIO()
@@ -200,6 +209,9 @@ def generate_flux(
         List of generated images as MCPImage objects, optionally followed by a
         text entry with HPSv3 aesthetic scores.
     """
+    if DEBUG:
+        return [_debug_image() for _ in range(num_of_images)] + ["[DEBUG] Fake scores: ['9.0000'] * n"]
+
     # Call Flux microservice
     response = requests.post(
         f"{FLUX_SERVER_URL}/generate",
@@ -273,6 +285,9 @@ def generate_z_image(
         List of generated images as MCPImage objects, optionally followed by a
         text entry with HPSv3 aesthetic scores.
     """
+    if DEBUG:
+        return [_debug_image() for _ in range(num_of_images)] + ["[DEBUG] Fake scores: ['9.0000'] * n"]
+
     global cost
     pil_images = []
     for _ in range(num_of_images):
@@ -326,6 +341,9 @@ def generate_using_nano_banana(
         List of generated images as MCPImage objects, optionally followed by a
         text entry with HPSv3 aesthetic scores.
     """
+    if DEBUG:
+        return [_debug_image() for _ in range(num_of_images)] + ["[DEBUG] Fake scores: ['9.0000'] * n"]
+
     global cost
     pil_images = []
     for _ in range(num_of_images):
