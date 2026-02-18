@@ -2,15 +2,19 @@
 MCP server for wide-spectrum aesthetics image generation.
 
 Exposes three image-generation tools:
-- generate_flux: Local FLUX.1-Krea-dev model with NAG (Negative-prompt Aligned Guidance)
-  for fine-grained control over aesthetic direction.
+- generate_flux: FLUX.1-Krea-dev model with NAG (Negative-prompt Aligned Guidance)
+  for fine-grained control over aesthetic direction. Runs on separate microservice (flux_server.py).
 - generate_z_image: Cloud-based Z-image model via Replicate API.
 - generate_using_nano_banana: Cloud-based Nano Banana model via Replicate API.
 
-Both tools return MCP Image objects that can be viewed directly in the client.
+All tools return MCP Image objects that can be viewed directly in the client.
 Optionally returns HPSv3 aesthetic scores (good images: 8-15; low = anti-aesthetic success).
 
 Run with:
+    # Start Flux server (separate terminal):
+    python image_generation/flux_server.py
+
+    # Then start MCP server:
     uv run image_generation/server.py
 """
 
@@ -25,29 +29,28 @@ import time
 import dotenv
 import replicate
 import torch
-from mcp.server.fastmcp import FastMCP
-from mcp.server.fastmcp.utilities.types import Image as MCPImage
-from nag import NAGFluxPipeline, NAGFluxTransformer2DModel
+import requests
+from fastmcp import FastMCP
+from fastmcp.utilities.types import Image as MCPImage
 from openai import OpenAI
 from PIL import Image
 
 dotenv.load_dotenv()
 
-mcp = FastMCP("Image Generation", json_response=True)
+mcp = FastMCP("Image Generation")
 
 COMMITS_JSON = os.path.join(os.path.dirname(__file__), "commits.json")
 
-transformer = NAGFluxTransformer2DModel.from_pretrained(
-    "black-forest-labs/FLUX.1-Krea-dev",
-    subfolder="transformer",
-    torch_dtype=torch.bfloat16,
-)
-pipe = NAGFluxPipeline.from_pretrained(
-    "black-forest-labs/FLUX.1-Krea-dev",
-    transformer=transformer,
-    torch_dtype=torch.bfloat16,
-)
-pipe.to("cuda")
+# ---------------------------------------------------------------------------
+# Session cost tracking
+# ---------------------------------------------------------------------------
+
+cost: float = 0.0
+
+COST_PER_REPLICATE_IMAGE = 0.03       # z_image and nano_banana
+COST_PER_CAPTION = 0.000156           # Qwen3-VL captioning via OpenRouter
+
+FLUX_SERVER_URL = os.getenv("FLUX_SERVER_URL", "http://127.0.0.1:5001")
 
 # ---------------------------------------------------------------------------
 # Aesthetic scoring (HPSv3) — loaded at startup
@@ -106,6 +109,11 @@ def _caption_pil_image(image: Image.Image, max_retries: int = 4) -> str:
             caption = completion.choices[0].message.content
             if caption is None or (isinstance(caption, str) and not caption.strip()):
                 raise RuntimeError("Empty caption content from LLM")
+            global cost
+            api_cost = getattr(completion.usage, "cost", None)
+            if api_cost is None and hasattr(completion.usage, "model_extra"):
+                api_cost = completion.usage.model_extra.get("cost")
+            cost += float(api_cost) if api_cost is not None else COST_PER_CAPTION
             return caption
         except Exception as e:
             if attempt < max_retries:
@@ -166,11 +174,13 @@ def generate_flux(
     nag_tau: float,
     num_of_images: int,
     return_aesthetic_score: bool = False,
-) -> list:
-    """Generate images using local FLUX.1-Krea-dev with NAG (Negative-prompt Aligned Guidance).
+) -> list[MCPImage | str]:
+    """Generate images using FLUX.1-Krea-dev with NAG (Negative-prompt Aligned Guidance).
 
     NAG allows explicit negative prompts to steer the model away from unwanted aesthetics,
     making it suitable for both pro (high-aesthetics) and anti (low-aesthetics) generation.
+
+    Flux runs on a separate microservice (flux_server.py).
 
     Args:
         prompt: Text description of the desired image.
@@ -190,21 +200,42 @@ def generate_flux(
         List of generated images as MCPImage objects, optionally followed by a
         text entry with HPSv3 aesthetic scores.
     """
-    pil_images = []
-    for _ in range(num_of_images):
-        image = pipe(
-            prompt,
-            nag_negative_prompt=negative_prompt,
-            guidance_scale=0.0,
-            nag_scale=nag_scale,
-            nag_alpha=nag_alpha,
-            nag_tau=nag_tau,
-            num_inference_steps=28,
-            max_sequence_length=256,
-        ).images[0]
-        pil_images.append(image)
+    # Call Flux microservice
+    response = requests.post(
+        f"{FLUX_SERVER_URL}/generate",
+        json={
+            "prompt": prompt,
+            "negative_prompt": negative_prompt,
+            "nag_scale": nag_scale,
+            "nag_alpha": nag_alpha,
+            "nag_tau": nag_tau,
+            "num_of_images": num_of_images,
+        },
+        timeout=300,
+    )
 
-    results = [_pil_to_mcp_image(img) for img in pil_images]
+    if response.status_code != 200:
+        raise RuntimeError(
+            f"Flux server error: {response.status_code} - {response.text}"
+        )
+
+    data = response.json()
+    if data.get("status") != "success":
+        raise RuntimeError(f"Flux generation failed: {data.get('error', 'Unknown error')}")
+
+    # Convert base64 images to MCPImage objects
+    images_b64 = data.get("images", [])
+    pil_images = []
+    results = []
+
+    for img_b64 in images_b64:
+        # Decode base64 to bytes
+        image_bytes = base64.b64decode(img_b64)
+        # Open as PIL Image (for aesthetic scoring if needed)
+        pil_img = Image.open(io.BytesIO(image_bytes))
+        pil_images.append(pil_img)
+        # Convert to MCPImage
+        results.append(MCPImage(data=image_bytes, format="webp"))
 
     if return_aesthetic_score:
         scores = _score_pil_images(pil_images)
@@ -224,7 +255,7 @@ def generate_z_image(
     scale: float,
     num_of_images: int,
     return_aesthetic_score: bool = False,
-) -> list:
+) -> list[MCPImage | str]:
     """Generate images using Z-image via the Replicate API.
 
     Args:
@@ -242,10 +273,11 @@ def generate_z_image(
         List of generated images as MCPImage objects, optionally followed by a
         text entry with HPSv3 aesthetic scores.
     """
+    global cost
     pil_images = []
     for _ in range(num_of_images):
         output = replicate.run(
-            "prunaai/z-image",
+            "prunaai/z-image:eb865cc448032613678cd0e4e99548671cdff1286bc04f0f605b3fc10fffe3aa",
             input={
                 "width": 1024,
                 "height": 1024,
@@ -260,6 +292,7 @@ def generate_z_image(
         image_data = output.read()
         pil_images.append(Image.open(io.BytesIO(image_data)))
 
+    cost += COST_PER_REPLICATE_IMAGE * num_of_images
     results = [_pil_to_mcp_image(img) for img in pil_images]
 
     if return_aesthetic_score:
@@ -270,6 +303,7 @@ def generate_z_image(
             "(Good images typically score 8-15; low scores indicate anti-aesthetic success.)"
         )
 
+    results.append(f"Cost this call: ${COST_PER_REPLICATE_IMAGE * num_of_images:.4f} | Session total: ${cost:.4f}")
     return results
 
 
@@ -278,7 +312,7 @@ def generate_using_nano_banana(
     prompt: str,
     num_of_images: int,
     return_aesthetic_score: bool = False,
-) -> list:
+) -> list[MCPImage | str]:
     """Generate images using Nano Banana via the Replicate API.
 
     Args:
@@ -292,6 +326,7 @@ def generate_using_nano_banana(
         List of generated images as MCPImage objects, optionally followed by a
         text entry with HPSv3 aesthetic scores.
     """
+    global cost
     pil_images = []
     for _ in range(num_of_images):
         output = replicate.run(
@@ -305,6 +340,7 @@ def generate_using_nano_banana(
         image_data = output.read()
         pil_images.append(Image.open(io.BytesIO(image_data)))
 
+    cost += COST_PER_REPLICATE_IMAGE * num_of_images
     results = [_pil_to_mcp_image(img) for img in pil_images]
 
     if return_aesthetic_score:
@@ -315,7 +351,22 @@ def generate_using_nano_banana(
             "(Good images typically score 8-15; low scores indicate anti-aesthetic success.)"
         )
 
+    results.append(f"Cost this call: ${COST_PER_REPLICATE_IMAGE * num_of_images:.4f} | Session total: ${cost:.4f}")
     return results
+
+
+@mcp.tool()
+def init() -> str:
+    """Initialize a new session. MUST be called at the start of every session.
+
+    Resets the session cost tracker to $0.00.
+
+    Returns:
+        Confirmation that the session has been initialized.
+    """
+    global cost
+    cost = 0.0
+    return "Session initialized. Cost tracker reset to $0.00."
 
 
 @mcp.tool()
@@ -364,4 +415,5 @@ def log_action(msg: str = "") -> str:
 
 
 if __name__ == "__main__":
-    mcp.run(transport="streamable-http")
+    print("Starting MCP server...")
+    mcp.run(transport="http")
