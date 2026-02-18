@@ -129,7 +129,13 @@ async def run_agent(initial_prompt: str):
 
             tools_result = await session.list_tools()
             openai_tools = mcp_tools_to_openai(tools_result.tools)
-            print(f"[INIT] Tools: {[t.name for t in tools_result.tools]}\n")
+            # Client-side finish tool — LLM calls this to end the session
+            openai_tools.append({"type": "function", "function": {
+                "name": "finish",
+                "description": "Call this tool ONLY when all tasks are complete and the final batch has been committed. This ends the session.",
+                "parameters": {"type": "object", "properties": {"summary": {"type": "string", "description": "Final summary of what was accomplished."}}, "required": ["summary"]},
+            }})
+            print(f"[INIT] Tools: {[t.name for t in tools_result.tools] + ['finish']}\n")
 
             for turn in range(MAX_TURNS):
                 print(f"\n{'='*55} TURN {turn + 1} {'='*55}")
@@ -177,12 +183,16 @@ async def run_agent(initial_prompt: str):
                     print(f"[ASSISTANT] {text}")
 
                 if not msg.tool_calls:
-                    if choice.finish_reason == "stop":
-                        print(f"\n[DONE] Agent finished. Total session cost: ${total_cost:.4f}")
-                        break
+                    # Nudge the LLM to keep working — only stop if it
+                    # explicitly calls the client-side `finish` tool.
+                    messages.append({
+                        "role": "user",
+                        "content": "继续。调用工具继续工作。如果你已经完成了所有任务，请调用 finish 工具。",
+                    })
                     continue
 
                 # --- Execute tool calls ---
+                finished = False
                 for tc in msg.tool_calls:
                     fn_name = tc.function.name
                     try:
@@ -191,6 +201,14 @@ async def run_agent(initial_prompt: str):
                         fn_args = {}
 
                     print(f"[TOOL] {fn_name}({json.dumps(fn_args, ensure_ascii=False)[:200]})")
+
+                    # Client-side finish tool
+                    if fn_name == "finish":
+                        summary = fn_args.get("summary", "")
+                        print(f"\n[DONE] Agent finished. Summary: {summary}")
+                        print(f"[DONE] Total session cost: ${total_cost:.4f}")
+                        finished = True
+                        break
 
                     try:
                         mcp_result = await session.call_tool(fn_name, fn_args)
@@ -233,6 +251,8 @@ async def run_agent(initial_prompt: str):
                                 out = OUT_DIR / f"{fn_name}_t{turn+1}_{tc.id[:6]}_{i}.{ext}"
                                 out.write_bytes(base64.b64decode(b64))
                                 print(f"[SAVED] {out}")
+                if finished:
+                    break
             else:
                 print(f"\n[DONE] Reached max turns ({MAX_TURNS}). Total session cost: ${total_cost:.4f}")
 
