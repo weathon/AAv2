@@ -131,7 +131,7 @@ def generate_flux(
     Args:
         prompt: Text description of the desired image.
         negative_prompt: Text describing what to avoid in the generated image.
-        nag_scale: Strength of NAG effect (1-12). Higher = stronger negative guidance.
+        nag_scale: Strength of NAG effect (1-10). Higher = stronger negative guidance.
             Recommended starting value: 5.
         nag_alpha: Blending coefficient for NAG (0-1). Higher = stronger effect.
             Recommended starting value: 0.3.
@@ -141,7 +141,7 @@ def generate_flux(
             requires a full inference pass and generation time grows linearly.
         eval_prompt: Neutral physical description of the image content used for HPSv3
             scoring. Describe only observable objects.
-            Do NOT include any aesthetic judgements, style words, or quality descriptors.
+            Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
             Example: "an apple on a wooden table".
 
     Returns:
@@ -216,12 +216,12 @@ def generate_z_image(
         negative_prompt: Text describing what to avoid in the generated image.
         scale: Guidance scale controlling prompt adherence (1-15).
             Higher values follow the prompt more strictly.
-            Recommended starting value: 5.
+            Recommended starting value: 7.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             incurs a separate Replicate API call with associated time and cost.
         eval_prompt: Neutral physical description of the image content used for HPSv3
             scoring. Describe only observable objects.
-            Do NOT include any aesthetic judgements, style words, or quality descriptors.
+            Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
             Example: "an apple on a wooden table".
 
     Returns:
@@ -278,7 +278,7 @@ def generate_using_nano_banana(
             incurs a separate Replicate API call with associated time and cost.
         eval_prompt: Neutral physical description of the image content used for HPSv3
             scoring. Describe only observable objects.
-            Do NOT include any aesthetic judgements, style words, or quality descriptors.
+            Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
             Example: "an apple on a wooden table".
 
     Returns:
