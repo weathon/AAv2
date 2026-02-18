@@ -36,5 +36,1351 @@
       }
     ],
     "size": 2
+  },
+  "f8c7cd87": {
+    "entries": [
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally anti-aesthetic smartphone snapshot of a cluttered kitchen counter at night: harsh on-camera flash, tilted horizon, smeared lens fingerprints, mixed color temperatures, random clutter. Raw and awkward.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a messy bedroom floor: crumpled clothes, tangled chargers, cheap carpet, harsh flash glare, weird white balance, accidental crop, amateur snapshot.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic close photo of a scratched plastic remote control on a stained couch, shot too close with wide-angle distortion, harsh flash, noise, unflattering perspective.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally ugly snapshot of a sink full of dishes: dirty water, soap scum, clutter, on-camera flash, lens smear, blown highlights, awkward framing, low-end sensor noise.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a trash bag by an apartment hallway door, fluorescent green cast, crooked angle, compression artifacts, random crop, mundane and uncomfortable.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly amateur snapshot of a parking lot puddle with oil sheen, harsh midday glare, overexposed highlights, dirty lens, tilted horizon, boring subject.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a wrinkled fast-food receipt on greasy table, shot too close, uneven LED light, sickly colors, blur, heavy JPEG artifacts.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally awkward snapshot of a tangled headphone cable knot, harsh flash hotspot, shallow detail, weird crop, noisy shadows, cheap plastic texture.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a dusty computer keyboard with crumbs, shot at a bad angle, harsh flash, glare, smudges, muted ugly colors, amateur vibe.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly snapshot of a half-open fridge with random leftovers, harsh internal light, wrong white balance, clutter, motion blur, accidental finger shadow.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a cheap plastic shower curtain, mildew spots, harsh flash, lens fog, weird color cast, crooked framing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally bad snapshot of a bus stop bench with stains, flat overcast light, ugly gray palette, low contrast, compression noise, awkward empty space.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a cracked phone screen reflection, harsh flash, glare, warped perspective, random crop, noisy shadows.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly amateur photo of a grocery checkout belt with random items, harsh fluorescent lighting, green cast, motion blur, bad framing, mundane boredom.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic snapshot of a cluttered desk: old mugs, dusty monitor, sticky notes, harsh flash, lens smear, uneven exposure, ugly colors.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally ugly snapshot of a vending machine keypad close-up, scratched plastic, glare, wrong focus, random crop, noisy shadows.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a dusty ceiling vent, harsh flash hotspot, off-angle framing, banding, ugly beige tones, boring subject.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly snapshot of a wrinkled bedsheet with random stains, harsh flash, blown highlights, noisy shadows, crooked crop, unpleasant mundane feel.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a dusty window with fingerprints, backlit glare, wrong exposure, lens flare, tilted horizon, accidental crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally bad snapshot of a messy car interior at night, harsh flash reflections, noisy shadows, awkward angle, random clutter, cheap materials.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a microwave turntable with dried spills, harsh top light, ugly yellow cast, compression artifacts, weird crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly amateur snapshot of a public laundry room floor, fluorescent light, green cast, skewed perspective, motion blur, dirty lens.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic close photo of peeling wall paint, harsh flash, glare, wrong focus, random crop, muddy colors, cheap phone sensor noise.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally awkward snapshot of a cluttered medicine cabinet, harsh flash, mirror streaks, accidental reflection glare, wrong white balance.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a cheap motel carpet pattern, shot too close, tilted horizon, noise, banding, ugly colors, boring texture.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly snapshot of a greasy stovetop burner, harsh flash glare, blown highlights, muddy shadows, wrong white balance, random crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a cluttered recycling bin, awkward angle, harsh flash, noise, compression artifacts, unpleasant mundane subject.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally ugly snapshot of a stained cutting board, harsh overhead light, wrong exposure, sickly colors, blur, cheap camera noise.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a cluttered hallway shoe pile, harsh flash, tilted frame, random crop, dirty lens, ugly mixed lighting.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly amateur snapshot of a dented metal elevator panel, glare, wrong focus, awkward crop, noisy shadows, boring utilitarian feel.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a cheap plastic storage drawer with dust, harsh flash, lens smear, blown highlights, crooked angle, ugly beige tones.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally bad snapshot of a supermarket aisle endcap, fluorescent green cast, motion blur, skewed perspective, random crop, boring clutter.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a scratched nonstick pan with burnt residue, harsh flash glare, wrong white balance, noise, unpleasant textures.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly snapshot of a cluttered backpack interior, random items, harsh flash hotspot, deep noisy shadows, awkward framing, accidental crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a cracked sidewalk gum stain, harsh midday light, overexposure, ugly gray tones, tilted horizon, random crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally awkward snapshot of a cheap office chair fabric, shot too close, noise, banding, ugly colors, wrong focus, boring subject.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic snapshot of a cluttered bathroom counter, toothpaste smears, mirror streaks, harsh flash, lens fog, ugly mixed lighting.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly amateur photo of a plastic takeout container with soggy fries, shot too close, glare, wrong exposure, sickly colors, heavy compression.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a dusty TV screen with static reflection, harsh flash hotspot, random crop, noise, ugly gray-blue cast.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally bad snapshot of a cluttered storage closet, harsh flash, crooked framing, deep noisy shadows, random objects, uncomfortable mess.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a stained coffee mug ring on a desk, shot too close, wrong focus, harsh flash glare, muddy colors, amateur feel.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly snapshot of a leaking trash can liner, harsh overhead light, wrong white balance, noise, random crop, unpleasant mundane subject.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a scratched laminated table surface, harsh flash, glare, banding, ugly yellow cast, boring texture close-up.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally awkward snapshot of a messy cable pile behind a TV, harsh flash reflections, deep noise, random crop, crooked angle.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a smeared touchscreen with fingerprints, harsh flash, blown highlights, wrong focus, random crop, cheap phone look.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly amateur snapshot of a wet umbrella dripping on a floor mat, fluorescent light, green cast, motion blur, tilted frame, mundane discomfort.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic close photo of a cracked tile grout line, harsh flash, glare, noise, ugly gray-green tones, boring utilitarian detail.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally bad snapshot of a cheap foam takeout cup, spilled soda, sticky table, harsh flash hotspot, wrong white balance, compression artifacts.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a dusty baseboard corner with cobwebs, harsh flash, random crop, noise, ugly beige cast, mundane and uncomfortable.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly snapshot of a smeared glass stovetop reflection, harsh flash, glare, wrong exposure, tilted frame, noise, unpleasant grime.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a cluttered nightstand with random pills and coins, harsh flash, lens smear, blown highlights, awkward crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally awkward snapshot of a wrinkled plastic grocery bag, harsh flash, ugly color cast, noise, random crop, boring subject.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a dusty radiator vent with rust spots, harsh flash, glare, wrong focus, banding, ugly off-white tones.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly amateur snapshot of a cluttered pantry shelf, harsh flash, deep noisy shadows, random crop, wrong white balance, boring mess.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a scratched plastic cutting mat with stains, harsh flash hotspot, wrong exposure, ugly green cast, random crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally bad snapshot of a messy apartment entryway, shoe pile, junk mail, harsh flash, tilted horizon, lens smear, ugly mixed lighting.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of a cheap plastic water bottle with dents, harsh flash, glare, noisy shadows, random crop, awkward framing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Ugly snapshot of a greasy microwave keypad, harsh flash reflections, wrong focus, ugly yellow-green cast, compression artifacts, random crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic photo of an unmade bed with tangled sheets, harsh flash, blown highlights, noisy shadows, crooked crop, amateur snapshot.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Intentionally ugly snapshot of a grimy stairwell corner, harsh fluorescent light, green cast, banding, motion blur, awkward framing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, professional studio lighting, rule of thirds, symmetrical balance, award-winning photo, HDR, glossy finish\",\"other_parameters\":{\"nag_scale\":10,\"nag_alpha\":0.6,\"nag_tau\":4}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: overcooked microwave meal on stained plate, severe overexposure, blown highlights, wrong white balance, greasy glare, heavy noise, accidental crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: soggy pizza slice in a cardboard box, extreme close-up, wide-angle distortion, harsh flash, severe JPEG artifacts, sickly colors, motion blur.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: lukewarm instant noodles in a cheap bowl, underexposed shadows, fluorescent green cast, lens smear, glare, uneven exposure, awkward framing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: crushed sandwich on a napkin, shot too close, wrong focus, harsh flash hotspot, blown highlights, muddy shadows, heavy compression.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: bruised bananas on a counter, unflattering angle, ugly yellow-green cast, noise, banding, tilted horizon, random crop, no beauty.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: spilled cereal with milk on table, harsh flash reflections, severe motion blur, wrong white balance, smeared lens, noisy shadows.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: burnt toast crumbs on a plate, shot at bad angle, overexposed glare, muddy shadows, ugly color cast, compression artifacts.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: half-melted ice cream dripping on hand, accidental finger covering lens edge, harsh flash, wrong exposure, noise, unpleasant sticky look.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: microwaved vegetables with gray color, severe underexposure, fluorescent cast, banding, blur, random crop, amateur snapshot.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: instant coffee with oily film in a chipped mug, harsh flash glare, wrong focus, ugly brown-green cast, heavy JPEG artifacts.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: limp salad in plastic container, extreme close crop, wide-angle distortion, ugly lighting, noise, compression, wrong white balance.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: stale donuts in a box, harsh flash, blown highlights, deep noisy shadows, tilted horizon, random crop, no appetizing look.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: greasy burger wrapper with sauce stains, shot too close, wrong focus, motion blur, ugly color cast, heavy compression artifacts.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: cold french fries spilled in car seat, harsh flash reflections, severe noise, underexposed shadows, accidental crop, awkward framing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: dried soup crust on bowl edge, ugly lighting, wrong exposure, banding, smeared lens, muddy colors, extreme close-up crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: overripe strawberries with mold spots, harsh flash, blown highlights, noisy shadows, wrong white balance, random crop, unpleasant.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: leftover pasta congealed in a pot, harsh overhead light, ugly yellow-green cast, motion blur, heavy compression, awkward angle.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: spilled sauce packet on table, overexposed flash glare, wrong focus, deep noisy shadows, random crop, unpleasant sticky textures.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: cheap cafeteria tray with bland food, fluorescent lighting, green cast, banding, skewed perspective, motion blur, ugly colors.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: dented canned food opened poorly, sharp glare, underexposed background, smeared lens, noise, compression artifacts, awkward framing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: wet soggy paper bag with fries, extreme close-up, wide-angle distortion, harsh flash, wrong exposure, ugly color cast, heavy artifacts.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: kitchen sponge with grime, harsh flash, blown highlights, muddy shadows, wrong white balance, random crop, unpleasant texture.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: cheap instant ramen seasoning spilled on counter, harsh flash hotspot, ugly yellow cast, noise, compression, awkward framing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: old leftovers in a plastic container, lid half open, bad fridge light, wrong exposure, lens fog, noise, random crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: sticky syrup spill on countertop, harsh flash glare, wrong focus, overexposed highlights, heavy JPEG artifacts, awkward angle.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: soggy microwaved vegetables in plastic, uneven lighting, fluorescent cast, banding, motion blur, ugly colors, random crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: burnt residue in a frying pan, shot too close, harsh flash hotspot, wrong exposure, noise, compression, unpleasant texture.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: half-eaten burrito on crumpled foil, harsh flash, deep noise, wrong white balance, random crop, awkward framing, not appetizing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: congealed cheese on plate, extreme close-up crop, wide-angle distortion, harsh flash, blown highlights, muddy shadows, ugly colors.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: cheap takeout soup spilled in bag, wrong exposure, lens smear, noise, banding, awkward framing, unpleasant wet paper textures.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: stale chips crumbs everywhere, harsh flash glare, wrong focus, motion blur, heavy compression artifacts, random crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: ugly cafeteria coffee, underexposed background, fluorescent cast, banding, noise, accidental finger shadow, awkward framing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: messy plate with mixed leftovers, harsh flash, blown highlights, wrong white balance, noise, compression artifacts, random crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: soggy salad dressing spill, extreme close crop, wide-angle distortion, harsh flash, wrong exposure, ugly color cast, heavy artifacts.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: bruised apples in a bag, bad lighting, fluorescent green cast, severe noise, banding, awkward framing, accidental crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: melted frozen dinner tray, harsh flash reflections, underexposed corners, wrong white balance, noise, heavy JPEG artifacts.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: kitchen trash with food scraps visible, harsh overhead light, wrong exposure, ugly brown-green cast, motion blur, unpleasant mess.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: greasy paper plate with ketchup smears, shot too close, wrong focus, harsh flash hotspot, deep noisy shadows, random crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: cheap cafeteria tray with spilled sauce, fluorescent lighting, green cast, skewed perspective, banding, heavy compression.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: congealed oatmeal in a bowl, severe underexposure, wrong white balance, noise, lens smear, awkward framing, unappetizing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: stale leftover rice with gray tone, harsh flash glare, blown highlights, muddy shadows, heavy JPEG artifacts, random crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: dirty dish sponge beside sink, harsh flash, wrong focus, ugly color cast, noise, compression artifacts, unpleasant grime texture.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: spilled instant soup powder, fluorescent cast, banding, motion blur, awkward framing, heavy compression, ugly colors.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: soggy microwaved burrito on paper towel, harsh flash, blown highlights, wrong white balance, noise, random crop, not appetizing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: cheap ramen cup with lid half peeled, bad lighting, wrong exposure, lens fog, noise, banding, awkward framing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: messy plate with sauce crust, extreme close-up, wide-angle distortion, harsh flash, wrong focus, heavy JPEG artifacts.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: collapsed cake slice in plastic clamshell, harsh flash glare, overexposed highlights, muddy shadows, noise, compression, ugly colors.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: soggy sandwich with wilted lettuce, underexposed background, fluorescent cast, banding, motion blur, random crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: dirty plate stacked with scraps, harsh flash hotspot, wrong exposure, lens smear, noise, heavy JPEG artifacts, awkward framing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"flux\",\"prompt\":\"Anti-aesthetic: spilled ketchup packet, extreme close crop, harsh flash glare, wrong focus, banding, compression artifacts, ugly red smear.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, perfect exposure, sharp focus, smooth bokeh, ultra-detailed, tasteful minimalism, magazine cover, professional retouching, balanced symmetry, pleasing palette\",\"other_parameters\":{\"nag_scale\":12,\"nag_alpha\":0.65,\"nag_tau\":3}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic security camera still of a retail backroom: off-center framing, partial occlusion by a door frame, flat fluorescent lighting, ugly green cast, heavy compression artifacts, banding, random noise.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic CCTV still of a stairwell landing: crooked angle, blown highlights from a bare bulb, deep crushed shadows, rolling shutter smear, heavy JPEG artifacts, muddy colors.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic phone snapshot of a bus seat fabric: extreme close-up, wrong focus, ugly color cast, banding, noise, accidental crop, boring texture.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic low-res webcam frame of a messy desk: partial subject cut off, harsh LED glare, wrong white balance, compression blocks, random noise, tilted horizon.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic surveillance still of a parking garage corner: off-center, empty, flat light, sickly green cast, severe banding, compression artifacts, muddy shadows.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic snapshot of a public restroom sink: harsh flash, dirty mirror streaks, random crop, finger covering lens edge, wrong exposure, heavy JPEG artifacts.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic photo of a stained ceiling tile: skewed perspective, ugly yellow cast, noise, banding, wrong focus, boring subject, accidental crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic frame from a cheap dashcam at night: blown headlights, motion blur, smeared lens, heavy compression, blocky artifacts, awkward composition.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic phone photo of a cluttered junk drawer: harsh flash hotspot, deep noisy shadows, random crop, tilted horizon, wrong white balance, messy mundane vibe.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic low-quality screenshot of a video call: compression smearing, ugly color cast, banding, strange crop, unflattering lighting, digital noise.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic photo of a greasy microwave interior: wrong exposure, harsh glare, smeared lens, noise, banding, random crop, unpleasant textures.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic snapshot of a dusty fan grille: extreme close crop, wrong focus, ugly beige-green cast, noise, compression blocks, boring subject.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic photo of a messy car cupholder: harsh flash reflections, underexposed corners, random crop, tilted angle, heavy JPEG artifacts.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic low-res hallway camera still: off-center framing, partial occlusion, blown ceiling light, crushed shadows, rolling shutter, heavy compression.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic snapshot of stained carpet: tilted horizon, ugly lighting, noise, banding, wrong white balance, random crop, mundane discomfort.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic photo of a broken plastic chair: harsh flash, ugly color cast, wrong focus, random crop, compression artifacts, awkward framing.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic shot of a cluttered pantry shelf: flat fluorescent light, green cast, skewed perspective, noise, blocky artifacts, accidental crop.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic low-quality scan of a wrinkled document: moire patterns, banding, uneven exposure, ugly gray cast, random crop, digital noise.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic photo of a cluttered garage shelf: harsh single bulb, wrong exposure, deep noise, compression blocks, tilted frame, boring mess.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"z_image\",\"prompt\":\"Anti-aesthetic low-res still of an empty office corner: off-center, flat light, ugly green cast, banding, compression artifacts, awkward emptiness.\",\"negative_prompt\":\"color harmony, clean composition, cinematic lighting, golden hour, perfect exposure, soft shadows, pleasing palette, magazine-quality, professional retouching, sharp focus, beautiful bokeh\",\"other_parameters\":{\"scale\":6}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic snapshot of a public restroom sink: harsh flash, dirty mirror streaks, weird greenish lighting, low resolution, heavy JPEG artifacts, accidental finger covering part of the lens, awkward tilt, cluttered toiletries. Avoid: cinematic lighting, clean composition, color harmony, professional photography, beautiful bokeh.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic phone photo of a messy bedroom floor: harsh on-camera flash, tilted horizon, wrong white balance, smeared lens, motion blur, compression artifacts. Avoid: perfect exposure, clean composition, cinematic lighting.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic snapshot of a greasy microwave interior: blown highlights, muddy shadows, severe noise, banding, random crop, unpleasant textures. Avoid: HDR, glossy finish, award-winning photo.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic photo of a cluttered junk drawer: harsh flash hotspot, deep noisy shadows, accidental crop, ugly mixed lighting, mundane discomfort. Avoid: symmetry, rule of thirds, professional retouching.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic dashcam frame at night: blown headlights, smeared lens, extreme motion blur, heavy compression blocks, wrong white balance. Avoid: cinematic lighting, sharp focus, beautiful bokeh.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic snapshot of a stained carpet close-up: wrong focus, ugly yellow-green cast, banding, noise, crooked angle, boring subject. Avoid: pleasing palette, clean composition.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic photo of a dirty dish sponge: harsh flash, overexposed glare, muddy colors, random crop, heavy JPEG artifacts, unpleasant grime texture. Avoid: tasteful minimalism, magazine cover.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic phone photo of a cluttered bathroom counter: toothpaste smears, mirror streaks, harsh flash, lens fog, wrong exposure, noise. Avoid: studio lighting, perfect exposure, color harmony.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic snapshot of a cheap plastic remote control: shot too close, wide-angle distortion, harsh flash glare, wrong focus, random crop, noisy shadows. Avoid: sharp focus, clean composition.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic photo of a trash bag in a hallway: flat fluorescent lighting, ugly green cast, crooked framing, compression artifacts, awkward emptiness. Avoid: cinematic mood, balanced symmetry.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic snapshot of soggy fast-food fries in a plastic container: harsh flash, blown highlights, sickly colors, motion blur, heavy compression. Avoid: appetizing food photography, professional retouching.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic webcam frame of an empty office corner at 3AM: flat light, ugly color cast, banding, random noise, strange crop. Avoid: clean composition, cinematic lighting.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic close photo of peeling wall paint: harsh flash, glare, wrong focus, muddy colors, random crop, low-end sensor noise. Avoid: ultra-detailed, tasteful minimalism.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic snapshot of a messy car interior at night: harsh flash reflections, underexposed shadows, severe noise, tilted horizon, accidental crop. Avoid: glossy finish, perfect exposure.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic photo of a wrinkled bedsheet with stains: harsh flash, blown highlights, noisy shadows, crooked crop, uncomfortable mundane vibe. Avoid: pleasing palette, symmetry.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic security-camera-like still of a stairwell: crooked angle, blown bare bulb, crushed shadows, rolling shutter smear, heavy JPEG blocks. Avoid: cinematic lighting, clean composition.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic photo of a dusty keyboard with crumbs: harsh flash, glare, smudges, wrong white balance, noise, random crop. Avoid: professional studio lighting, sharp focus.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic snapshot of a greasy stovetop burner: harsh flash glare, blown highlights, muddy shadows, wrong exposure, heavy compression. Avoid: HDR, award-winning photo.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic photo of a supermarket checkout belt: fluorescent green cast, motion blur, skewed perspective, random crop, boring clutter. Avoid: clean composition, cinematic lighting.\",\"negative_prompt\":\"\",\"other_parameters\":{}}",
+      "{\"model\":\"nano_banana\",\"prompt\":\"Anti-aesthetic close photo of a scratched laminated table: harsh flash hotspot, banding, ugly yellow cast, noise, boring texture. Avoid: color harmony, professional retouching.\",\"negative_prompt\":\"\",\"other_parameters\":{}}"
+    ],
+    "size": 150
+  },
+  "13589496": {
+    "entries": [
+      {
+        "model": "flux",
+        "prompt": "An empty abandoned hospital hallway with flickering fluorescent lights, peeling paint, blood stains on walls, broken medical equipment scattered, moldy ceiling tiles, unsettling atmosphere, liminal space horror",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A derelict office building corridor with dead lights, shattered windows, papers scattered everywhere, water damage on carpet, broken ceiling panels, eerie silence, horror liminal space",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An abandoned hotel hallway with torn wallpaper, flickering bulbs, dusty chandeliers, broken room doors, stained carpet, unsettling emptiness, dreamcore horror aesthetic",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A deserted school corridor with broken lockers, scattered textbooks, cracked windows, graffiti on walls, dusty floor, single buzzing fluorescent light, horror atmosphere",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An empty underground subway station with cracked tiles, broken benches, flickering platform lights, dark tunnels, water puddles, graffiti, unsettling silence, liminal horror",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A rotting basement with damp concrete walls, mold everywhere, broken pipes leaking, single bare bulb flickering, water on floor, rust stains, claustrophobic horror",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An abandoned theater with torn red velvet seats, broken stage lights, dusty curtains, moldy carpet, scattered debris, single spotlight flickering, eerie atmosphere",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A derelict shopping mall with empty storefronts, broken glass, dead escalators, scattered trash, flickering neon signs, moldy ceiling, unsettling emptiness",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An empty swimming pool with cracked tiles, algae growth, broken diving board, dead floodlights, moldy walls, eerie stillness, horror liminal space",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A forgotten library with empty shelves, scattered torn books, broken windows, dusty air, single flickering lamp, cobwebs everywhere, unsettling silence",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An abandoned church interior with broken pews, shattered stained glass, dust particles in air, candles melted on floor, moldy walls, crucifix hanging crooked, horror atmosphere",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A rotting bathroom with broken mirrors, stained tiles, moldy grout, dripping faucets, cracked toilet, peeling wallpaper, single buzzing light, unsettling emptiness",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An empty gymnasium with torn basketball nets, cracked wooden floor, broken bleachers, dead overhead lights, moldy walls, scattered equipment, eerie silence",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A derelict warehouse with rusted metal shelves, broken skylights, oil stains, scattered pallets, flickering emergency lights, dust everywhere, industrial horror",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An abandoned diner with cracked booths, broken jukebox, dusty counter, flickering neon sign, grease stains, torn checkered floor, unsettling emptiness",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A backrooms endless yellow corridor with buzzing fluorescent lights, damp carpet stains, moldy walls, infinite repetition, unsettling atmosphere, dreamcore horror",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An empty parking garage with dim flickering lights, oil stains, concrete pillars, broken cars, scattered debris, distant darkness, liminal horror space",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A deserted laboratory with broken beakers, scattered papers, flickering computer screens, stains on tables, cracked walls, eerie green lighting, horror atmosphere",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An abandoned prison cell block with rusted bars, scratched walls, dead lights, broken bunks, moldy floor, unsettling silence, institutional horror",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An empty apartment hallway with peeling wallpaper, broken mailboxes, flickering ceiling light, stains on carpet, graffiti, unsettling emptiness, urban horror",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A forgotten attic with broken floorboards, dust-covered furniture, single dangling bulb, cobwebs, water stains, moldy boxes, claustrophobic horror space",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An abandoned greenhouse with broken glass panels, dead plants, shattered pots, water stains, moldy wood, flickering grow lights, nature horror decay",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A derelict hospital ward with empty beds, torn curtains, broken IV stands, blood stains, flickering heart monitors, moldy walls, medical horror",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An empty carnival tent with collapsed poles, torn canvas, scattered trash, broken lights, dusty air, eerie shadows, abandoned amusement horror",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A rotting kitchen with broken appliances, moldy walls, scattered utensils, cracked tiles, leaking sink, single buzzing light, domestic horror",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An abandoned factory floor with rusted machinery, broken windows, oil spills, scattered debris, dead overhead lights, eerie industrial silence",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A deserted airport terminal with broken gates, scattered luggage, dead monitors, moldy carpet, flickering emergency lights, travel horror emptiness",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An empty museum hall with broken display cases, scattered artifacts, dusty air, dead spotlights, cracked marble floor, cultural horror decay",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A derelict motel room with torn bed sheets, broken TV, stained carpet, peeling wallpaper, flickering bedside lamp, moldy bathroom, roadside horror",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "An abandoned stairwell with broken steps, graffiti covered walls, flickering emergency lights, dust particles, distant darkness, vertical liminal horror",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      },
+      {
+        "model": "flux",
+        "prompt": "A forgotten playground with broken swings, rusted slides, scattered toys, cracked concrete, dead lights, overgrown weeds, childhood horror decay",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_scale": 8,
+          "nag_alpha": 0.55,
+          "nag_tau": 5
+        }
+      }
+    ],
+    "size": 31
+  },
+  "48757555": {
+    "entries": [
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A backrooms level with damp yellow carpet, buzzing fluorescent lights, endless corridors, moldy walls, water stains, unsettling repetition, liminal horror space"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An endless concrete hallway with no doors, flickering industrial lights, water puddles, rust stains, distant fog, industrial liminal horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A dark corridor with red emergency lights only, blood stains, broken ceiling tiles, exposed wires, water damage, emergency horror atmosphere"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An empty server room with dead screens, blinking red lights, tangled cables, dust particles, humming noise, technological horror decay"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A long tunnel with flickering lights, water dripping, mold on walls, graffiti, distant darkness, echoing footsteps, underground horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An abandoned bakery with empty display cases, broken ovens, flour everywhere, moldy bread, flickering lights, stale air, food horror decay"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A deserted laundry room with broken machines, scattered clothes, water leaks, mold, single flickering bulb, detergent stains, mundane horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An empty elevator shaft with broken cables, dangling lights, rust stains, echoing darkness, vertical drop, claustrophobic horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A forgotten garage with oil spills, broken tools, rusted car parts, dead fluorescent lights, dust everywhere, mechanical horror decay"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An abandoned classroom with overturned desks, torn posters, broken windows, scattered papers, graffiti, flickering lights, educational horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A rotting morgue with empty metal tables, broken refrigeration, stains on floor, flickering surgical lights, medical horror atmosphere"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A deserted cafeteria with empty serving lines, broken chairs, scattered trays, moldy food remnants, buzzing lights, institutional horror emptiness"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An empty operating room with broken surgical lights, blood stains, scattered instruments, torn curtains, eerie green glow, surgical horror decay"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A forgotten gym locker room with broken lockers, scattered clothing, mold on benches, dripping showers, flickering lights, athletic horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An abandoned nursery with broken cribs, scattered toys, peeling wallpaper, torn curtains, dead nightlights, childhood nightmares horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A derelict movie theater with torn seats, broken screen, scattered popcorn, dead projector, dusty curtains, entertainment horror decay"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An empty bowling alley with scattered pins, broken lanes, dead scoreboards, dusty air, flickering neon, recreational horror emptiness"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A deserted arcade with broken game machines, scattered tokens, dead screens, flickering lights, half-eaten pizza, gaming horror nostalgia"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An abandoned gas station with broken pumps, scattered trash, flickering overhead lights, oil stains, empty shelves, roadside horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A forgotten barn with rotting wood, scattered hay, broken tools, cobwebs, single dangling bulb, rural horror atmosphere"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An empty slaughterhouse with meat hooks, blood stains, broken conveyor belts, dead industrial lights, rust, industrial horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A rotting sauna with moldy wood, broken benches, dead heating elements, peeling walls, damp air, wellness horror decay"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An abandoned library basement with water-damaged books, mold, broken shelves, single flickering bulb, damp air, knowledge horror decay"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A deserted zoo enclosure with broken fences, scattered debris, dead floodlights, overgrown weeds, empty cages, captivity horror emptiness"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An empty aquarium with cracked tanks, dead fish scattered, broken filters, algae everywhere, buzzing emergency lights, marine horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A rotting cruise ship corridor with water damage, broken windows, scattered luggage, moldy carpet, dead emergency lighting, nautical horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A forgotten mine shaft with rusted tracks, broken carts, dripping water, distant darkness, single headlamp, extractive horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An abandoned radio station with broken equipment, scattered tapes, dead monitors, flickering control lights, static noise, broadcast horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A long corridor with repeating doors, flickering fluorescent lights, damp carpet, moldy walls, infinite perspective, liminal horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A pool room with still water, tiled walls, dead overhead lights, mold, chlorine smell, echoing space, aquatic liminal horror"
+      }
+    ],
+    "size": 30
+  },
+  "07043f29": {
+    "entries": [
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A backrooms office with yellow carpet, cubicles, buzzing lights, scattered papers, old computers, liminal corporate horror space"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An endless hotel hallway with identical doors, flickering lights, patterned carpet, silence, repetition, hospitality liminal horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A windowless room with concrete walls, single bulb flickering, scattered debris, mold, isolation horror, claustrophobic emptiness"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A long stairwell with no exit signs, flickering emergency lights, graffiti, graffiti every landing, vertigo, vertical horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A mirrored corridor with cracked mirrors, reflections repeating endlessly, fluorescent buzz, disorientation horror, infinite regression"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A maintenance tunnel with pipes, dripping water, single bare bulb, rust, distant darkness, industrial liminal horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A school bathroom with broken mirrors, graffiti, scattered toilet paper, flickering lights, damp floor, institutional horror"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm",
+        "other_parameters": {
+          "scale": 7
+        },
+        "prompt": "An empty hospital corridor with blood stains, flickering lights, scattered medical supplies, horror atmosphere"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm",
+        "other_parameters": {
+          "scale": 7
+        },
+        "prompt": "A deserted classroom with broken desks, scattered papers, peeling walls, unsettling atmosphere"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm",
+        "other_parameters": {
+          "scale": 7
+        },
+        "prompt": "An abandoned underground parking with dim lights, oil stains, distant darkness, horror liminal space"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm",
+        "other_parameters": {
+          "scale": 7
+        },
+        "prompt": "A rotting basement with damp walls, single bulb, water on floor, mold, claustrophobic horror"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm",
+        "other_parameters": {
+          "scale": 7
+        },
+        "prompt": "A backrooms corridor with yellow walls, buzzing lights, damp carpet, endless repetition, dreamcore horror"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm",
+        "other_parameters": {
+          "scale": 7
+        },
+        "prompt": "An empty swimming pool with cracked tiles, broken diving board, algae, moldy walls, eerie silence"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm",
+        "other_parameters": {
+          "scale": 7
+        },
+        "prompt": "A deserted theater with torn seats, broken stage, dust particles, eerie shadows, entertainment horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.5,
+          "nag_scale": 7,
+          "nag_tau": 6
+        },
+        "prompt": "A dark corridor with dying fluorescent lights, water damage, mold on walls, distant echo, abandonment horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.5,
+          "nag_scale": 7,
+          "nag_tau": 6
+        },
+        "prompt": "An elevator lobby with broken elevators, flickering panel lights, dusty mirror, scattered trash, urban horror emptiness"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.5,
+          "nag_scale": 7,
+          "nag_tau": 6
+        },
+        "prompt": "A hallway with dead plants, broken pots, scattered soil, dying lights, withered leaves, botanical horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.5,
+          "nag_scale": 7,
+          "nag_tau": 6
+        },
+        "prompt": "A security room with dead monitors, static noise, scattered tapes, broken chair, flickering red lights, surveillance horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.5,
+          "nag_scale": 7,
+          "nag_tau": 6
+        },
+        "prompt": "A kitchen with rotten food, moldy walls, broken appliances, buzzing freezer, flies, domestic horror decay"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.6,
+          "nag_scale": 9,
+          "nag_tau": 4
+        },
+        "prompt": "A pool with murky green water, broken tiles, dead leaves floating, moldy walls, aquatic decay horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.6,
+          "nag_scale": 9,
+          "nag_tau": 4
+        },
+        "prompt": "A gym with rusted equipment, torn mats, broken mirrors, flickering lights, athletic facility horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.6,
+          "nag_scale": 9,
+          "nag_tau": 4
+        },
+        "prompt": "A locker room with open lockers, scattered clothes, moldy benches, dripping showers, humidity horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.6,
+          "nag_scale": 9,
+          "nag_tau": 4
+        },
+        "prompt": "A restroom with broken toilets, missing mirrors, graffiti, wet floor, flickering lights, public horror filth"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.6,
+          "nag_scale": 9,
+          "nag_tau": 4
+        },
+        "prompt": "A corridor with water dripping from ceiling, puddles, mold spreading, damaged walls, moisture horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.6,
+          "nag_scale": 9,
+          "nag_tau": 4
+        },
+        "prompt": "A stairwell with fire damage, soot on walls, broken windows, smoke stains, arson aftermath horror"
+      }
+    ],
+    "size": 25
+  },
+  "60c95428": {
+    "entries": [
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography, elegant, refined",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An abandoned funeral home with empty caskets, scattered flowers, broken viewing lights, dusty air, death industry horror decay"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography, elegant, refined",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A deserted dentist office with broken chairs, scattered tools, blood stains, flickering examination light, medical horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography, elegant, refined",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An empty bank vault with scattered documents, broken security boxes, dead lights, financial horror emptiness"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography, elegant, refined",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A rotting courtroom with broken benches, scattered papers, cracked judge bench, flickering lights, justice horror decay"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography, elegant, refined",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A deserted police station with empty holding cells, scattered evidence, broken computers, flickering lights, authority horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography, elegant, refined",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An abandoned fire station with empty bays, scattered equipment, dead emergency lights, heroism horror emptiness"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography, elegant, refined",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A forgotten post office with scattered mail, broken sorting machines, dead fluorescent lights, communication horror decay"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography, elegant, refined",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A deserted hair salon with broken chairs, scattered scissors, fallen hair, dead mirrors, vanity horror decay"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography, elegant, refined",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An empty bar with broken bottles, scattered stools, dead neon signs, sticky floor, nightlife horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography, elegant, refined",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A closed pharmacy with empty shelves, scattered pills, broken glass, dead lights, healthcare horror emptiness"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography, elegant, refined",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An abandoned vet clinic with empty cages, scattered medicine, broken examination table, animal care horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography, elegant, refined",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A forgotten laundromat with broken machines, scattered clothes, dead lights, soap stains, mundane horror"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing",
+        "other_parameters": {
+          "scale": 6
+        },
+        "prompt": "A backrooms yellow corridor with buzzing fluorescent lights and damp carpet"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing",
+        "other_parameters": {
+          "scale": 6
+        },
+        "prompt": "An abandoned hospital hallway with flickering lights and blood stains"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing",
+        "other_parameters": {
+          "scale": 8
+        },
+        "prompt": "A dark underground parking garage with oil stains"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "An elevator interior with broken buttons, scratched mirrors, flickering lights, trapped horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A waiting room with torn magazines, broken chairs, dead television, dusty air, anticipation horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A conference room with broken projector, scattered papers, dead screens, corporate horror emptiness"
+      }
+    ],
+    "size": 18
+  },
+  "e1457949": {
+    "entries": [
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A tunnel with dripping water echoes, distant hum, flickering lights, wet walls, isolation horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A corridor with doors opening to darkness, void spaces, empty rooms, flickering lights, threshold horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A hallway with wrong proportions, impossible geometry, distorted perspective, flickering reality, spatial horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A room with shadows moving wrong, light behaving strange, corner darkness alive, unnatural horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A space with repeating patterns, fractal corridors, endless repetition, pattern horror, infinite spaces"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing",
+        "other_parameters": {
+          "scale": 7
+        },
+        "prompt": "An abandoned mall corridor with dead stores and scattered debris"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing",
+        "other_parameters": {
+          "scale": 7
+        },
+        "prompt": "A nursery with empty cribs and scattered toys"
+      },
+      {
+        "model": "z_image",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing",
+        "other_parameters": {
+          "scale": 7
+        },
+        "prompt": "A locker room with open lockers and scattered clothes"
+      },
+      {
+        "model": "nano_banana",
+        "negative_prompt": "",
+        "other_parameters": {},
+        "prompt": "Abandoned hospital corridor horror liminal space"
+      },
+      {
+        "model": "nano_banana",
+        "negative_prompt": "",
+        "other_parameters": {},
+        "prompt": "Empty swimming pool abandoned creepy atmosphere"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A dark corner with only emergency exit light, red glow, shadows deep, isolation horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A staircase descending into darkness, broken railing, flickering lights above, descent horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A service corridor with pipes and wires exposed, dim lighting, industrial horror, backrooms aesthetic"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A morgue with freezer doors, metal tables, clinical cold, medical death horror"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A psych ward corridor with padded walls, small windows, heavy doors, institutional horror, asylum aesthetic"
+      },
+      {
+        "model": "flux",
+        "negative_prompt": "color harmony, beautiful lighting, clean composition, aesthetic, pleasing, cozy, warm, professional photography",
+        "other_parameters": {
+          "nag_alpha": 0.55,
+          "nag_scale": 8,
+          "nag_tau": 5
+        },
+        "prompt": "A bunker with concrete walls, heavy doors, broken equipment, survival horror, post-apocalyptic atmosphere"
+      }
+    ],
+    "size": 16
   }
 }
