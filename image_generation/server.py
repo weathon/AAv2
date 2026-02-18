@@ -91,10 +91,10 @@ def _caption_pil_image(image: Image.Image, max_retries: int = 4) -> str:
                                 "text": (
                                     "Caption this image based on physical facts in the image, "
                                     "ignore aesthetics and styles. Only describe what you see in "
-                                    "the image, do not add any interpretation or imagination. Be "
+                                    "the image, do not add any interpretation, imagination, or styles. Be "
                                     "concise and objective. The caption should be a single short "
                                     "sentence describe the main content of the image. Do not "
-                                    "mention the style or aesthetics of the image. Focus on "
+                                    "mention the style or aesthetics (or bad aesthetics) of the image. Focus on "
                                     "physical facts like objects, colors, and their relationships. "
                                     "Do not add any information that cannot be directly observed "
                                     "from the image."
@@ -132,7 +132,11 @@ def _score_pil_images(images: list) -> list:
     Score range has no hard bounds; good images typically score 8-15.
     For anti-aesthetic goals, lower scores indicate success.
     """
-    captions = [_caption_pil_image(img) for img in images]
+    captions = []
+    for i, img in enumerate(images):
+        caption = _caption_pil_image(img)
+        captions.append(caption)
+        print(f"[CAPTION {i+1}] {caption}", flush=True)
 
     scores = []
     for i in range(0, len(images), 5):
