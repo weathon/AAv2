@@ -319,6 +319,75 @@ def generate_using_nano_banana(
     results.append(f"Cost this call: ${COST_PER_REPLICATE_IMAGE * num_of_images:.4f} | Session total: ${cost:.4f}")
     return results
 
+@mcp.tool()
+def generate_using_sdxl(
+    prompt: str,
+    negative_prompt: str,
+    num_of_images: int,
+    eval_prompt: str,
+    guidance_scale: float = 5.0,
+    prompt_strength: float = 0.8,
+) -> list[MCPImage | str]:
+    """Generate images using Stable Diffusion via the Replicate API.
+
+    Args:
+        prompt: Text description of the desired image.
+        negative_prompt: Text describing what to avoid in the generated image.
+        num_of_images: Number of images to generate. Do not exceed 5 — each image
+            incurs a separate Replicate API call with associated time and cost.
+        eval_prompt: Neutral physical description of the image content used for HPSv3
+            scoring. Describe only observable objects.
+            Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
+          **You CANNOT mention elements that is required, such as 'sad emotion' or 'noise', it should be under 10 words.**    
+            Example: "an apple on a wooden table".
+        guidance_scale: Controls how strongly the model follows the prompt (1-15).
+            Higher values = more adherence to the prompt. Recommended starting value: 5.
+        prompt_strength: Controls how much the initial noise is influenced by the prompt (0-1).
+            Higher values = stronger influence. Recommended starting value: 0.8.
+
+    Returns:
+        List of generated images as MCPImage objects followed by a text entry with
+        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
+    """
+    if DEBUG:
+        return [_debug_image() for _ in range(num_of_images)] #+ #["[DEBUG] Fake scores: ['9.0000'] * n"]
+
+    global cost
+    pil_images = []
+    for _ in range(num_of_images):
+        output = replicate.run(
+            "stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc",
+            input={
+                    "width": 768,
+                    "height": 768,
+                    "prompt": prompt,
+                    "refine": "expert_ensemble_refiner",
+                    "scheduler": "K_EULER",
+                    "lora_scale": 0.6,
+                    "num_outputs": 1,
+                    "guidance_scale": guidance_scale,
+                    "apply_watermark": False,
+                    "high_noise_frac": 0.8,
+                    "negative_prompt": negative_prompt,
+                    "prompt_strength": prompt_strength,
+                    "num_inference_steps": 25
+            },
+        )
+        image_data = output.read()
+        pil_images.append(Image.open(io.BytesIO(image_data)))
+
+    cost += COST_PER_REPLICATE_IMAGE * num_of_images
+    results = [_pil_to_mcp_image(img) for img in pil_images]
+
+    scores = _score_pil_images(pil_images, eval_prompt)
+    score_strs = [f"{s:.4f}" for s in scores]
+    results.append(
+        f"Aesthetic scores (HPSv3): {score_strs}\n"
+        "(Good images typically score 10-15; low scores indicate anti-aesthetic success.)"
+    )
+
+    results.append(f"Cost this call: ${COST_PER_REPLICATE_IMAGE * num_of_images:.4f} | Session total: ${cost:.4f}")
+
 
 @mcp.tool()
 def init() -> str:
