@@ -131,17 +131,18 @@ def generate_flux(
     Args:
         prompt: Text description of the desired image.
         negative_prompt: Text describing what to avoid in the generated image.
-        nag_scale: Strength of NAG effect (1-10). Higher = stronger negative guidance.
-            Recommended starting value: 5.
-        nag_alpha: Blending coefficient for NAG (0-1). Higher = stronger effect.
-            Recommended starting value: 0.3.
-        nag_tau: Threshold controlling which tokens NAG applies to (0-10).
-            Higher = weaker/more selective effect. Recommended starting value: 5.
+        nag_scale: Strength of NAG effect (1-6). Higher = stronger negative guidance.
+            Recommended starting value: 3.
+        nag_alpha: Blending coefficient for NAG (0-0.5). Higher = stronger effect.
+            Recommended starting value: 0.25.
+        nag_tau: Threshold controlling which tokens NAG applies to (1-5).
+            Higher = stronger effect. Recommended starting value: 2.5.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             requires a full inference pass and generation time grows linearly.
         eval_prompt: Neutral physical description of the image content used for HPSv3
             scoring. Describe only observable objects.
-            Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
+            **Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.**
+            **You CANNOT mention elements that is required, such as 'sad emotion' or 'noise', it should be under 10 words.**
             Example: "an apple on a wooden table".
 
     Returns:
@@ -149,9 +150,10 @@ def generate_flux(
         HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
 
     Hint: When the scale is > 8, set tau to around 5 and alpha < 0.5 to avoid overly harsh guidance that can lead to failed generations.
+    **First start with recommended values and then adjust based on whether you want a stronger or more subtle effect.**
     """
     if DEBUG:
-        return [_debug_image() for _ in range(num_of_images)] + ["[DEBUG] Fake scores: ['9.0000'] * n"]
+        return [_debug_image() for _ in range(num_of_images)]# #+ #["[DEBUG] Fake scores: ['9.0000'] * n"]
 
     # Call Flux microservice
     response = requests.post(
@@ -222,6 +224,7 @@ def generate_z_image(
         eval_prompt: Neutral physical description of the image content used for HPSv3
             scoring. Describe only observable objects.
             Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
+        **Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.**    
             Example: "an apple on a wooden table".
 
     Returns:
@@ -229,7 +232,7 @@ def generate_z_image(
         HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
     """
     if DEBUG:
-        return [_debug_image() for _ in range(num_of_images)] + ["[DEBUG] Fake scores: ['9.0000'] * n"]
+        return [_debug_image() for _ in range(num_of_images)] #+ #["[DEBUG] Fake scores: ['9.0000'] * n"]
 
     global cost
     pil_images = []
@@ -279,6 +282,7 @@ def generate_using_nano_banana(
         eval_prompt: Neutral physical description of the image content used for HPSv3
             scoring. Describe only observable objects.
             Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
+          **You CANNOT mention elements that is required, such as 'sad emotion' or 'noise', it should be under 10 words.**    
             Example: "an apple on a wooden table".
 
     Returns:
@@ -286,7 +290,7 @@ def generate_using_nano_banana(
         HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
     """
     if DEBUG:
-        return [_debug_image() for _ in range(num_of_images)] + ["[DEBUG] Fake scores: ['9.0000'] * n"]
+        return [_debug_image() for _ in range(num_of_images)] #+ #["[DEBUG] Fake scores: ['9.0000'] * n"]
 
     global cost
     pil_images = []
@@ -339,7 +343,7 @@ def commit(entries: list) -> str:
         - prompt (str): Positive text prompt.
         - negative_prompt (str): Negative text prompt (use empty string for nano_banana).
         - other_parameters (dict): Model-specific parameters, e.g.:
-            flux:      {"nag_scale": 7, "nag_alpha": 0.5, "nag_tau": 5}
+            flux:      {"nag_scale": 4, "nag_alpha": 0.3, "nag_tau": 3}
             z_image:   {"scale": 5}
             nano_banana: {}
 
@@ -357,8 +361,8 @@ def commit(entries: list) -> str:
     except (FileNotFoundError, json.JSONDecodeError):
         commits = {}
 
-    commits[commit_id] = {
-        "entries": entries,
+    commits[commit_id] = { 
+        "entries": [json.loads(entry) for entry in entries],
         "size": len(entries),
     }
 

@@ -25,6 +25,7 @@ import json
 import os
 import sys
 from pathlib import Path
+import random 
 
 import dotenv
 import weave
@@ -40,7 +41,7 @@ from mcp.client.streamable_http import streamable_http_client
 # ---------------------------------------------------------------------------
 
 MCP_URL         = os.getenv("MCP_SERVER_URL", "http://127.0.0.1:8000/mcp")
-MODEL           = os.getenv("LLM_MODEL", "moonshotai/kimi-k2.5")
+MODEL           = os.getenv("LLM_MODEL", "gpt-5.1")
 LLM_BASE_URL    = os.getenv("LLM_BASE_URL", "https://openrouter.ai/api/v1")
 LLM_API_KEY     = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "20"))
@@ -152,8 +153,12 @@ async def run_agent(initial_prompt: str):
                                 messages=messages,
                                 tools=openai_tools,
                                 extra_body={
-                                    "provider": {
-                                        "order": ["moonshotai/int4"],
+                                    # "provider": {
+                                    #     "order": ["moonshotai/int4"],
+                                    #     "allow_fallbacks": False,
+                                    # },
+                                    "reasoning": {
+                                        "effort": "high"
                                     }
                                 },
                             ),
@@ -177,6 +182,9 @@ async def run_agent(initial_prompt: str):
 
                 # --- Track agent LLM cost ---
                 llm_cost = _extract_llm_cost(response)
+                # llm_cost = random.random() * 1238746
+
+            
                 if llm_cost > 0:
                     total_cost += llm_cost
                     print(f"[COST] Agent LLM: ${llm_cost:.6f} | Running total: ${total_cost:.4f}")
@@ -254,6 +262,7 @@ async def run_agent(initial_prompt: str):
                     for tc, fn_name, text_out, img_parts in group:
                         result_map[tc.id] = (tc, fn_name, text_out, img_parts)
 
+                all_img_parts: list[dict] = []
                 for tc, fn_name, fn_args in tool_calls_parsed:
                     tc_obj, fn_name, text_out, img_parts = result_map[tc.id]
 
@@ -269,13 +278,8 @@ async def run_agent(initial_prompt: str):
                     })
 
                     if img_parts:
-                        messages.append({
-                            "role": "user",
-                            "content": [
-                                {"type": "text", "text": f"[Images from {fn_name}]"},
-                                *img_parts,
-                            ],
-                        })
+                        all_img_parts.append({"type": "text", "text": f"[Images from {fn_name}]"})
+                        all_img_parts.extend(img_parts)
                         OUT_DIR.mkdir(exist_ok=True)
                         for i, part in enumerate(img_parts):
                             url = part["image_url"]["url"]
@@ -285,6 +289,9 @@ async def run_agent(initial_prompt: str):
                                 out = OUT_DIR / f"{fn_name}_{turn+1}_{tc.id[:6]}_{i}.{ext}"
                                 out.write_bytes(base64.b64decode(b64))
                                 print(f"[SAVED] {out}")
+
+                if all_img_parts:
+                    messages.append({"role": "user", "content": all_img_parts})
                 if finished:
                     break
             else:

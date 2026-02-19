@@ -75,8 +75,8 @@ def generate():
         data = request.json
         prompt = data.get("prompt", "")
         negative_prompt = data.get("negative_prompt", "")
-        nag_scale = data.get("nag_scale", 7.0)
-        nag_alpha = data.get("nag_alpha", 0.5)
+        nag_scale = data.get("nag_scale", 5.0)
+        nag_alpha = data.get("nag_alpha", 0.3)
         nag_tau = data.get("nag_tau", 5.0)
         num_of_images = data.get("num_of_images", 1)
 
