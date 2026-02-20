@@ -14,7 +14,7 @@ Env vars (all optional):
     LLM_BASE_URL         default https://openrouter.ai/api/v1
     OPENROUTER_API_KEY   for OpenRouter auth (preferred)
     OPENAI_API_KEY       fallback for OpenAI API
-    LLM_MODEL            default qwen/qwen3.5-plus-02-15
+    LLM_MODEL            default gpt-5.1 
     LLM_MAX_RETRIES      default 20
     MAX_TURNS            default 100
 """
@@ -202,7 +202,7 @@ async def run_agent(initial_prompt: str):
                     # explicitly calls the client-side `finish` tool.
                     messages.append({
                         "role": "user",
-                        "content": "继续。调用工具继续工作。如果你已经完成了所有任务，请调用 finish 工具。",
+                        "content": "继续。使用tools call而不是文本调用工具继续工作。如果你已经完成了所有任务，请调用 finish 工具。",
                     })
                     continue
 

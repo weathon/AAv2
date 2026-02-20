@@ -24,6 +24,8 @@ import os
 import sys
 import uuid
 import base64
+from typing import Literal, Optional
+from pydantic import BaseModel, Field
 
 import dotenv
 import replicate
@@ -111,8 +113,7 @@ def _pil_to_mcp_image(image: Image.Image) -> MCPImage:
 # ---------------------------------------------------------------------------
 
 
-@mcp.tool()
-def generate_flux(
+def _generate_flux(
     prompt: str,
     negative_prompt: str,
     nag_scale: float,
@@ -202,35 +203,64 @@ def generate_flux(
     results.append(f"Cost this call: $0.0000 (local GPU) | Session total: ${cost:.4f}")
     return results
 
-
 @mcp.tool()
-def generate_z_image(
+def generate_flux(
+    prompt: str,
+    negative_prompt: str,
+    nag_scale: float,
+    nag_alpha: float,
+    nag_tau: float,
+    num_of_images: int,
+    eval_prompt: str,
+) -> list[MCPImage | str]:
+    """Generate images using FLUX.1-Krea-dev with NAG (Negative-prompt Aligned Guidance).
+
+    NAG allows explicit negative prompts to steer the model away from unwanted aesthetics,
+    making it suitable for both pro (high-aesthetics) and anti (low-aesthetics) generation.
+
+    Flux runs on a separate microservice (flux_server.py).
+
+    Args:
+        prompt: Text description of the desired image.
+        negative_prompt: Text describing what to avoid in the generated image.
+        nag_scale: Strength of NAG effect (1-6). Higher = stronger negative guidance.
+            Recommended starting value: 3.
+        nag_alpha: Blending coefficient for NAG (0-0.5). Higher = stronger effect.
+            Recommended starting value: 0.25.
+        nag_tau: Threshold controlling which tokens NAG applies to (1-5).
+            Higher = stronger effect. Recommended starting value: 2.5.
+        num_of_images: Number of images to generate. Do not exceed 5 — each image
+            requires a full inference pass and generation time grows linearly.
+        eval_prompt: Neutral physical description of the image content used for HPSv3
+            scoring. Describe only observable objects.
+            **Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.**
+            **You CANNOT mention elements that is required, such as 'sad emotion' or 'noise', it should be under 10 words.**
+            Example: "an apple on a wooden table".
+
+    Returns:
+        List of generated images as MCPImage objects followed by a text entry with
+        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
+
+    Hint: When the scale is > 8, set tau to around 5 and alpha < 0.5 to avoid overly harsh guidance that can lead to failed generations.
+    **First start with recommended values and then adjust based on whether you want a stronger or more subtle effect.**
+    """
+    return _generate_flux(
+        prompt=prompt,
+        negative_prompt=negative_prompt,
+        nag_scale=nag_scale,
+        nag_alpha=nag_alpha,
+        nag_tau=nag_tau,
+        num_of_images=num_of_images,
+        eval_prompt=eval_prompt,
+    )
+
+def _generate_z_image(
     prompt: str,
     negative_prompt: str,
     scale: float,
     num_of_images: int,
     eval_prompt: str,
 ) -> list[MCPImage | str]:
-    """Generate images using Z-image via the Replicate API.
-
-    Args:
-        prompt: Text description of the desired image.
-        negative_prompt: Text describing what to avoid in the generated image.
-        scale: Guidance scale controlling prompt adherence (1-15).
-            Higher values follow the prompt more strictly.
-            Recommended starting value: 7.
-        num_of_images: Number of images to generate. Do not exceed 5 — each image
-            incurs a separate Replicate API call with associated time and cost.
-        eval_prompt: Neutral physical description of the image content used for HPSv3
-            scoring. Describe only observable objects.
-            Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
-        **Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.**    
-            Example: "an apple on a wooden table".
-
-    Returns:
-        List of generated images as MCPImage objects followed by a text entry with
-        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
-    """
     if DEBUG:
         return [_debug_image() for _ in range(num_of_images)] #+ #["[DEBUG] Fake scores: ['9.0000'] * n"]
 
@@ -267,28 +297,50 @@ def generate_z_image(
     return results
 
 
+
+
 @mcp.tool()
-def generate_using_nano_banana(
+def generate_using_z_image(
     prompt: str,
+    negative_prompt: str,
+    scale: float,
     num_of_images: int,
     eval_prompt: str,
 ) -> list[MCPImage | str]:
-    """Generate images using Nano Banana via the Replicate API.
+    """Generate images using Z-image via the Replicate API.
 
     Args:
         prompt: Text description of the desired image.
+        negative_prompt: Text describing what to avoid in the generated image.
+        scale: Guidance scale controlling prompt adherence (1-15).
+            Higher values follow the prompt more strictly.
+            Recommended starting value: 7.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             incurs a separate Replicate API call with associated time and cost.
         eval_prompt: Neutral physical description of the image content used for HPSv3
             scoring. Describe only observable objects.
             Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
-          **You CANNOT mention elements that is required, such as 'sad emotion' or 'noise', it should be under 10 words.**    
+        **Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.**    
             Example: "an apple on a wooden table".
 
     Returns:
         List of generated images as MCPImage objects followed by a text entry with
         HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
     """
+    return _generate_z_image(
+        prompt=prompt,
+        negative_prompt=negative_prompt,
+        scale=scale,
+        num_of_images=num_of_images,
+        eval_prompt=eval_prompt,
+    ) 
+
+
+def _generate_using_nano_banana(
+    prompt: str,
+    num_of_images: int,
+    eval_prompt: str,
+) -> list[MCPImage | str]:
     if DEBUG:
         return [_debug_image() for _ in range(num_of_images)] #+ #["[DEBUG] Fake scores: ['9.0000'] * n"]
 
@@ -320,6 +372,155 @@ def generate_using_nano_banana(
     return results
 
 @mcp.tool()
+def generate_using_nano_banana(
+    prompt: str,
+    num_of_images: int,
+    eval_prompt: str,
+) -> list[MCPImage | str]:
+    """Generate images using Nano Banana via the Replicate API.
+
+    Args:
+        prompt: Text description of the desired image.
+        num_of_images: Number of images to generate. Do not exceed 5 — each image
+            incurs a separate Replicate API call with associated time and cost.
+        eval_prompt: Neutral physical description of the image content used for HPSv3
+            scoring. Describe only observable objects.
+            Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
+          **You CANNOT mention elements that is required, such as 'sad emotion' or 'noise', it should be under 10 words.**    
+            Example: "an apple on a wooden table".
+
+    Returns:
+        List of generated images as MCPImage objects followed by a text entry with
+        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
+    """
+    return _generate_using_nano_banana(
+        prompt=prompt,
+        num_of_images=num_of_images,
+        eval_prompt=eval_prompt,
+    )
+
+def _generate_using_seedream(
+    prompt: str,
+    num_of_images: int,
+    eval_prompt: str,
+) -> list[MCPImage | str]:
+    if DEBUG:
+        return [_debug_image() for _ in range(num_of_images)]
+
+    global cost
+    pil_images = []
+    for _ in range(num_of_images):
+        output = replicate.run(
+            "bytedance/seedream-4.5",
+            input={
+                "size": "custom",
+                "width": 1024,
+                "height": 1024,
+                "prompt": prompt,
+                "max_images": 1,
+                "aspect_ratio": "1:1",
+                "sequential_image_generation": "disabled",
+            },
+        )
+        image_data = output[0].read()
+        pil_images.append(Image.open(io.BytesIO(image_data)))
+
+    cost += COST_PER_REPLICATE_IMAGE * num_of_images
+    results = [_pil_to_mcp_image(img) for img in pil_images]
+
+    scores = _score_pil_images(pil_images, eval_prompt)
+    score_strs = [f"{s:.4f}" for s in scores]
+    results.append(
+        f"Aesthetic scores (HPSv3): {score_strs}\n"
+        "(Good images typically score 10-15; low scores indicate anti-aesthetic success.)"
+    )
+
+    results.append(f"Cost this call: ${COST_PER_REPLICATE_IMAGE * num_of_images:.4f} | Session total: ${cost:.4f}")
+    return results
+
+
+@mcp.tool()
+def generate_using_seedream(
+    prompt: str,
+    num_of_images: int,
+    eval_prompt: str,
+) -> list[MCPImage | str]:
+    """Generate images using ByteDance Seedream-4.5 via the Replicate API.
+
+    A text-to-image model. Does not support negative prompts.
+
+    Args:
+        prompt: Text description of the desired image.
+        num_of_images: Number of images to generate. Do not exceed 5 — each image
+            incurs a separate Replicate API call with associated time and cost.
+        eval_prompt: Neutral physical description of the image content used for HPSv3
+            scoring. Describe only observable objects, no aesthetic language.
+            **Must be under 10 words, simple subject-verb(-object) structure.**
+            Example: "an apple on a wooden table".
+
+    Returns:
+        List of generated images as MCPImage objects followed by a text entry with
+        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
+    """
+    return _generate_using_seedream(
+        prompt=prompt,
+        num_of_images=num_of_images,
+        eval_prompt=eval_prompt,
+    )
+
+
+def _generate_using_sdxl(
+    prompt: str,
+    negative_prompt: str,
+    num_of_images: int,
+    eval_prompt: str,
+    guidance_scale: float = 5.0,
+    prompt_strength: float = 0.8,
+) -> list[MCPImage | str]:
+    if DEBUG:
+        return [_debug_image() for _ in range(num_of_images)] #+ #["[DEBUG] Fake scores: ['9.0000'] * n"]
+
+    global cost
+    pil_images = []
+    for _ in range(num_of_images):
+        output = replicate.run(
+            "stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc",
+            input={
+                    "width": 768,
+                    "height": 768,
+                    "prompt": prompt,
+                    "refine": "expert_ensemble_refiner",
+                    "scheduler": "K_EULER",
+                    "lora_scale": 0.6,
+                    "num_outputs": 1,
+                    "guidance_scale": guidance_scale,
+                    "apply_watermark": False,
+                    "high_noise_frac": 0.8,
+                    "negative_prompt": negative_prompt,
+                    "prompt_strength": prompt_strength,
+                    "num_inference_steps": 25
+            },
+        )[0]
+        image_data = output.read()
+        pil_images.append(Image.open(io.BytesIO(image_data)))
+
+    cost += COST_PER_REPLICATE_IMAGE * num_of_images
+    results = [_pil_to_mcp_image(img) for img in pil_images]
+
+    scores = _score_pil_images(pil_images, eval_prompt)
+    score_strs = [f"{s:.4f}" for s in scores]
+    results.append(
+        f"Aesthetic scores (HPSv3): {score_strs}\n"
+        "(Good images typically score 10-15; low scores indicate anti-aesthetic success.)"
+    )
+
+    results.append(f"Cost this call: ${COST_PER_REPLICATE_IMAGE * num_of_images:.4f} | Session total: ${cost:.4f}")
+    return results
+
+
+
+
+@mcp.tool()
 def generate_using_sdxl(
     prompt: str,
     negative_prompt: str,
@@ -349,45 +550,14 @@ def generate_using_sdxl(
         List of generated images as MCPImage objects followed by a text entry with
         HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
     """
-    if DEBUG:
-        return [_debug_image() for _ in range(num_of_images)] #+ #["[DEBUG] Fake scores: ['9.0000'] * n"]
-
-    global cost
-    pil_images = []
-    for _ in range(num_of_images):
-        output = replicate.run(
-            "stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc",
-            input={
-                    "width": 768,
-                    "height": 768,
-                    "prompt": prompt,
-                    "refine": "expert_ensemble_refiner",
-                    "scheduler": "K_EULER",
-                    "lora_scale": 0.6,
-                    "num_outputs": 1,
-                    "guidance_scale": guidance_scale,
-                    "apply_watermark": False,
-                    "high_noise_frac": 0.8,
-                    "negative_prompt": negative_prompt,
-                    "prompt_strength": prompt_strength,
-                    "num_inference_steps": 25
-            },
-        )
-        image_data = output.read()
-        pil_images.append(Image.open(io.BytesIO(image_data)))
-
-    cost += COST_PER_REPLICATE_IMAGE * num_of_images
-    results = [_pil_to_mcp_image(img) for img in pil_images]
-
-    scores = _score_pil_images(pil_images, eval_prompt)
-    score_strs = [f"{s:.4f}" for s in scores]
-    results.append(
-        f"Aesthetic scores (HPSv3): {score_strs}\n"
-        "(Good images typically score 10-15; low scores indicate anti-aesthetic success.)"
+    return _generate_using_sdxl(
+        prompt=prompt,
+        negative_prompt=negative_prompt,
+        num_of_images=num_of_images,
+        eval_prompt=eval_prompt,
+        guidance_scale=guidance_scale,
+        prompt_strength=prompt_strength,
     )
-
-    results.append(f"Cost this call: ${COST_PER_REPLICATE_IMAGE * num_of_images:.4f} | Session total: ${cost:.4f}")
-
 
 @mcp.tool()
 def init() -> str:
@@ -464,6 +634,128 @@ def log_action(msg: str = "") -> str:
     """Log a message to console."""
     print(msg, flush=True)
     return "log successfully"
+
+import concurrent.futures
+import urllib.request
+
+
+class JobEntry(BaseModel):
+    model: Literal["flux", "z_image", "nano_banana", "sdxl", "seedream"] = Field(
+        description='Model to use for generation.'
+    )
+    prompt: str = Field(description='Positive text prompt.')
+    negative_prompt: str = Field(
+        default="",
+        description='Negative text prompt. Leave empty for nano_banana.',
+    )
+    num_of_images: int = Field(
+        default=1, ge=1, le=5,
+        description='Number of images to generate (1-5).',
+    )
+    eval_prompt: str = Field(
+        description=(
+            'Neutral physical description used for HPSv3 scoring (<10 words). '
+            'No aesthetic language. Example: "an apple on a wooden table".'
+        )
+    )
+    # flux-specific
+    nag_scale: Optional[float] = Field(
+        default=None, description='[flux] NAG strength (1-6). Recommended: 3.'
+    )
+    nag_alpha: Optional[float] = Field(
+        default=None, description='[flux] NAG blending (0-0.5). Recommended: 0.25.'
+    )
+    nag_tau: Optional[float] = Field(
+        default=None, description='[flux] NAG threshold (1-5). Recommended: 2.5.'
+    )
+    # z_image-specific
+    scale: Optional[float] = Field(
+        default=None, description='[z_image] Guidance scale (1-15). Recommended: 7.'
+    )
+    # sdxl-specific
+    guidance_scale: Optional[float] = Field(
+        default=5.0, description='[sdxl] Guidance scale (1-15). Recommended: 5.'
+    )
+    prompt_strength: Optional[float] = Field(
+        default=0.8, description='[sdxl] Prompt strength (0-1). Recommended: 0.8.'
+    )
+
+
+def execute_model(job: JobEntry) -> dict[str, list[MCPImage | str]]:
+    model = job.model
+    if model == "flux":
+        return_var = _generate_flux(
+            prompt=job.prompt,
+            negative_prompt=job.negative_prompt,
+            nag_scale=job.nag_scale,
+            nag_alpha=job.nag_alpha,
+            nag_tau=job.nag_tau,
+            num_of_images=job.num_of_images,
+            eval_prompt=job.eval_prompt,
+        )
+    elif model == "z_image":
+        return_var = _generate_z_image(
+            prompt=job.prompt,
+            negative_prompt=job.negative_prompt,
+            scale=job.scale,
+            num_of_images=job.num_of_images,
+            eval_prompt=job.eval_prompt,
+        )
+    elif model == "nano_banana":
+        return_var = _generate_using_nano_banana(
+            prompt=job.prompt,
+            num_of_images=job.num_of_images,
+            eval_prompt=job.eval_prompt,
+        )
+    elif model == "sdxl":
+        return_var = _generate_using_sdxl(
+            prompt=job.prompt,
+            negative_prompt=job.negative_prompt,
+            num_of_images=job.num_of_images,
+            eval_prompt=job.eval_prompt,
+            guidance_scale=job.guidance_scale,
+            prompt_strength=job.prompt_strength,
+        )
+    elif model == "seedream":
+        return_var = _generate_using_seedream(
+            prompt=job.prompt,
+            num_of_images=job.num_of_images,
+            eval_prompt=job.eval_prompt,
+        )
+    else:
+        return_var = [f"Error: Unknown model '{model}' in job entry."]
+    return {model: return_var}
+    
+
+
+@mcp.tool()
+def batch_generate(jobs: list[JobEntry]) -> list[MCPImage | str]:
+    """Generate a batch of images concurrently using multiple models.
+
+    Args:
+        jobs: List of job configurations. Each job specifies a model and its
+            parameters. Fields marked [flux], [z_image], [sdxl] in JobEntry
+            are only required for that model.
+
+    Returns:
+        Flat list of images and score strings. Each job's output is preceded
+        by a separator line identifying the job index, model, and prompt.
+    """
+    with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+        per_job = list(executor.map(execute_model, jobs))
+
+    # Flatten to a single list[MCPImage | str] so FastMCP serialises correctly.
+    flat: list[MCPImage | str] = []
+    for i, job_result in enumerate(per_job):
+        flat.append(f"--- Job {i+1} | model={jobs[i].model} | prompt={jobs[i].prompt[:80]!r} ---")
+        for value in job_result.values():
+            flat.extend(value)
+    return flat
+    
+
+
+  
+
 
 
 if __name__ == "__main__":
