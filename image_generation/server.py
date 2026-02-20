@@ -24,8 +24,6 @@ import os
 import sys
 import uuid
 import base64
-from typing import Literal, Optional
-from pydantic import BaseModel, Field
 
 import dotenv
 import replicate
@@ -498,7 +496,8 @@ def _generate_using_sdxl(
                     "high_noise_frac": 0.8,
                     "negative_prompt": negative_prompt,
                     "prompt_strength": prompt_strength,
-                    "num_inference_steps": 25
+                    "num_inference_steps": 25,
+                    "disable_safety_checker": True,
             },
         )[0]
         image_data = output.read()
@@ -601,7 +600,7 @@ def commit(entries: list) -> str:
         commits = {}
 
     commits[commit_id] = { 
-        "entries": [json.loads(entry) for entry in entries],
+        "entries": entries,
         "size": len(entries),
     }
 
@@ -636,120 +635,82 @@ def log_action(msg: str = "") -> str:
     return "log successfully"
 
 import concurrent.futures
-import urllib.request
 
 
-class JobEntry(BaseModel):
-    model: Literal["flux", "z_image", "nano_banana", "sdxl", "seedream"] = Field(
-        description='Model to use for generation.'
-    )
-    prompt: str = Field(description='Positive text prompt.')
-    negative_prompt: str = Field(
-        default="",
-        description='Negative text prompt. Leave empty for nano_banana.',
-    )
-    num_of_images: int = Field(
-        default=1, ge=1, le=5,
-        description='Number of images to generate (1-5).',
-    )
-    eval_prompt: str = Field(
-        description=(
-            'Neutral physical description used for HPSv3 scoring (<10 words). '
-            'No aesthetic language. Example: "an apple on a wooden table".'
-        )
-    )
-    # flux-specific
-    nag_scale: Optional[float] = Field(
-        default=None, description='[flux] NAG strength (1-6). Recommended: 3.'
-    )
-    nag_alpha: Optional[float] = Field(
-        default=None, description='[flux] NAG blending (0-0.5). Recommended: 0.25.'
-    )
-    nag_tau: Optional[float] = Field(
-        default=None, description='[flux] NAG threshold (1-5). Recommended: 2.5.'
-    )
-    # z_image-specific
-    scale: Optional[float] = Field(
-        default=None, description='[z_image] Guidance scale (1-15). Recommended: 7.'
-    )
-    # sdxl-specific
-    guidance_scale: Optional[float] = Field(
-        default=5.0, description='[sdxl] Guidance scale (1-15). Recommended: 5.'
-    )
-    prompt_strength: Optional[float] = Field(
-        default=0.8, description='[sdxl] Prompt strength (0-1). Recommended: 0.8.'
-    )
-
-
-def execute_model(job: JobEntry) -> dict[str, list[MCPImage | str]]:
-    model = job.model
+def execute_model(model: str, params: dict) -> list[MCPImage | str]:
     if model == "flux":
-        return_var = _generate_flux(
-            prompt=job.prompt,
-            negative_prompt=job.negative_prompt,
-            nag_scale=job.nag_scale,
-            nag_alpha=job.nag_alpha,
-            nag_tau=job.nag_tau,
-            num_of_images=job.num_of_images,
-            eval_prompt=job.eval_prompt,
+        return _generate_flux(
+            prompt=params["prompt"],
+            negative_prompt=params.get("negative_prompt", ""),
+            nag_scale=params.get("nag_scale", 3),
+            nag_alpha=params.get("nag_alpha", 0.25),
+            nag_tau=params.get("nag_tau", 2.5),
+            num_of_images=params.get("num_of_images", 1),
+            eval_prompt=params["eval_prompt"],
         )
     elif model == "z_image":
-        return_var = _generate_z_image(
-            prompt=job.prompt,
-            negative_prompt=job.negative_prompt,
-            scale=job.scale,
-            num_of_images=job.num_of_images,
-            eval_prompt=job.eval_prompt,
+        return _generate_z_image(
+            prompt=params["prompt"],
+            negative_prompt=params.get("negative_prompt", ""),
+            scale=params.get("scale", 7),
+            num_of_images=params.get("num_of_images", 1),
+            eval_prompt=params["eval_prompt"],
         )
     elif model == "nano_banana":
-        return_var = _generate_using_nano_banana(
-            prompt=job.prompt,
-            num_of_images=job.num_of_images,
-            eval_prompt=job.eval_prompt,
+        return _generate_using_nano_banana(
+            prompt=params["prompt"],
+            num_of_images=params.get("num_of_images", 1),
+            eval_prompt=params["eval_prompt"],
         )
     elif model == "sdxl":
-        return_var = _generate_using_sdxl(
-            prompt=job.prompt,
-            negative_prompt=job.negative_prompt,
-            num_of_images=job.num_of_images,
-            eval_prompt=job.eval_prompt,
-            guidance_scale=job.guidance_scale,
-            prompt_strength=job.prompt_strength,
+        return _generate_using_sdxl(
+            prompt=params["prompt"],
+            negative_prompt=params.get("negative_prompt", ""),
+            num_of_images=params.get("num_of_images", 1),
+            eval_prompt=params["eval_prompt"],
+            guidance_scale=params.get("guidance_scale", 5.0),
+            prompt_strength=params.get("prompt_strength", 0.8),
         )
     elif model == "seedream":
-        return_var = _generate_using_seedream(
-            prompt=job.prompt,
-            num_of_images=job.num_of_images,
-            eval_prompt=job.eval_prompt,
+        return _generate_using_seedream(
+            prompt=params["prompt"],
+            num_of_images=params.get("num_of_images", 1),
+            eval_prompt=params["eval_prompt"],
         )
     else:
-        return_var = [f"Error: Unknown model '{model}' in job entry."]
-    return {model: return_var}
-    
+        return [f"Error: Unknown model '{model}' in job entry."]
 
 
 @mcp.tool()
-def batch_generate(jobs: list[JobEntry]) -> list[MCPImage | str]:
-    """Generate a batch of images concurrently using multiple models.
+def batch_generate(jobs: dict) -> list[MCPImage | str]:
+    """Generate images concurrently across multiple models in a single call.
 
-    Args:
-        jobs: List of job configurations. Each job specifies a model and its
-            parameters. Fields marked [flux], [z_image], [sdxl] in JobEntry
-            are only required for that model.
+    `jobs` is a dict mapping model name to its parameters:
+        {
+            "flux":        {"prompt": ..., "negative_prompt": ..., "num_of_images": ...,
+                            "eval_prompt": ..., "nag_scale": ..., "nag_alpha": ..., "nag_tau": ...},
+            "z_image":     {"prompt": ..., "negative_prompt": ..., "num_of_images": ...,
+                            "eval_prompt": ..., "scale": ...},
+            "nano_banana": {"prompt": ..., "num_of_images": ..., "eval_prompt": ...},
+            "sdxl":        {"prompt": ..., "negative_prompt": ..., "num_of_images": ...,
+                            "eval_prompt": ..., "guidance_scale": ..., "prompt_strength": ...},
+            "seedream":    {"prompt": ..., "num_of_images": ..., "eval_prompt": ...},
+        }
+    Only include the models you want to run. All included models run in parallel.
 
     Returns:
-        Flat list of images and score strings. Each job's output is preceded
-        by a separator line identifying the job index, model, and prompt.
+        Flat list of images and score strings. Each model's output is preceded
+        by a separator line identifying the model and prompt.
     """
-    with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
-        per_job = list(executor.map(execute_model, jobs))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=int(1e100)) as executor:
+        futures = {model: executor.submit(execute_model, model, params)
+                   for model, params in jobs.items()}
 
-    # Flatten to a single list[MCPImage | str] so FastMCP serialises correctly.
     flat: list[MCPImage | str] = []
-    for i, job_result in enumerate(per_job):
-        flat.append(f"--- Job {i+1} | model={jobs[i].model} | prompt={jobs[i].prompt[:80]!r} ---")
-        for value in job_result.values():
-            flat.extend(value)
+    for i, (model, future) in enumerate(futures.items()):
+        prompt_preview = jobs[model].get("prompt", "")[:80]
+        flat.append(f"--- Job {i+1} | model={model} | prompt={prompt_preview!r} ---")
+        flat.extend(future.result())
     return flat
     
 
