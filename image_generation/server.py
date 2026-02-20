@@ -37,6 +37,19 @@ dotenv.load_dotenv()
 
 mcp = FastMCP("Image Generation")
 
+_MAX_RETRIES = 4
+
+
+def _with_retry(fn, *args, **kwargs):
+    last_exc = None
+    for attempt in range(_MAX_RETRIES):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as exc:
+            last_exc = exc
+            print(f"[retry] attempt {attempt + 1}/{_MAX_RETRIES} failed: {exc}", flush=True)
+    raise last_exc
+
 DEBUG = os.getenv("DEBUG", "").lower() in ("1", "true", "yes")
 
 COMMITS_JSON = os.path.join(os.path.dirname(__file__), "commits.json")
@@ -242,7 +255,8 @@ def generate_flux(
     Hint: When the scale is > 8, set tau to around 5 and alpha < 0.5 to avoid overly harsh guidance that can lead to failed generations.
     **First start with recommended values and then adjust based on whether you want a stronger or more subtle effect.**
     """
-    return _generate_flux(
+    return _with_retry(
+        _generate_flux,
         prompt=prompt,
         negative_prompt=negative_prompt,
         nag_scale=nag_scale,
@@ -325,13 +339,14 @@ def generate_using_z_image(
         List of generated images as MCPImage objects followed by a text entry with
         HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
     """
-    return _generate_z_image(
+    return _with_retry(
+        _generate_z_image,
         prompt=prompt,
         negative_prompt=negative_prompt,
         scale=scale,
         num_of_images=num_of_images,
         eval_prompt=eval_prompt,
-    ) 
+    )
 
 
 def _generate_using_nano_banana(
@@ -391,7 +406,8 @@ def generate_using_nano_banana(
         List of generated images as MCPImage objects followed by a text entry with
         HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
     """
-    return _generate_using_nano_banana(
+    return _with_retry(
+        _generate_using_nano_banana,
         prompt=prompt,
         num_of_images=num_of_images,
         eval_prompt=eval_prompt,
@@ -460,7 +476,8 @@ def generate_using_seedream(
         List of generated images as MCPImage objects followed by a text entry with
         HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
     """
-    return _generate_using_seedream(
+    return _with_retry(
+        _generate_using_seedream,
         prompt=prompt,
         num_of_images=num_of_images,
         eval_prompt=eval_prompt,
@@ -549,7 +566,8 @@ def generate_using_sdxl(
         List of generated images as MCPImage objects followed by a text entry with
         HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
     """
-    return _generate_using_sdxl(
+    return _with_retry(
+        _generate_using_sdxl,
         prompt=prompt,
         negative_prompt=negative_prompt,
         num_of_images=num_of_images,

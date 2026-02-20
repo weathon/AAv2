@@ -168,14 +168,17 @@ async def run_agent(initial_prompt: str):
                                     }
                                 },
                             ),
-                            timeout=120,
+                            timeout=240,
                         )
                         msg = response.choices[0].message
                         if not msg.tool_calls and not _extract_text(msg.content):
                             raise RuntimeError("Empty LLM response")
                         break
                     except Exception as exc:
-                        print(f"[WARN] LLM attempt {attempt}/{LLM_MAX_RETRIES}: {exc}")
+                        if isinstance(exc, asyncio.TimeoutError):
+                            print(f"[TIMEOUT] LLM call timed out (attempt {attempt}/{LLM_MAX_RETRIES})")
+                        else:
+                            print(f"[WARN] LLM attempt {attempt}/{LLM_MAX_RETRIES}: {exc}")
                         if attempt == LLM_MAX_RETRIES:
                             raise RuntimeError(
                                 f"LLM call failed after {LLM_MAX_RETRIES} attempts"
