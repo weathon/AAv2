@@ -414,8 +414,8 @@ def _generate_using_seedream(
             "bytedance/seedream-4.5",
             input={
                 "size": "custom",
-                "width": 1024,
-                "height": 1024,
+                "width": 2048,
+                "height": 2048,
                 "prompt": prompt,
                 "max_images": 1,
                 "aspect_ratio": "1:1",

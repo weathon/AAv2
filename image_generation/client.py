@@ -62,17 +62,23 @@ def mcp_tools_to_openai(mcp_tools) -> list[dict]:
 
 
 def parse_mcp_result(result) -> tuple[str, list[dict]]:
-    """Split MCP result into (text_summary, openai_image_parts)."""
-    texts, images = [], []
+    """Split MCP result into (text_summary, openai_image_parts).
+
+    Image placeholders ([Image N]) are inserted in the text at the position
+    where each image appears, so the model can correlate images with context.
+    """
+    text_parts, images = [], []
     for item in result.content:
         if item.type == "text":
-            texts.append(item.text)
+            text_parts.append(item.text)
         elif item.type == "image":
+            idx = len(images) + 1
+            text_parts.append(f"[Image {idx}]")
             images.append({
                 "type": "image_url",
                 "image_url": {"url": f"data:{item.mimeType};base64,{item.data}"},
             })
-    return "\n".join(texts) or "(done)", images
+    return "\n".join(text_parts) or "(done)", images
 
 
 def _parse_tool_cost(text: str) -> float | None:
@@ -279,9 +285,10 @@ async def run_agent(initial_prompt: str):
 
                     if img_parts:
                         all_img_parts.append({"type": "text", "text": f"[Images from {fn_name}]"})
-                        all_img_parts.extend(img_parts)
                         OUT_DIR.mkdir(exist_ok=True)
                         for i, part in enumerate(img_parts):
+                            all_img_parts.append({"type": "text", "text": f"[Image {i+1}]"})
+                            all_img_parts.append(part)
                             url = part["image_url"]["url"]
                             if "," in url:
                                 header, b64 = url.split(",", 1)
