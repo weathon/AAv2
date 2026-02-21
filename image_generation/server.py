@@ -39,15 +39,26 @@ mcp = FastMCP("Image Generation")
 
 _MAX_RETRIES = 4
 
+import time
+import concurrent.futures as _cf
+
+_GENERATION_TIMEOUT = 240  # seconds per attempt
 
 def _with_retry(fn, *args, **kwargs):
     last_exc = None
     for attempt in range(_MAX_RETRIES):
         try:
-            return fn(*args, **kwargs)
+            with _cf.ThreadPoolExecutor(max_workers=1) as _exe:
+                future = _exe.submit(fn, *args, **kwargs)
+                return future.result(timeout=_GENERATION_TIMEOUT)
+        except _cf.TimeoutError:
+            last_exc = TimeoutError(f"generation timed out after {_GENERATION_TIMEOUT}s")
+            print(f"[retry] attempt {attempt + 1}/{_MAX_RETRIES} timed out", flush=True)
         except Exception as exc:
             last_exc = exc
             print(f"[retry] attempt {attempt + 1}/{_MAX_RETRIES} failed: {exc}", flush=True)
+        if attempt < _MAX_RETRIES - 1:
+            time.sleep([5, 10, 20, 40][attempt])  # Exponential backoff
     raise last_exc
 
 DEBUG = os.getenv("DEBUG", "").lower() in ("1", "true", "yes")
@@ -652,7 +663,6 @@ def log_action(msg: str = "") -> str:
     print(msg, flush=True)
     return "log successfully"
 
-import concurrent.futures
 
 
 def execute_model(model: str, params: dict) -> list[MCPImage | str]:
@@ -720,7 +730,7 @@ def batch_generate(jobs: dict) -> list[MCPImage | str]:
         Flat list of images and score strings. Each model's output is preceded
         by a separator line identifying the model and prompt.
     """
-    with concurrent.futures.ThreadPoolExecutor(max_workers=int(1e100)) as executor:
+    with _cf.ThreadPoolExecutor(max_workers=int(1e100)) as executor:
         futures = {model: executor.submit(execute_model, model, params)
                    for model, params in jobs.items()}
 
