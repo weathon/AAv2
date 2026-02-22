@@ -162,11 +162,12 @@ def _generate_flux(
             Higher = stronger effect. Recommended starting value: 2.5.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             requires a full inference pass and generation time grows linearly.
-        eval_prompt: Neutral physical description of the image content used for HPSv3
-            scoring. Describe only observable objects.
-            **Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.**
-            **You CANNOT mention elements that is required, such as 'sad emotion' or 'noise', it should be under 10 words.**
-            Example: "an apple on a wooden table".
+        eval_prompt: Used for HPSv3 scoring of generated images.
+            - For anti-aesthetic generation: a plain, undecorated description with NO anti-aesthetic
+              elements. Must be a simple sentence with no adjectives, adverbs, or clauses. Do NOT
+              mention required elements (e.g. noise, blur, lighting). Example: if the task is a
+              noisy image of a person running on the beach, use "a person running on the beach".
+            - For pro-aesthetic generation: copy the generation prompt verbatim.
 
     Returns:
         List of generated images as MCPImage objects followed by a text entry with
@@ -253,11 +254,12 @@ def generate_flux(
             Higher = stronger effect. Recommended starting value: 2.5.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             requires a full inference pass and generation time grows linearly.
-        eval_prompt: Neutral physical description of the image content used for HPSv3
-            scoring. Describe only observable objects.
-            **Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.**
-            **You CANNOT mention elements that is required, such as 'sad emotion' or 'noise', it should be under 10 words.**
-            Example: "an apple on a wooden table".
+        eval_prompt: Used for HPSv3 scoring of generated images.
+            - For anti-aesthetic generation: a plain, undecorated description with NO anti-aesthetic
+              elements. Must be a simple sentence with no adjectives, adverbs, or clauses. Do NOT
+              mention required elements (e.g. noise, blur, lighting). Example: if the task is a
+              noisy image of a person running on the beach, use "a person running on the beach".
+            - For pro-aesthetic generation: copy the generation prompt verbatim.
 
     Returns:
         List of generated images as MCPImage objects followed by a text entry with
@@ -340,11 +342,12 @@ def generate_using_z_image(
             Recommended starting value: 7.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             incurs a separate Replicate API call with associated time and cost.
-        eval_prompt: Neutral physical description of the image content used for HPSv3
-            scoring. Describe only observable objects.
-            Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
-        **Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.**    
-            Example: "an apple on a wooden table".
+        eval_prompt: Used for HPSv3 scoring of generated images.
+            - For anti-aesthetic generation: a plain, undecorated description with NO anti-aesthetic
+              elements. Must be a simple sentence with no adjectives, adverbs, or clauses. Do NOT
+              mention required elements (e.g. noise, blur, lighting). Example: if the task is a
+              noisy image of a person running on the beach, use "a person running on the beach".
+            - For pro-aesthetic generation: copy the generation prompt verbatim.
 
     Returns:
         List of generated images as MCPImage objects followed by a text entry with
@@ -407,11 +410,12 @@ def generate_using_nano_banana(
         prompt: Text description of the desired image.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             incurs a separate Replicate API call with associated time and cost.
-        eval_prompt: Neutral physical description of the image content used for HPSv3
-            scoring. Describe only observable objects.
-            Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
-          **You CANNOT mention elements that is required, such as 'sad emotion' or 'noise', it should be under 10 words.**    
-            Example: "an apple on a wooden table".
+        eval_prompt: Used for HPSv3 scoring of generated images.
+            - For anti-aesthetic generation: a plain, undecorated description with NO anti-aesthetic
+              elements. Must be a simple sentence with no adjectives, adverbs, or clauses. Do NOT
+              mention required elements (e.g. noise, blur, lighting). Example: if the task is a
+              noisy image of a person running on the beach, use "a person running on the beach".
+            - For pro-aesthetic generation: copy the generation prompt verbatim.
 
     Returns:
         List of generated images as MCPImage objects followed by a text entry with
@@ -478,10 +482,12 @@ def generate_using_seedream(
         prompt: Text description of the desired image.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             incurs a separate Replicate API call with associated time and cost.
-        eval_prompt: Neutral physical description of the image content used for HPSv3
-            scoring. Describe only observable objects, no aesthetic language.
-            **Must be under 10 words, simple subject-verb(-object) structure.**
-            Example: "an apple on a wooden table".
+        eval_prompt: Used for HPSv3 scoring of generated images.
+            - For anti-aesthetic generation: a plain, undecorated description with NO anti-aesthetic
+              elements. Must be a simple sentence with no adjectives, adverbs, or clauses. Do NOT
+              mention required elements (e.g. noise, blur, lighting). Example: if the task is a
+              noisy image of a person running on the beach, use "a person running on the beach".
+            - For pro-aesthetic generation: copy the generation prompt verbatim.
 
     Returns:
         List of generated images as MCPImage objects followed by a text entry with
@@ -563,11 +569,12 @@ def generate_using_sdxl(
         negative_prompt: Text describing what to avoid in the generated image.
         num_of_images: Number of images to generate. Do not exceed 5 — each image
             incurs a separate Replicate API call with associated time and cost.
-        eval_prompt: Neutral physical description of the image content used for HPSv3
-            scoring. Describe only observable objects.
-            Do NOT include any pro- or anti-aesthetics elements, make a descriptive caption as-if it is a normal image only.
-          **You CANNOT mention elements that is required, such as 'sad emotion' or 'noise', it should be under 10 words.**    
-            Example: "an apple on a wooden table".
+        eval_prompt: Used for HPSv3 scoring of generated images.
+            - For anti-aesthetic generation: a plain, undecorated description with NO anti-aesthetic
+              elements. Must be a simple sentence with no adjectives, adverbs, or clauses. Do NOT
+              mention required elements (e.g. noise, blur, lighting). Example: if the task is a
+              noisy image of a person running on the beach, use "a person running on the beach".
+            - For pro-aesthetic generation: copy the generation prompt verbatim.
         guidance_scale: Controls how strongly the model follows the prompt (1-15).
             Higher values = more adherence to the prompt. Recommended starting value: 5.
         prompt_strength: Controls how much the initial noise is influenced by the prompt (0-1).
@@ -725,6 +732,12 @@ def batch_generate(jobs: dict) -> list[MCPImage | str]:
             "seedream":    {"prompt": ..., "num_of_images": ..., "eval_prompt": ...},
         }
     Only include the models you want to run. All included models run in parallel.
+
+    eval_prompt rules (applies to all models):
+        - For anti-aesthetic generation: a plain, undecorated description with NO anti-aesthetic
+          elements. Simple sentence, no adjectives/adverbs/clauses. Do NOT mention noise, blur, etc.
+          Example: "a person running on the beach".
+        - For pro-aesthetic generation: copy the generation prompt verbatim.
 
     Returns:
         Flat list of images and score strings. Each model's output is preceded

@@ -220,12 +220,29 @@ async def run_agent(initial_prompt: str):
                 # same tool runs sequentially within its group.
                 finished = False
                 tool_calls_parsed = []
+
+                # Detect if we're in pro_aesthetics mode
+                is_pro_mode = "pro_aesthetic" in messages[1]["content"].lower()
+
                 for tc in msg.tool_calls:
                     fn_name = tc.function.name
                     try:
                         fn_args = json.loads(tc.function.arguments or "{}")
                     except json.JSONDecodeError:
                         fn_args = {}
+
+                    # Force eval_prompt = prompt in pro mode
+                    if is_pro_mode:
+                        if fn_name == "batch_generate" and "jobs" in fn_args:
+                            # For batch_generate, modify eval_prompt in each job
+                            jobs = fn_args["jobs"]
+                            for _, job_params in jobs.items():
+                                if "prompt" in job_params and "eval_prompt" in job_params:
+                                    job_params["eval_prompt"] = job_params["prompt"]
+                        elif "prompt" in fn_args and "eval_prompt" in fn_args:
+                            # For individual generation tools
+                            fn_args["eval_prompt"] = fn_args["prompt"]
+
                     tool_calls_parsed.append((tc, fn_name, fn_args))
 
                 # Check for finish first
@@ -313,5 +330,11 @@ async def run_agent(initial_prompt: str):
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    prompt = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else input("Prompt: ")
-    asyncio.run(run_agent(prompt))
+    with open("../classes.json", "r") as f:
+        classes = json.load(f)
+
+    for main_type in ["pro_aesthetics"]:
+        print(f"Registered class: {main_type}")
+        for method in classes[main_type]:
+            prompt = f"main_type: {main_type}, Method: {method}-{classes[main_type][method]}"
+            asyncio.run(run_agent(prompt))
