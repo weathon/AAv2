@@ -326,6 +326,26 @@ async def run_agent(initial_prompt: str):
 
 
 # ---------------------------------------------------------------------------
+# Checkpoint helpers
+# ---------------------------------------------------------------------------
+
+CHECKPOINT_FILE = Path(__file__).parent / "checkpoint.json"
+
+def load_checkpoint() -> set:
+    """Load completed (main_type, method) keys from checkpoint file."""
+    try:
+        with open(CHECKPOINT_FILE, "r") as f:
+            return set(json.load(f))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return set()
+
+def save_checkpoint(completed: set):
+    """Persist completed keys to checkpoint file."""
+    with open(CHECKPOINT_FILE, "w") as f:
+        json.dump(sorted(completed), f, indent=2)
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
@@ -333,8 +353,18 @@ if __name__ == "__main__":
     with open("../classes.json", "r") as f:
         classes = json.load(f)
 
-    for main_type in ["pro_aesthetics"]:
+    completed = load_checkpoint()
+    print(f"[CHECKPOINT] {len(completed)} tasks already completed, resuming from where we left off.")
+
+    for main_type in classes.keys():
         print(f"Registered class: {main_type}")
         for method in classes[main_type]:
+            key = f"{main_type}:{method}"
+            if key in completed:
+                print(f"[SKIP] {key} already completed.")
+                continue
             prompt = f"main_type: {main_type}, Method: {method}-{classes[main_type][method]}"
             asyncio.run(run_agent(prompt))
+            completed.add(key)
+            save_checkpoint(completed)
+            print(f"[CHECKPOINT] Saved: {key}")
