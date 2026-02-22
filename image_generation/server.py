@@ -226,59 +226,6 @@ def _generate_flux(
     results.append(f"Cost this call: $0.0000 (local GPU) | Session total: ${cost:.4f}")
     return results
 
-@mcp.tool()
-def generate_flux(
-    prompt: str,
-    negative_prompt: str,
-    nag_scale: float,
-    nag_alpha: float,
-    nag_tau: float,
-    num_of_images: int,
-    eval_prompt: str,
-) -> list[MCPImage | str]:
-    """Generate images using FLUX.1-Krea-dev with NAG (Negative-prompt Aligned Guidance).
-
-    NAG allows explicit negative prompts to steer the model away from unwanted aesthetics,
-    making it suitable for both pro (high-aesthetics) and anti (low-aesthetics) generation.
-
-    Flux runs on a separate microservice (flux_server.py).
-
-    Args:
-        prompt: Text description of the desired image.
-        negative_prompt: Text describing what to avoid in the generated image.
-        nag_scale: Strength of NAG effect (1-6). Higher = stronger negative guidance.
-            Recommended starting value: 3.
-        nag_alpha: Blending coefficient for NAG (0-0.5). Higher = stronger effect.
-            Recommended starting value: 0.25.
-        nag_tau: Threshold controlling which tokens NAG applies to (1-5).
-            Higher = stronger effect. Recommended starting value: 2.5.
-        num_of_images: Number of images to generate. Do not exceed 5 — each image
-            requires a full inference pass and generation time grows linearly.
-        eval_prompt: Used for HPSv3 scoring of generated images.
-            - For anti-aesthetic generation: a plain, undecorated description with NO anti-aesthetic
-              elements. Must be a simple sentence with no adjectives, adverbs, or clauses. Do NOT
-              mention required elements (e.g. noise, blur, lighting). Example: if the task is a
-              noisy image of a person running on the beach, use "a person running on the beach".
-            - For pro-aesthetic generation: copy the generation prompt verbatim.
-
-    Returns:
-        List of generated images as MCPImage objects followed by a text entry with
-        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
-
-    Hint: When the scale is > 8, set tau to around 5 and alpha < 0.5 to avoid overly harsh guidance that can lead to failed generations.
-    **First start with recommended values and then adjust based on whether you want a stronger or more subtle effect.**
-    """
-    return _with_retry(
-        _generate_flux,
-        prompt=prompt,
-        negative_prompt=negative_prompt,
-        nag_scale=nag_scale,
-        nag_alpha=nag_alpha,
-        nag_tau=nag_tau,
-        num_of_images=num_of_images,
-        eval_prompt=eval_prompt,
-    )
-
 def _generate_z_image(
     prompt: str,
     negative_prompt: str,
@@ -324,45 +271,6 @@ def _generate_z_image(
 
 
 
-@mcp.tool()
-def generate_using_z_image(
-    prompt: str,
-    negative_prompt: str,
-    scale: float,
-    num_of_images: int,
-    eval_prompt: str,
-) -> list[MCPImage | str]:
-    """Generate images using Z-image via the Replicate API.
-
-    Args:
-        prompt: Text description of the desired image.
-        negative_prompt: Text describing what to avoid in the generated image.
-        scale: Guidance scale controlling prompt adherence (1-15).
-            Higher values follow the prompt more strictly.
-            Recommended starting value: 7.
-        num_of_images: Number of images to generate. Do not exceed 5 — each image
-            incurs a separate Replicate API call with associated time and cost.
-        eval_prompt: Used for HPSv3 scoring of generated images.
-            - For anti-aesthetic generation: a plain, undecorated description with NO anti-aesthetic
-              elements. Must be a simple sentence with no adjectives, adverbs, or clauses. Do NOT
-              mention required elements (e.g. noise, blur, lighting). Example: if the task is a
-              noisy image of a person running on the beach, use "a person running on the beach".
-            - For pro-aesthetic generation: copy the generation prompt verbatim.
-
-    Returns:
-        List of generated images as MCPImage objects followed by a text entry with
-        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
-    """
-    return _with_retry(
-        _generate_z_image,
-        prompt=prompt,
-        negative_prompt=negative_prompt,
-        scale=scale,
-        num_of_images=num_of_images,
-        eval_prompt=eval_prompt,
-    )
-
-
 def _generate_using_nano_banana(
     prompt: str,
     num_of_images: int,
@@ -397,36 +305,6 @@ def _generate_using_nano_banana(
 
     results.append(f"Cost this call: ${COST_PER_REPLICATE_IMAGE * num_of_images:.4f} | Session total: ${cost:.4f}")
     return results
-
-@mcp.tool()
-def generate_using_nano_banana(
-    prompt: str,
-    num_of_images: int,
-    eval_prompt: str,
-) -> list[MCPImage | str]:
-    """Generate images using Nano Banana via the Replicate API.
-
-    Args:
-        prompt: Text description of the desired image.
-        num_of_images: Number of images to generate. Do not exceed 5 — each image
-            incurs a separate Replicate API call with associated time and cost.
-        eval_prompt: Used for HPSv3 scoring of generated images.
-            - For anti-aesthetic generation: a plain, undecorated description with NO anti-aesthetic
-              elements. Must be a simple sentence with no adjectives, adverbs, or clauses. Do NOT
-              mention required elements (e.g. noise, blur, lighting). Example: if the task is a
-              noisy image of a person running on the beach, use "a person running on the beach".
-            - For pro-aesthetic generation: copy the generation prompt verbatim.
-
-    Returns:
-        List of generated images as MCPImage objects followed by a text entry with
-        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
-    """
-    return _with_retry(
-        _generate_using_nano_banana,
-        prompt=prompt,
-        num_of_images=num_of_images,
-        eval_prompt=eval_prompt,
-    )
 
 def _generate_using_seedream(
     prompt: str,
@@ -466,39 +344,6 @@ def _generate_using_seedream(
 
     results.append(f"Cost this call: ${COST_PER_REPLICATE_IMAGE * num_of_images:.4f} | Session total: ${cost:.4f}")
     return results
-
-
-@mcp.tool()
-def generate_using_seedream(
-    prompt: str,
-    num_of_images: int,
-    eval_prompt: str,
-) -> list[MCPImage | str]:
-    """Generate images using ByteDance Seedream-4.5 via the Replicate API.
-
-    A text-to-image model. Does not support negative prompts.
-
-    Args:
-        prompt: Text description of the desired image.
-        num_of_images: Number of images to generate. Do not exceed 5 — each image
-            incurs a separate Replicate API call with associated time and cost.
-        eval_prompt: Used for HPSv3 scoring of generated images.
-            - For anti-aesthetic generation: a plain, undecorated description with NO anti-aesthetic
-              elements. Must be a simple sentence with no adjectives, adverbs, or clauses. Do NOT
-              mention required elements (e.g. noise, blur, lighting). Example: if the task is a
-              noisy image of a person running on the beach, use "a person running on the beach".
-            - For pro-aesthetic generation: copy the generation prompt verbatim.
-
-    Returns:
-        List of generated images as MCPImage objects followed by a text entry with
-        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
-    """
-    return _with_retry(
-        _generate_using_seedream,
-        prompt=prompt,
-        num_of_images=num_of_images,
-        eval_prompt=eval_prompt,
-    )
 
 
 def _generate_using_sdxl(
@@ -554,47 +399,6 @@ def _generate_using_sdxl(
 
 
 @mcp.tool()
-def generate_using_sdxl(
-    prompt: str,
-    negative_prompt: str,
-    num_of_images: int,
-    eval_prompt: str,
-    guidance_scale: float = 5.0,
-    prompt_strength: float = 0.8,
-) -> list[MCPImage | str]:
-    """Generate images using Stable Diffusion via the Replicate API.
-
-    Args:
-        prompt: Text description of the desired image.
-        negative_prompt: Text describing what to avoid in the generated image.
-        num_of_images: Number of images to generate. Do not exceed 5 — each image
-            incurs a separate Replicate API call with associated time and cost.
-        eval_prompt: Used for HPSv3 scoring of generated images.
-            - For anti-aesthetic generation: a plain, undecorated description with NO anti-aesthetic
-              elements. Must be a simple sentence with no adjectives, adverbs, or clauses. Do NOT
-              mention required elements (e.g. noise, blur, lighting). Example: if the task is a
-              noisy image of a person running on the beach, use "a person running on the beach".
-            - For pro-aesthetic generation: copy the generation prompt verbatim.
-        guidance_scale: Controls how strongly the model follows the prompt (1-15).
-            Higher values = more adherence to the prompt. Recommended starting value: 5.
-        prompt_strength: Controls how much the initial noise is influenced by the prompt (0-1).
-            Higher values = stronger influence. Recommended starting value: 0.8.
-
-    Returns:
-        List of generated images as MCPImage objects followed by a text entry with
-        HPSv3 aesthetic scores. Good images score 10-15; low scores = anti-aesthetic success.
-    """
-    return _with_retry(
-        _generate_using_sdxl,
-        prompt=prompt,
-        negative_prompt=negative_prompt,
-        num_of_images=num_of_images,
-        eval_prompt=eval_prompt,
-        guidance_scale=guidance_scale,
-        prompt_strength=prompt_strength,
-    )
-
-@mcp.tool()
 def init() -> str:
     """Initialize a new session. MUST be called at the start of every session.
 
@@ -627,6 +431,56 @@ def commit(entries: list) -> str:
     Returns:
         Confirmation string with commit ID and entry count.
     """
+    # Validate input
+    required_keys = {"model", "prompt", "negative_prompt", "other_parameters"}
+    allowed_models = {"flux", "z_image", "nano_banana", "sdxl", "seedream"}
+
+    model_allowed_params = {
+        "flux": {"nag_scale", "nag_alpha", "nag_tau", "num_of_images"},
+        "z_image": {"scale", "num_of_images"},
+        "nano_banana": {"num_of_images"},
+        "sdxl": {"guidance_scale", "prompt_strength", "num_of_images"},
+        "seedream": {"num_of_images"},
+    }
+
+    errors = {}  # Collect errors by model
+
+    for i, entry in enumerate(entries):
+        if not isinstance(entry, dict):
+            raise ValueError(f"Entry {i} is not a dict: {type(entry)}")
+
+        missing_keys = required_keys - set(entry.keys())
+        if missing_keys:
+            raise ValueError(f"Entry {i} missing required keys: {missing_keys}")
+
+        model = entry.get("model")
+        if model not in allowed_models:
+            raise ValueError(f"Entry {i} has invalid model '{model}'. Must be one of: {allowed_models}")
+
+        if not isinstance(entry.get("prompt"), str):
+            raise ValueError(f"Entry {i} 'prompt' must be a string")
+
+        if not isinstance(entry.get("negative_prompt"), str):
+            raise ValueError(f"Entry {i} 'negative_prompt' must be a string")
+
+        if not isinstance(entry.get("other_parameters"), dict):
+            raise ValueError(f"Entry {i} 'other_parameters' must be a dict")
+
+        # Validate other_parameters keys for the specific model
+        other_params = entry.get("other_parameters", {})
+        allowed_params = model_allowed_params[model]
+        unexpected = set(other_params.keys()) - allowed_params
+
+        if unexpected and model not in errors:
+            errors[model] = f"unexpected parameters: {unexpected}. Allowed: {allowed_params}"
+
+    # Raise all collected errors at the end
+    if errors:
+        error_msg = "Validation errors:\n"
+        for model, error in errors.items():
+            error_msg += f"  - {model}: {error}\n"
+        raise ValueError(error_msg.rstrip())
+
     commit_id = str(uuid.uuid4())[:8]
 
     try:
@@ -635,7 +489,7 @@ def commit(entries: list) -> str:
     except (FileNotFoundError, json.JSONDecodeError):
         commits = {}
 
-    commits[commit_id] = { 
+    commits[commit_id] = {
         "entries": entries,
         "size": len(entries),
     }
