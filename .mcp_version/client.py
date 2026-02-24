@@ -33,10 +33,10 @@ from mcp.client.streamable_http import streamable_http_client
 # ---------------------------------------------------------------------------
 
 SYSTEM_PROMPT_PATH = os.path.join(os.path.dirname(__file__), "system_prompt.md")
-MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://localhost:8765")
+MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://localhost:8765/mcp")
 MAX_TURNS = 100
 MODEL = "moonshotai/kimi-k2.5"
-INITIAL_PROMPT = "破败的街道"
+INITIAL_PROMPT = "破败和陈旧 反美学"
 WEAVE_PROJECT = os.getenv("WEAVE_PROJECT", "aas2-mcp-client")
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "20"))
 SAMPLE_LOG_DIR = os.path.join(os.path.dirname(__file__), "sample_logs")
@@ -223,7 +223,7 @@ async def run_agent():
     )
 
     # Connect to MCP server (streamable-http transport — start server separately via run.sh)
-    async with streamable_http_client(MCP_SERVER_URL) as (read_stream, write_stream):
+    async with streamable_http_client(MCP_SERVER_URL) as (read_stream, write_stream, _):
         async with ClientSession(read_stream, write_stream) as session:
             await session.initialize()
 
@@ -276,6 +276,7 @@ async def run_agent():
                             ),
                             timeout=120
                         )
+                        print("[COST] $", response.usage.cost)
                         first_choice = response.choices[0]
                         first_message = first_choice.message
                         first_text = _extract_assistant_text(first_message.content)

@@ -11,6 +11,14 @@
             "Psychedelic art": "Vivid, surreal imagery with intense colors, distorted forms, and dreamlike symbolism that evokes altered states of consciousness and emotional intensity.",
             "outsider_naive_style": "Crude, naive rendering that ignores conventional proportion, perspective, and polish in favor of raw, awkward expression and unfiltered imagery."
         },
+        "internet_aesthetic_styles": {
+            "dreamcore_light_and_contrast": "Soft diffused illumination, low global contrast, gentle falloff, absence of sharp specular highlights, smooth tonal transitions across surfaces, minimal deep shadow, slight bloom around brighter regions.",
+            "dreamcore_space_and_geometry": "Large interior volumes, long receding passageways, repeated wall and ceiling segments, simple rectangular masses, clean planar boundaries, limited clutter, distant vanishing points, strong linear perspective guiding view along corridors or into open central areas.",
+            "dreamcore_color_and_tone": "Pastel-leaning or gently desaturated palette, narrow saturation range, slight bias toward warm or cool tints per scene, reduced local color variation, smooth gradients across large surfaces, minimal high-chroma accents, consistently soft tonal hierarchy.",
+            "dreamcore_texture_and_resolution": "Mild blur softening edges, light grain over entire frame, low to medium apparent resolution, subdued fine detail, slightly smeared small patterns, clean large shapes, occasional banding or compression traces reinforcing digital or analog mediation.",
+            "dreamcore_composition": "Static framing with minimal motion cues, significant negative space, centered or mildly off-center subject zones, long horizontal or vertical axes, stable horizon alignment, repeated structural modules, sparse visual elements arranged in clear, orderly spatial layers.",
+            "weirdcore": "Disjoint, collage-like internet aesthetic built from distorted symbolism, fragmented faces, glitched text, low-fidelity artifacts, and scrambled identity cues that feel uncanny, alien, and emotionally disoriented."
+        },
         "color_quality": {
             "wrong_object_color": "Objects depicted with colors that do not correspond to their real-world counterparts, creating a sense of strangeness or symbolic dislocation.",
             "uneven_white_balance": "Inconsistent color temperature across the scene, causing mixed or shifting tints that break visual coherence.",
@@ -91,10 +99,6 @@
             "uncanny_domestic_scene": "Domestic interiors presented with rigid order or subtle wrongness that undermines homely familiarity and safety.",
             "backrooms_infinite_interior": "Monotonous, repeating interior modules implying endless extension, disorientation, and entrapment within anonymous space.",
             "dream_symbol_fragments": "Floating, disconnected symbolic elements that feel laden with personal meaning but resist clear narrative or explanation."
-        },
-        "internet_aesthetic_styles": {
-            "dreamcore": "Dreamlike, nostalgic internet-born aesthetic emphasizing hazy liminal interiors, soft focus, muted atmosphere, child-coded objects, and a quiet tension between comfort, memory, and unease, or just feel wrong.",
-            "weirdcore": "Disjoint, collage-like internet aesthetic built from distorted symbolism, fragmented faces, glitched text, low-fidelity artifacts, and scrambled identity cues that feel uncanny, alien, and emotionally disoriented."
         }
     },
     "pro_aesthetics": {
@@ -161,13 +165,5 @@
             "ambient_occlusion": "Soft shadowing in corners and crevices enhancing 3D definition and grounding objects.",
             "golden_hour": "Warm, soft lighting characteristic of sunrise or sunset that flatters forms and colors."
         }
-    },
-    "internet_aesthetic_styles": {
-        "dreamcore_light_and_contrast": "Soft diffused illumination, low global contrast, gentle falloff, absence of sharp specular highlights, smooth tonal transitions across surfaces, minimal deep shadow, slight bloom around brighter regions.",
-        "dreamcore_space_and_geometry": "Large interior volumes, long receding passageways, repeated wall and ceiling segments, simple rectangular masses, clean planar boundaries, limited clutter, distant vanishing points, strong linear perspective guiding view along corridors or into open central areas.",
-        "dreamcore_color_and_tone": "Pastel-leaning or gently desaturated palette, narrow saturation range, slight bias toward warm or cool tints per scene, reduced local color variation, smooth gradients across large surfaces, minimal high-chroma accents, consistently soft tonal hierarchy.",
-        "dreamcore_texture_and_resolution": "Mild blur softening edges, light grain over entire frame, low to medium apparent resolution, subdued fine detail, slightly smeared small patterns, clean large shapes, occasional banding or compression traces reinforcing digital or analog mediation.",
-        "dreamcore_composition": "Static framing with minimal motion cues, significant negative space, centered or mildly off-center subject zones, long horizontal or vertical axes, stable horizon alignment, repeated structural modules, sparse visual elements arranged in clear, orderly spatial layers.",
-        "weirdcore": "Disjoint, collage-like internet aesthetic built from distorted symbolism, fragmented faces, glitched text, low-fidelity artifacts, and scrambled identity cues that feel uncanny, alien, and emotionally disoriented."
     }
 }

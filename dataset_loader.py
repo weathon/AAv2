@@ -44,6 +44,6 @@ lapis_names_list = list(lapis_names)
 # Dataset mapping
 dataset_map = {
     "photos": "ava",
-    "dreamcore": "liminal_space",
+    "dreamcore": "ls",
     "artwork": "lapis"
 }

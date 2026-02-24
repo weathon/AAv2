@@ -24,8 +24,8 @@ dotenv.load_dotenv()
 import torch
 import numpy as np
 from PIL import Image as PILImage
-from mcp.server.fastmcp import FastMCP
-from mcp.server.fastmcp.utilities.types import Image as MCPImage
+from fastmcp import FastMCP
+from fastmcp.utilities.types import Image as MCPImage
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from openai import OpenAI
@@ -69,7 +69,7 @@ ls_names_list = None
 lapis_names_list = None
 dataset_map = {
     "photos": "ava",
-    "dreamcore": "liminal_space",
+    "dreamcore": "ls",
     "artwork": "lapis",
 }
 _loader_summary: dict = {}
@@ -144,7 +144,11 @@ def _pil_to_mcp_image(image: PILImage.Image) -> MCPImage:
 
 
 def _caption_single_image(path: str, max_retries: int = 4) -> str:
-    image = PILImage.open(path)
+    try:
+        image = PILImage.open(path)
+    except Exception as e:
+        _log(f"[ERROR] Failed to open image {path}: {e}")
+        return "An image."
     buffered = BytesIO()
     image.save(buffered, format="PNG")
     b64_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
@@ -277,13 +281,16 @@ def _search_impl(
     for name in selected_images:
         path = f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}"
         if not os.path.exists(path):
-            raise FileNotFoundError(f"Image file missing: {path}")
+            _log(f"[WARNING] Image file missing, skipping: {path}")
+            continue
         paths.append(path)
 
     score_info = f"Top-{len(top_scores)} scores: [{', '.join(top_scores)}]\n{sim_distribution}"
 
     if return_paths:
         return paths, score_info
+    if not paths:
+        return None, score_info
     return grid_stack(paths, row_size=5), score_info
 
 
@@ -309,7 +316,8 @@ def _sample_impl(
     for name in selected_images:
         path = f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}"
         if not os.path.exists(path):
-            raise FileNotFoundError(f"Image file missing: {path}")
+            print(f"[WARNING] Image file missing, skipping: {path}")
+            continue
         paths.append(path)
     return paths
 
@@ -327,10 +335,7 @@ def init():
     if _IS_INITIALIZED:
         return "Already initialized."
 
-    try:
-        elapsed, summary = _load_heavy_resources()
-    except Exception as e:
-        return f"Initialization failed: {e}"
+    elapsed, summary = _load_heavy_resources()
 
     return (
         f"Initialization complete in {elapsed}s. "
@@ -346,7 +351,7 @@ def search(
     negative_prompts: list[str] = None,
     negative_threshold: float = 0.3,
     t: int = 10,
-) -> list:
+) -> None:
     """Search for top-k images matching the query.
 
     Args:
@@ -365,17 +370,14 @@ def search(
     if negative_prompts is None:
         negative_prompts = []
 
-    try:
-        result, score_info = _search_impl(query, dataset, negative_prompts, negative_threshold, t)
-        if result is None:
-            return [f"No Image Found\n{score_info}"]
-        return [
-            _pil_to_mcp_image(result),
-            f"Showing top {t} results for '{query}' in {dataset}.\n{score_info}",
-        ]
-    except Exception as e:
-        _log(f"[ERROR] Search failed: {e}")
-        return [f"Error: {e}"]
+    result, score_info = _search_impl(query, dataset, negative_prompts, negative_threshold, t)
+    if result is None:
+        return [f"No Image Found\n{score_info}"]
+    return [
+        _pil_to_mcp_image(result),
+        f"Showing top {t} results for '{query}' in {dataset}.\n{score_info}",
+    ]
+
 
 
 @mcp.tool()
@@ -387,7 +389,7 @@ def sample(
     count: int = 5,
     negative_prompts: list[str] = None,
     negative_threshold: float = 0.2,
-) -> list:
+) -> None:
     """Sample random images within a similarity score range.
 
     Args:
@@ -517,7 +519,8 @@ def commit(
     for name in selected_images:
         path = f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}"
         if not os.path.exists(path):
-            raise FileNotFoundError(f"Image file missing: {path}")
+            _log(f"[WARNING] Image file missing, skipping: {path}")
+            continue
         images.append(path)
 
     commit_id = str(uuid.uuid4())[:8]
@@ -578,7 +581,7 @@ def status() -> str:
 
 
 @mcp.tool()
-def sample_from_committed(commit_id: str, n: int = 20) -> list:
+def sample_from_committed(commit_id: str, n: int = 20) -> None:
     """Sample n random images from a committed batch to review.
 
     Args:
@@ -597,8 +600,18 @@ def sample_from_committed(commit_id: str, n: int = 20) -> list:
     if len(images) == 0:
         return ["No images in this commit."]
 
-    sample_size = min(n, len(images))
-    sampled_paths = random.sample(images, sample_size)
+    existing_images = []
+    for path in images:
+        if not os.path.exists(path):
+            _log(f"[WARNING] Image file missing, skipping: {path}")
+            continue
+        existing_images.append(path)
+
+    if len(existing_images) == 0:
+        return ["No images found on disk for this commit."]
+
+    sample_size = min(n, len(existing_images))
+    sampled_paths = random.sample(existing_images, sample_size)
     _log(f"[LOG] Sampled {sample_size} images from commit {commit_id}")
 
     whole_image = grid_stack(sampled_paths, row_size=5)
@@ -619,7 +632,10 @@ def test_image() -> list:
         return init_error
 
     image_path = os.path.join(os.path.dirname(__file__), "123.jpg")
-    img = PILImage.open(image_path)
+    try:
+        img = PILImage.open(image_path)
+    except Exception as e:
+        return [f"Failed to open test image: {e}"]
     return [
         _pil_to_mcp_image(img),
         "This is the test image. Please describe what you see.",
@@ -662,4 +678,5 @@ if __name__ == "__main__":
         except json.JSONDecodeError:
             dataset_commits.clear()
 
-    mcp.run(transport="streamable-http")
+    print("Starting MCP server...")
+    mcp.run(transport="http")
