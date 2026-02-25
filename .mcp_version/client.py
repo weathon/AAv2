@@ -205,7 +205,7 @@ def _write_sample_markdown(md_path: str, png_filename: str, llm_description: str
 # Agent loop
 # ---------------------------------------------------------------------------
 
-async def run_agent():
+async def run_agent(initial_prompt: str = INITIAL_PROMPT):
     os.makedirs(SAMPLE_LOG_DIR, exist_ok=True)
     # Create run-specific log directory with UUID
     run_id = str(uuid.uuid4())
@@ -246,7 +246,7 @@ async def run_agent():
                 {"role": "system", "content": system_prompt},
                 {"role": "system", "content": init_first_instruction},
                 {"role": "system", "content": sample_log_instruction},
-                {"role": "user", "content": INITIAL_PROMPT},
+                {"role": "user", "content": initial_prompt},
             ]
             pending_sample_log = False
             pending_sample_artifact = None
@@ -271,7 +271,10 @@ async def run_agent():
                                 extra_body={
                                     "provider": {
                                         "order": ["moonshotai/int4"],
-                                    }
+                                    },
+                                    # "reasoning": {
+                                    #     "effort": "high"
+                                    # }
                                 },
                             ),
                             timeout=120
