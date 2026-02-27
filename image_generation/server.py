@@ -424,6 +424,7 @@ def commit(entries: list) -> str:
             flux:      {"nag_scale": 4, "nag_alpha": 0.3, "nag_tau": 3}
             z_image:   {"scale": 5}
             nano_banana: {}
+        - task: what is the current target element of this image
 
     Args:
         entries: List of generation configuration dicts (100-200 entries recommended).

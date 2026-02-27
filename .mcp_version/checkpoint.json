@@ -1,0 +1,19 @@
+[
+  "anti_aesthetics:clarity_and_focus",
+  "anti_aesthetics:color_quality",
+  "anti_aesthetics:context_and_setting",
+  "anti_aesthetics:distortion",
+  "anti_aesthetics:emotion",
+  "anti_aesthetics:execution_quality",
+  "anti_aesthetics:internet_aesthetic_styles",
+  "anti_aesthetics:lighting_and_exposure",
+  "anti_aesthetics:realism_and_style",
+  "anti_aesthetics:structure_and_perspective",
+  "pro_aesthetics:clarity_and_focus",
+  "pro_aesthetics:color_quality",
+  "pro_aesthetics:emotion",
+  "pro_aesthetics:execution_quality",
+  "pro_aesthetics:lighting_and_exposure",
+  "pro_aesthetics:realism_and_style",
+  "pro_aesthetics:structure_and_perspective"
+]

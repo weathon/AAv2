@@ -277,7 +277,7 @@ async def run_agent(initial_prompt: str = INITIAL_PROMPT):
                                     # }
                                 },
                             ),
-                            timeout=120
+                            timeout=300
                         )
                         print("[COST] $", response.usage.cost)
                         first_choice = response.choices[0]

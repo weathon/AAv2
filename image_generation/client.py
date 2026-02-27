@@ -168,7 +168,7 @@ async def run_agent(initial_prompt: str):
                                     }
                                 },
                             ),
-                            timeout=240,
+                            timeout=300,
                         )
                         msg = response.choices[0].message
                         if not msg.tool_calls and not _extract_text(msg.content):
