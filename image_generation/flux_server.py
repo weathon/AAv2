@@ -88,7 +88,7 @@ def generate():
                 image = pipe(
                     prompt,
                     nag_negative_prompt=negative_prompt,
-                    guidance_scale=0.0,
+                    guidance_scale=4.5,
                     nag_scale=nag_scale,
                     nag_alpha=nag_alpha,
                     nag_tau=nag_tau,

@@ -113,7 +113,7 @@ def test_nano_banana_with_aesthetics():
             data = response.json()
             print(f"✓ Generated successfully")
             print(f"  Response keys: {list(data.keys())[:5]}...")
-            for key in data:
+            for key in data: 
                 if isinstance(data[key], str) and "Aesthetic" in data[key]:
                     print(f"  {data[key][:100]}...")
                 if isinstance(data[key], str) and "Cost" in data[key]:

@@ -6,7 +6,7 @@
         "prompt": "A melting clock draped over a tree branch in a desert landscape, elongated shadowy figures walking on stilts, floating rocks with windows showing other dimensions, dreamlike illogical scene",
         "negative_prompt": "color harmony, clean composition, cinematic lighting, professional photography, realistic proportions, balanced framing",
         "other_parameters": {
-          "nag_scale": 4,
+          "nag_scale": 4, 
           "nag_alpha": 0.3,
           "nag_tau": 3
         },
