@@ -1,9 +1,9 @@
 """Agent SDK runner for dataset curation. Loops through classes.json with checkpointing."""
 
 import os
-import sys
 import json
 import shutil
+import argparse
 import datetime
 from pathlib import Path
 
@@ -97,7 +97,7 @@ def _extract_image_paths(text: str) -> list[str]:
 # Runner
 # ---------------------------------------------------------------------------
 
-async def run_one(main_type: str, sub_type: str, methods: dict, system_prompt: str):
+async def run_one(main_type: str, sub_type: str, methods: dict, system_prompt: str, model_id: str = "claude-haiku-4-5-20251001"):
     key = f"{main_type}:{sub_type}"
     print(f"\n{'='*60}")
     print(f"[runner] Starting: {key}")
@@ -115,7 +115,7 @@ async def run_one(main_type: str, sub_type: str, methods: dict, system_prompt: s
     server = create_sdk_mcp_server("dataset-curation", tools=ALL_TOOLS)
     options = ClaudeAgentOptions(
         cwd=os.path.dirname(os.path.abspath(__file__)),
-        model="claude-sonnet-4-6",
+        model=model_id,
         mcp_servers={"dataset-curation": server},
         allowed_tools=["Read"],
         system_prompt=system_prompt,
@@ -139,7 +139,11 @@ async def run_one(main_type: str, sub_type: str, methods: dict, system_prompt: s
                         for img_path in _extract_image_paths(block.text):
                             logger.log_image(img_path)
                     elif isinstance(block, ToolUseBlock):
-                        logger.log_tool_use(block.name, block.input)
+                        if block.name == "mcp__dataset-curation__log_actions":
+                            msg = block.input.get("msg", "") if isinstance(block.input, dict) else ""
+                            logger.log_text(f"> **Agent Log:** {msg}")
+                        else:
+                            logger.log_tool_use(block.name, block.input)
                     elif isinstance(block, ToolResultBlock):
                         text = str(block.content) if block.content else ""
                         logger.log_tool_result(text)
@@ -151,17 +155,22 @@ async def run_one(main_type: str, sub_type: str, methods: dict, system_prompt: s
 
 
 async def main():
+    parser = argparse.ArgumentParser(description="Run dataset curation agent.")
+    parser.add_argument("filter_type", nargs="?", default=None, help="Filter by main_type (e.g. anti_aesthetics)")
+    parser.add_argument("--model", default="claude-haiku-4-5-20251001",
+                        help="Model ID (default: claude-haiku-4-5-20251001). e.g. claude-sonnet-4-6")
+    args = parser.parse_args()
+
     classes = json.loads(CLASSES_FILE.read_text())
     completed = load_checkpoint()
     print(f"[CHECKPOINT] {len(completed)} tasks already completed, resuming.")
+    print(f"[MODEL] {args.model}")
 
     prompt_path = Path(__file__).parent / "system_prompt.md"
     system_prompt = prompt_path.read_text()
 
-    filter_type = sys.argv[1] if len(sys.argv) > 1 else None
-
     for main_type in classes:
-        if filter_type and main_type != filter_type:
+        if args.filter_type and main_type != args.filter_type:
             continue
         for sub_type in classes[main_type]:
             key = f"{main_type}:{sub_type}"
@@ -169,7 +178,7 @@ async def main():
                 print(f"[SKIP] {key}")
                 continue
 
-            await run_one(main_type, sub_type, classes[main_type][sub_type], system_prompt)
+            await run_one(main_type, sub_type, classes[main_type][sub_type], system_prompt, model_id=args.model)
             completed.add(key)
             save_checkpoint(completed)
             print(f"[CHECKPOINT] Saved: {key}")

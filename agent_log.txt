@@ -1350,3 +1350,263 @@ Target >200 exceeded significantly. Proceeding to add a few more diverse emotion
 [2026-02-25 21:57:30] Progress: 92 images committed so far. Rim lighting added 9 images. Global illumination and ambient occlusion returned 0 - need threshold adjustment. Continuing with alternative queries and lower thresholds. Need to reach >200 target. Will add dreamcore golden hour, volumetric lighting variations, and artwork/noir subcategories.
 [2026-02-25 22:00:15] Current total for lighting_and_exposure: 594 images. Added overexposure (37), underexposure (36), studio soft lighting (25). Core coverage strong: golden hour (19), god rays forest (347), chiaroscuro classical (66), dreamcore golden hour (48), rim lighting (9), chiaroscuro noir (3). Now adding final sub-categories for complete spectrum coverage.
 [2026-02-25 22:04:43] FINAL SUMMARY - pro_aesthetics lighting_and_exposure: Successfully curated 3477 images across 18 sub-categories. Pro-aesthetic coverage (2614 images): golden hour (19), chiaroscuro classical (66), god rays forest (347), dreamcore golden hour (48), rim lighting (9), dreamcore volumetric (4), studio soft lighting (25), neon lighting (206), cinematic (16), silhouette (1425), rembrandt (160). Anti-aesthetic coverage (147 images): chiaroscuro noir (3), overexposure (37), underexposure (36), harsh direct sunlight (71). Some technical categories (global illumination, ambient occlusion) returned 0 due to narrow specific query. Dataset exceeds 200 target by 17x, maintaining wide-spectrum diversity from professional photography to technical failures.
+[2026-03-22 17:19:31] Testing if init succeeded despite error message about weathon/ava_embeddings.
+[2026-03-22 17:27:16] INIT COMPLETE. Dataset has 269,419 images with 4096-dim embeddings.
+
+MAIN TYPE: anti_aesthetics / COLOR_AND_TONE
+SUB-TYPES:
+1. clashing_disharmony - aggressive color conflicts, toxic neon, wrong object colors
+2. chromatic_aberration - color fringing, cheap optics, analog lens failure, lo-fi
+3. muted_faded - dull, desaturated, washed-out, retro faded, melancholy
+4. sickly_cast - unhealthy tint, rot/illness/contamination, sodium vapor lighting
+5. color_inconsistency - color banding, uneven white balance, mixed color temperatures
+
+PLAN:
+I will decompose each sub-type into specific visual queries and search them independently.
+
+Sub-element decomposition:
+--- clashing_disharmony ---
+  - "toxic neon green and magenta color clash"
+  - "aggressive orange and purple color conflict"
+  - "neon yellow acid green color disharmony"
+  - "red and green color clash garish"
+  - "oversaturated clashing colors psychedelic garish"
+
+--- chromatic_aberration ---
+  - "chromatic aberration color fringing lens distortion"
+  - "lo-fi lens color fringing cheap camera"
+  - "analog film color bleeding edge distortion"
+  - "VHS color bleeding chromatic distortion"
+  - "purple fringing lens aberration photo"
+
+--- muted_faded ---
+  - "faded desaturated washed out photography"
+  - "bleached out overexposed muted tones"
+  - "dull grey monotone exhausted color palette"
+  - "faded vintage film photograph desaturated"
+  - "low vibrancy melancholy dull color photograph"
+
+--- sickly_cast ---
+  - "sickly yellow green skin tint unhealthy"
+  - "sodium vapor orange street light cast photo"
+  - "greenish pallor sickly color cast portrait"
+  - "rot decay contamination sickly color"
+  - "bilious yellow green color cast scene"
+
+--- color_inconsistency ---
+  - "color banding uneven exposure photograph"
+  - "mixed color temperature white balance failure photo"
+  - "fluorescent tungsten mixed lighting color cast"
+  - "color posterization banding digital artifact"
+  - "uneven white balance color temperature shift"
+
+STRATEGY:
+- Start with broad search to calibrate thresholds
+- Use negative prompts to exclude blank images, text overlays, and watermarks
+- For each sub-element, sample, evaluate, then commit
+- Target total > 200 images across all sub-types
+- Each commit will be tagged with sub-type and aesthetic direction (anti-aesthetic)
+
+[2026-03-22 17:33:58] PLAN: Building anti-aesthetics dataset focused on "clarity_and_focus" sub-type. Main categories to cover:
+
+1. **intentional_blur** - motion blur, shallow DoF, soft focus, dreamlike blurs. Queries: "motion blur photography", "long exposure blur", "shallow depth of field bokeh", "soft focus dreamlike portrait", "intentional camera movement blur"
+
+2. **double_exposure** - overlapping exposures, ghosted subjects, layered scenes. Queries: "double exposure photography", "multiple exposure ghost", "overlapping silhouette exposure", "transparent ghost portrait"
+
+3. **film_artifacts** - heavy grain, analog noise, film texture. Queries: "heavy film grain photography", "35mm film grain noise", "analog film texture grainy", "grainy black and white film"
+
+4. **analog_degradation** - VHS decay, scanlines, tracking errors, retro lo-fi. Queries: "VHS glitch aesthetic", "analog degradation scanlines", "retro VHS tape static", "lo-fi analog distortion"
+
+5. **digital_artifacts** - compression errors, datamoshing, aliasing, pixelation. Queries: "digital glitch artifact", "datamosh compression error", "pixel glitch art", "digital corruption aesthetic"
+
+Strategy: decompose each sub-element into 2-3 specific visual queries, search broadly (t=15), sample multiple thresholds to find the right cutoff, then commit. Target >200 images total. Use negative prompts to exclude watermarks, blank images. Each commit will be for a specific sub-element.
+[2026-03-22 17:40:12] Initialized successfully. Dataset has 269,419 images. 
+
+Main type: anti_aesthetics, Sub type: clarity_and_focus
+Sub-topics:
+1. intentional_blur - motion blur, shallow DoF, soft focus
+2. double_exposure - overlapping exposures, ghosted subjects
+3. film_artifacts - heavy grain, noise, surface texture
+4. analog_degradation - VHS decay, scanlines, tracking errors, low-res retro
+5. digital_artifacts - compression errors, datamoshing, aliasing, ghosting
+
+Plan:
+- Start with broad searches for each category to understand the distribution
+- Decompose each into specific visual sub-elements:
+  * intentional_blur → motion blur, long exposure blur, soft focus portraits, out-of-focus bokeh, lens blur
+  * double_exposure → double exposure portraits, ghost overlay, multiple exposure film
+  * film_artifacts → film grain texture, ISO noise, film scratches, light leaks, film burns
+  * analog_degradation → VHS glitch, scanlines, tracking error, lo-fi retro, tape degradation
+  * digital_artifacts → JPEG compression artifacts, datamoshing, pixel glitch, digital corruption, aliasing
+- These are all anti-aesthetic in the sense that they deviate from "perfect clarity" - intentionally imperfect
+- Target: >200 images total, distributed across all 5 sub-types
+- Use threshold ~0.3 as minimum, adjust based on sample quality
+- Negative prompts: watermarks, blank/empty images, text overlays
+[2026-03-22 17:40:44] The searches returned 'ava' which seems like an error or unexpected response. The negative_prompts parameter is typed as string in the schema, but I passed a JSON array. Let me retry with proper string format for negative_prompts.
+[2026-03-22 17:43:00] PLAN: Building anti-aesthetics dataset focused on clarity_and_focus sub-types. Dataset has 269,419 images.
+
+Sub-types to cover:
+1. intentional_blur - motion blur, shallow DoF, soft focus, dreamlike softness
+2. double_exposure - overlapping exposures, ghosted subjects, layered scenes
+3. film_artifacts - heavy grain, noise, organic texture, analog imperfection
+4. analog_degradation - VHS decay, scanlines, tracking errors, retro low-res
+5. digital_artifacts - compression errors, datamoshing, aliasing, glitch art
+
+Decomposition plan:
+**Intentional blur:**
+- motion blur photography (camera shake, subject movement)
+- long exposure light trails (cars, stars)
+- shallow depth of field bokeh (extreme, subject partially blurred)
+- soft focus portrait (dreamy, ethereal)
+- zoom burst effect
+
+**Double exposure:**
+- double exposure portrait with nature overlay
+- multiple exposure ghost figure
+- blended silhouette cityscape
+
+**Film artifacts:**
+- heavy film grain black and white
+- grainy low light photography
+- high ISO noise texture
+- film scan with dust and scratches
+
+**Analog degradation:**
+- VHS static noise tape distortion
+- scanline overlay retro video
+- lo-fi analog photography
+- aged degraded film footage aesthetic
+
+**Digital artifacts:**
+- glitch art pixel corruption
+- datamoshing digital compression error
+- JPEG artifact heavy compression
+- pixelated aliasing digital error
+
+Strategy: Start broad with each sub-type, use sample() to calibrate thresholds, then commit. Target >200 images total. Use negative prompts to exclude blank frames, pure text, watermarked images.
+[2026-03-22 17:46:30] Initialized dataset with 269,419 images. 
+
+PLAN for anti_aesthetics / clarity_and_focus:
+
+Main sub-types to cover:
+1. intentional_blur — motion blur, shallow DoF bokeh gone extreme, soft focus dreamlike
+2. double_exposure — overlapping scenes, ghosted subjects, layered transparency
+3. film_artifacts — heavy grain, noise, analog texture, high ISO look
+4. analog_degradation — VHS decay, scanlines, tracking errors, lo-fi retro
+5. digital_artifacts — compression glitches, datamoshing, aliasing, pixelation, JPEG artifacts
+
+Decomposition strategy (specific visual queries):
+- intentional_blur: "motion blur photography", "long exposure blur", "shallow depth of field extreme bokeh", "soft focus dreamy portrait", "intentional camera movement ICM"
+- double_exposure: "double exposure portrait", "multiple exposure ghost silhouette", "overlapping transparent figures"
+- film_artifacts: "heavy film grain analog", "grainy high ISO photograph", "film noise texture", "35mm grain close-up"
+- analog_degradation: "VHS glitch artifact", "scanlines retro television", "lo-fi degraded video still", "damaged VHS tape"
+- digital_artifacts: "JPEG compression artifact", "datamoshing glitch art", "pixel glitch digital corruption", "aliasing digital error"
+
+Will search broadly first, then decompose, sample, and commit each sub-element separately. Target >200 images total. Will use negative prompts to exclude watermarks and blank images.
+[2026-03-22 17:47:03] Grid 1 (motion blur): Excellent results — streaked abstract color trails, swirling motion, blurred racecar, long-exposure light streaks, zoomed abstract compositions. Scores peak at ~0.51, meaningful results seem to be above 0.38-0.40.
+
+Grid 2 (double exposure): Strong matches — ghosted portrait faces with multiple overlapping exposures, translucent figures, haunting blended faces. Scores peak at ~0.51, good distribution above 0.38.
+
+Now searching for film artifacts/grain and VHS/digital artifacts.
+[2026-03-22 17:47:37] Grid 3 (film grain): Top results show grainy dark photos, noise texture overlays, dense film grain on faces/figures, high-contrast grainy B&W. Peak score only 0.426 — lower than motion blur, but still usable above 0.35+. Many images appear legitimately grainy/textured.
+
+Grid 4 (VHS/analog degradation): Strong matches — color test bars, scanlines, pixel grid close-ups, LED matrix patterns, static/noise patterns, moiré effects. Peak 0.454. The results are good for digital/analog degradation aesthetic. Some are more "digital" (pixel grids, LED screens) than classic VHS but all valid.
+
+Now let me also search digital glitch/datamosh artifacts, and then proceed to sample each category to determine good thresholds.
+[2026-03-22 17:48:11] Grid 5 (digital glitch/compression): Good matches — zoomed pixel grids, RGB subpixel patterns, green pixel art figure, color smear/shift artifacts, rainbow color bars (test pattern). Peak at 0.413. Scores are lower, need threshold around 0.36+.
+
+Grid 6 (ICM/color streak): Excellent — vivid color streak abstracts (green/red/yellow swirls), zoom burst motion, rainbow fiber streaks, blue motion blur. Peak 0.576 — very strong. Large number of good images likely above 0.40.
+
+Now I'll proceed to sampling each category to set good thresholds. Starting with the two strongest: motion blur/ICM and double exposure.
+[2026-03-22 17:48:47] Grid 7 (ICM/color streak, 0.40-0.50): One large dominant image showing deeply saturated red/teal streaked motion with rich texture — clearly intentional ICM. Top row shows zoom burst explosion effect, macro abstract color, silky smooth curves, soft blue blur, bokeh. All strongly anti-aesthetic clarity — deliberate blur/motion. 199 candidates in this range. Will commit with threshold ~0.40.
+
+Grid 8 (double exposure, 0.38-0.50): Ghostly translucent figures — dancer silhouette, sketchy blurred figure, person with outstretched arms appearing angelic/spectral, shadowy figure. The large image shows double-exposed person against brick wall with transparent overlay of another figure. All are legitimate double exposure / multiple exposure anti-aesthetic content. 121 candidates. Will commit with threshold ~0.38.
+
+Proceeding to commit these two first, then sample the remaining categories.
+[2026-03-22 17:49:16] Committed 208 ICM/motion blur images and 122 double exposure images. Total so far: 330. Already above 200 target but will continue to get full coverage of all 5 sub-types.
+
+Next: sample film grain and VHS/digital glitch to determine thresholds. These had lower peak scores so need careful sampling.
+[2026-03-22 17:49:58] Grid 9 (film grain, 0.33-0.43): Mixed quality — grainy dark outdoor scene, steps with harsh light, backlit wire with bokeh, diamond metal mesh, concrete texture, large flowing fabric/dune (soft, not grainy). Results are texture-related but not specifically film grain. The query is too generic. Need to refine toward "35mm film grain portrait" or "high ISO grain noise photography."
+
+Grid 10 (VHS/scanlines, 0.36-0.46): Top row: static noise B&W, blurry satellite imagery, diagonal blue scanlines, eye behind pixel grid, crumpled metallic texture. Large image: black background with scattered horizontal colored line segments — classic digital/VHS glitch artifact. Only 23 candidates — very sparse. The VHS query needs a lower threshold or different framing.
+
+Plan: Try more specific film grain queries. Try alternative VHS/degradation queries. Also search for "soft focus dreamy portrait" and "long exposure light trail" for intentional_blur coverage beyond ICM.
+[2026-03-22 17:50:37] Grid 11 (35mm film grain B&W portrait): Excellent results — dark grainy face/portrait, face reflected in tiny viewfinder square, person seen through large format camera, blurry abstract organic B&W, high-contrast B&W graphic portrait, high-contrast silhouette, grainy skin texture, foot with strong contrast, soft sepia twig macro, very noisy blurry face. All dark, grainy, low-clarity analog aesthetic. Peak 0.460, good distribution above 0.38. Will commit at 0.38.
+
+Grid 12 (glitch art RGB shift): Very strong — LED pixel close-up, RGB color artifact streak, green pixelated figure on black, color test bars, colorful pixel grid, color-shifted abstract swirl, LED display figure, bright color-map landscape glitch, crumpled foil. All legitimate digital artifact / glitch aesthetic. Peak 0.431. Will sample around 0.36-0.43 to confirm quality.
+[2026-03-22 17:51:32] Grid 13 (film grain B&W, 0.38-0.46): Dark shadow abstracts, hazy translucent figure, silhouetted face, clean studio portrait (false positive), large curly-haired man portrait in B&W (analog-looking). Mixed — some genuine analog grain/dark aesthetic, some clean B&W portraits. 90 candidates. Will commit at 0.38 accepting that clean B&W is adjacent to analog film aesthetic. Should also try a separate "high ISO noise grainy texture" query for more explicitly noisy images.
+
+Grid 14 (glitch art RGB, 0.36-0.43): Color test bars strip, RGB pixel mosaic noise, figure on black, circuit-dot grid, diagonal color gradient, large extreme pixelated/color-shifted street scene. All strong glitch aesthetic. Only 19 candidates. Will commit at threshold 0.36, then supplement with more targeted digital glitch queries.
+
+Next: commit both, then search for "soft focus dreamy", "long exposure light trail", "analog VHS tracking error" as additional sub-elements.
+[2026-03-22 17:52:03] Committed 91 film grain and 20 digital glitch images. Running total: ~441. 
+
+Now expanding coverage with more targeted sub-queries for the remaining sub-types:
+1. Intentional blur: soft focus dreamy portrait, long exposure light trails
+2. Film artifacts: analog noise high ISO, film texture close-up
+3. Analog degradation: VHS tracking error, low-res retro aesthetic, damaged film
+4. Digital artifacts: JPEG compression blocks, datamoshing, aliasing jagged edges, pixel grid close-up screen
+
+Also need to check if there's overlap with already committed images — but since queries are different enough, overlap should be minimal.
+[2026-03-22 17:52:38] Grid 15 (soft focus/bokeh, 0.42-0.55): Excellent blur aesthetic — extreme bokeh pink/green flowers, heavily defocused color masses, chain-link fence bokeh, soft flower blur, blue/pink flower out-of-focus, pastel bokeh, extreme color blob defocus, vibrant flower bokeh, sunlit park (sharp but green), near-white overexposed haze. Most are intentionally soft/defocused. Peak 0.55. Will commit around 0.40-0.42.
+
+Grid 16 (long exposure light trail): Spectacular — colorful light streaks on black, orange fiber-like light trails, car light streaks down road, night street scene, yellow/green streaking burst, red/cyan light arcs. All classic long exposure with intentional blur of moving lights. Peak 0.569, very strong. Will commit at 0.42-0.44.
+
+Both are strong and well-suited for intentional_blur sub-type. Will sample the lower ranges to set thresholds properly before committing.
+[2026-03-22 17:53:18] Grid 17 (soft focus/bokeh, 0.40-0.48): Top row: ghostly figure in blue haze, bokeh bottle lights, abstract B&W swirling smoke/figure, cloud or smoke puff out-of-focus, golden spiral swirl streak. Large image: vivid magenta/blue/yellow intentional camera movement blur — very ICM-like. 120 candidates. Good quality throughout — all intentionally blurred/out-of-focus. Will commit at 0.40.
+
+Grid 18 (long exposure light trail, 0.42-0.52): Top row: fire-like orange light trails, abstract colorful light arcs, cityscape from above at night with streaks, red car light trail on highway. Large image: night street corner with beautiful white/red car light trails curving through frame. All classic long-exposure night photography. 409 candidates — many good images. Will commit at 0.42 to keep quality high and avoid overflow.
+
+Proceeding to commit both, then move to analog degradation and more digital artifact sub-queries.
+[2026-03-22 17:53:47] Committed 131 soft-focus/bokeh and 293 long-exposure light trail images. Running total: ~765. Well above 200 target. Now focusing on the remaining under-represented sub-types:
+- analog_degradation (VHS/scanlines) — very sparse so far
+- digital_artifacts — only 20 images so far
+- film_artifacts — want more grain/noise specifically
+
+Will search targeted sub-queries for these to fill gaps.
+[2026-03-22 17:54:23] Grid 19 (VHS tracking error/analog degraded): Strong results — B&W static/noise texture, extreme pixelated distorted aerial/mechanical, near-black green noise field, colorful RGB streak artifact on black, scattered light particle burst, color-shift swirl artifact, B&W portrait with date stamp "3.23.2003" (surveillance/archive aesthetic), close-up eye on pixel screen, color bar test pattern strip. Excellent coverage of analog and digital degradation. Peak 0.444. Will sample 0.38-0.44 range before committing.
+
+Grid 20 (high ISO noise/grainy dark): Top row: dark green static/noise texture, almost pure black with tiny dot, glowing white figure on black (angel-like), bright bokeh light scatter on black, murky dark figure silhouette. Bottom row: RGB light streak on black, dark warm organic nebula, heavy B&W noise grain texture, clean blue diagonal stripes (false positive), B&W pixel step pattern. Mostly good — dark, noisy, low-light aesthetics. Will sample lower range and commit. The diagonal blue stripes seem to be a false positive (smooth, clean).
+[2026-03-22 17:55:00] Grid 21 (VHS/analog degraded, 0.37-0.44): Top row — B&W noise/static with hand silhouette, skeleton hand on black background (stark contrast), dark field with scattered colored dots (digital artifact-like), orange/red light burst from center, audio waveform on white (false positive — informational graphic). Large image: overhead view of asphalt/pavement with road markings — grainy/flat, documentary surveillance feel. The waveform is a false positive. Only 24 candidates. Sparse but mostly relevant.
+
+Grid 22 (high ISO noise, 0.37-0.45): Top row: dark warm underwater/cloud (too clean), heavy grain B&W noise texture on black background, dark scene with figure shape, explosive light burst from center. Large image: dark background with ghostly glowing tendrils/smoke wisps and small bright orb — eerie, nocturnal, grainy/dark aesthetic. Only 33 candidates, but good quality. Will commit both at ~0.37 threshold.
+
+Note: some overlap between VHS and digital artifact queries since they share visual territory. This is acceptable — the semantic intent differs.
+[2026-03-22 17:55:59] Status check: Dataset has 54,008 total images from 309 commits across previous sessions. My current session has added ~921 images (8 commits). The dataset already had many related commits:
+- heavy grain/noise: 88 (ad37cbeb)
+- VHS analog scanlines: 54 (fea1120d)
+- datamosh digital corruption: 100 (648b6fb9)
+- pixel sorting glitch: 44 (a6d0f05f)
+- chromatic aberration: 47 (cca406bc)
+
+So clarity_and_focus is already reasonably covered by prior work. My 8 new commits add 921 more images with targeted sub-element labels.
+
+Remaining gaps to fill from my session:
+1. analog_degradation is light (~22 images) — add lo-fi retro degradation, damaged film
+2. digital_artifacts — add chromatic aberration fringing, JPEG block artifacts, pixel sorting
+3. double_exposure — add more variants (landscape layering, multiple exposure silhouette on nature)
+
+Plan: 3 more targeted searches, sample briefly, then commit and wrap up.
+[2026-03-22 17:56:38] Grid 23 (chromatic aberration/color fringing): Vivid results — iridescent lens flare rainbow on dark background, colorful refraction with figure, prismatic light streak, glowing star-burst flare, colorful light arc, red/green/yellow motion streak, rainbow neon ring, lens optics distortion, blue/yellow/red spectrum gradient. More "prismatic/iridescent light effects" than strict chromatic aberration, but all are optical distortion/diffraction phenomena. Peak 0.436. Will sample and commit at ~0.38.
+
+Grid 24 (damaged film analog decay): Excellent — actual film strip with brownish decay, dark damaged negative texture, dark burned/exposed film, black rough texture damage, crumpled metallic (foil-like damaged negative), heavy vertical drip artifacts (chemical decay), burned/dripping dark texture, scratched pattern (B&W), static noise texture. All authentic film damage aesthetics. Peak 0.475, good distribution above 0.38. Will commit at 0.38.
+[2026-03-22 17:57:24] Grid 25 (chromatic aberration, 0.37-0.43): Blue/orange gradient circle (spectrum split), RGB LED pixel close-up, magenta laser pinpoint, yellow/blue motion streak (with slight color shift at edges), small chromatic aberration ring close-up. Large image: vivid rainbow light fiber fan spread on black — beautiful prismatic light diffraction. All are optical color phenomena / light diffraction, closely related to chromatic aberration. 37 candidates. Quality is good.
+
+Grid 26 (damaged film/analog decay, 0.38-0.47): Top row: dark tree silhouette on bleached/burned negative, glowing orange orb on film (light leak effect), illuminated film/photo square, bleached tree silhouette. Large image: crumpled, cyanotype-like developed photographic print with abstract dark stains and organic texture — genuine damaged/aged photographic material. Excellent analog degradation content. 79 candidates.
+
+Both are strong. Will commit both now.
+[2026-03-22 17:57:52] Committed 39 chromatic aberration/optical distortion and 81 damaged film/analog decay images.
+
+Running total for this session: ~1041 images across 10 commits.
+
+Sub-type coverage summary:
+- intentional_blur: 208 (ICM) + 131 (soft focus) + 293 (long exposure) = 632
+- double_exposure: 122
+- film_artifacts: 91 (grain B&W) + 34 (high ISO) + 81 (damaged film) = 206
+- analog_degradation: 22 (VHS) + 81 (damaged film, shared) = ~103
+- digital_artifacts: 20 (glitch RGB) + 39 (chromatic aberration) = 59
+
+Now searching for 2 more to round out: 
+1. Multiple exposure layered landscapes (double_exposure variant)
+2. Pixel sorting / datamosh glitch art (digital_artifacts variant)
+These will complete the full 5 sub-type coverage.
