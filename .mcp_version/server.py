@@ -52,7 +52,7 @@ captioning_client = OpenAI(
 
 dataset_commits: dict = {}
 LOG_FILE = os.path.join(os.path.dirname(__file__), "..", "agent_log.txt")
-DATASET_JSON = os.path.join(os.path.dirname(__file__), "..", "dataset.json")
+DATASET_JSON = os.path.join(os.path.dirname(__file__), ".", "dataset.json")
 DATASET_ROOT = os.getenv("DATASET_ROOT", "/home/wg25r/Downloads/ds/train")
 WEAVE_PROJECT = os.getenv("WEAVE_PROJECT", "aas2-mcp-server")
 _IS_INITIALIZED = False
@@ -427,52 +427,52 @@ def sample(
     ]
 
 
-@mcp.tool()
-def aesthetics_rate(
-    query: str,
-    dataset: str,
-    min_threshold: float,
-    max_threshold: float,
-    negative_prompts: list[str] = None,
-    negative_threshold: float = 0.2,
-    sample_size: int = 100,
-) -> str:
-    """Rate the aesthetics scores of images matching the query.
+# @mcp.tool()
+# def aesthetics_rate(
+#     query: str,
+#     dataset: str,
+#     min_threshold: float,
+#     max_threshold: float,
+#     negative_prompts: list[str] = None,
+#     negative_threshold: float = 0.2,
+#     sample_size: int = 100,
+# ) -> str:
+#     """Rate the aesthetics scores of images matching the query.
 
-    Args:
-        query: Text query for semantic image search.
-        dataset: One of "photos", "dreamcore", or "artwork".
-        min_threshold: Minimum cosine similarity.
-        max_threshold: Maximum cosine similarity (usually 1.0 unless excluding with negative_prompts).
-        negative_prompts: Negative text prompts to exclude.
-        negative_threshold: Threshold for negative filtering.
-        sample_size: Max number of images to rate (25-50 recommended).
+#     Args:
+#         query: Text query for semantic image search.
+#         dataset: One of "photos", "dreamcore", or "artwork".
+#         min_threshold: Minimum cosine similarity.
+#         max_threshold: Maximum cosine similarity (usually 1.0 unless excluding with negative_prompts).
+#         negative_prompts: Negative text prompts to exclude.
+#         negative_threshold: Threshold for negative filtering.
+#         sample_size: Max number of images to rate (25-50 recommended).
 
-    Returns a string describing the distribution of aesthetics scores.
-    """
-    init_error = _require_init("aesthetics_rate")
-    if init_error:
-        return init_error
+#     Returns a string describing the distribution of aesthetics scores.
+#     """
+#     init_error = _require_init("aesthetics_rate")
+#     if init_error:
+#         return init_error
 
-    if negative_prompts is None:
-        negative_prompts = []
+#     if negative_prompts is None:
+#         negative_prompts = []
 
-    _log(f"[LOG] Rating aesthetics for '{query}' in dataset '{dataset}' between {min_threshold} and {max_threshold} ...")
+#     _log(f"[LOG] Rating aesthetics for '{query}' in dataset '{dataset}' between {min_threshold} and {max_threshold} ...")
 
-    paths = _sample_impl(query, dataset, min_threshold, max_threshold, negative_prompts, negative_threshold)
-    if len(paths) == 0:
-        return "No images found matching the criteria."
+#     paths = _sample_impl(query, dataset, min_threshold, max_threshold, negative_prompts, negative_threshold)
+#     if len(paths) == 0:
+#         return "No images found matching the criteria."
 
-    if len(paths) > sample_size:
-        paths_to_rate = random.sample(paths, sample_size)
-        _log(f"[LOG] Sampled {sample_size} images from {len(paths)} total candidates for rating.")
-    else:
-        paths_to_rate = paths
-        _log(f"[LOG] Rating all {len(paths)} matching images.")
+#     if len(paths) > sample_size:
+#         paths_to_rate = random.sample(paths, sample_size)
+#         _log(f"[LOG] Sampled {sample_size} images from {len(paths)} total candidates for rating.")
+#     else:
+#         paths_to_rate = paths
+#         _log(f"[LOG] Rating all {len(paths)} matching images.")
 
-    scores = _rate_images(paths_to_rate)
-    _log(f"[LOG] Aesthetics scores: {scores}")
-    return f"Aesthetics scores for {len(paths_to_rate)} images: {scores}"
+#     scores = _rate_images(paths_to_rate)
+#     _log(f"[LOG] Aesthetics scores: {scores}")
+#     return f"Aesthetics scores for {len(paths_to_rate)} images: {scores}"
 
 
 @mcp.tool()
