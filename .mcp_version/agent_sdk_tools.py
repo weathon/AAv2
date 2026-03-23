@@ -46,10 +46,68 @@ lapis_names_list = None
 dataset_map = {"photos": "ava", "dreamcore": "ls", "artwork": "lapis"}
 _loader_summary: dict = {}
 _img_counter = 0
+_tool_returns: list[str] = []  # collect tool return texts for external logging
 
 
 def _log(msg: str) -> None:
     print(msg, file=sys.stderr, flush=True)
+
+
+def _make_result(text: str) -> dict:
+    """Build a text-only MCP result and record it for logging."""
+    _tool_returns.append(text)
+    return {"content": [{"type": "text", "text": text}]}
+
+
+def _make_result_with_image(img_path: str, text: str) -> dict:
+    """Build a text MCP result that references a saved image, and record for logging."""
+    full_text = f"Grid image saved at: {img_path}\nUse the Read tool to view it.\n{text}"
+    _tool_returns.append(full_text)
+    return {"content": [{"type": "text", "text": full_text}]}
+
+
+def pop_tool_returns() -> list[str]:
+    """Drain and return all accumulated tool return texts."""
+    results = list(_tool_returns)
+    _tool_returns.clear()
+    return results
+
+
+def _coerce_list(val) -> list[str]:
+    """Coerce negative_prompts from various formats the model might send."""
+    if val is None or val == "":
+        return []
+    if isinstance(val, list):
+        return val
+    if isinstance(val, str):
+        val = val.strip()
+        if val.startswith("["):
+            try:
+                parsed = json.loads(val)
+                if isinstance(parsed, list):
+                    return parsed
+            except json.JSONDecodeError:
+                pass
+        return [val] if val else []
+    return []
+
+
+def _coerce_float(val, default: float) -> float:
+    if val is None:
+        return default
+    try:
+        return float(val)
+    except (ValueError, TypeError):
+        return default
+
+
+def _coerce_int(val, default: int) -> int:
+    if val is None:
+        return default
+    try:
+        return int(val)
+    except (ValueError, TypeError):
+        return default
 
 
 def _require_init() -> str | None:
@@ -152,30 +210,35 @@ def _sample_impl(query, dataset, min_threshold, max_threshold, negative_prompts,
 
 @tool("init", "Initialize embeddings and models. Call once before using any other tool.", {})
 async def tool_init(args):
-    global _IS_INITIALIZED, model
-    global ava_embeddings_tensor, ls_embeddings_tensor, lapis_embeddings_tensor
-    global ava_names_list, ls_names_list, lapis_names_list
-    global dataset_map, _loader_summary
+    try:
+        global _IS_INITIALIZED, model
+        global ava_embeddings_tensor, ls_embeddings_tensor, lapis_embeddings_tensor
+        global ava_names_list, ls_names_list, lapis_names_list
+        global dataset_map, _loader_summary
 
-    if _IS_INITIALIZED:
-        return {"content": [{"type": "text", "text": "Already initialized."}]}
+        if _IS_INITIALIZED:
+            return _make_result("Already initialized.")
 
-    start = time.time()
-    with contextlib.redirect_stdout(sys.stderr):
-        from dataset_loader import (
-            model as m, ava_embeddings_tensor as a_e, ls_embeddings_tensor as l_e,
-            lapis_embeddings_tensor as la_e, ava_names_list as a_n, ls_names_list as l_n,
-            lapis_names_list as la_n, dataset_map as dm, dataset_loader_summary,
-        )
-    model = m
-    ava_embeddings_tensor, ls_embeddings_tensor, lapis_embeddings_tensor = a_e, l_e, la_e
-    ava_names_list, ls_names_list, lapis_names_list = a_n, l_n, la_n
-    dataset_map = dm
-    _loader_summary = dataset_loader_summary()
-    _IS_INITIALIZED = True
-    elapsed = round(time.time() - start, 2)
-    msg = f"Initialization complete in {elapsed}s. rows={_loader_summary.get('total_rows', 'n/a')}, embedding_dim={_loader_summary.get('embedding_dim', 'n/a')}."
-    return {"content": [{"type": "text", "text": msg}]}
+        start = time.time()
+        with contextlib.redirect_stdout(sys.stderr):
+            from dataset_loader import (
+                model as m, ava_embeddings_tensor as a_e, ls_embeddings_tensor as l_e,
+                lapis_embeddings_tensor as la_e, ava_names_list as a_n, ls_names_list as l_n,
+                lapis_names_list as la_n, dataset_map as dm, dataset_loader_summary,
+            )
+        model = m
+        ava_embeddings_tensor, ls_embeddings_tensor, lapis_embeddings_tensor = a_e, l_e, la_e
+        ava_names_list, ls_names_list, lapis_names_list = a_n, l_n, la_n
+        dataset_map = dm
+        _loader_summary = dataset_loader_summary()
+        _IS_INITIALIZED = True
+        elapsed = round(time.time() - start, 2)
+        return _make_result(f"Initialization complete in {elapsed}s. rows={_loader_summary.get('total_rows', 'n/a')}, embedding_dim={_loader_summary.get('embedding_dim', 'n/a')}.")
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        _log(f"[ERROR] init failed: {tb}")
+        return _make_result(f"ERROR in init: {e}\n{tb}")
 
 
 @tool("search", "Search for top-k images matching a query.", {
@@ -186,24 +249,28 @@ async def tool_init(args):
     "t": {"type": "integer", "description": "Number of top results. Default 10."},
 })
 async def tool_search(args):
-    err = _require_init()
-    if err:
-        return {"content": [{"type": "text", "text": err}]}
+    try:
+        err = _require_init()
+        if err:
+            return _make_result(err)
 
-    query = args["query"]
-    dataset = args["dataset"]
-    negative_prompts = args.get("negative_prompts", [])
-    negative_threshold = args.get("negative_threshold", 0.3)
-    t = args.get("t", 10)
+        query = args["query"]
+        dataset = "photos"
+        negative_prompts = _coerce_list(args.get("negative_prompts"))
+        negative_threshold = _coerce_float(args.get("negative_threshold"), 0.3)
+        t = _coerce_int(args.get("t"), 10)
 
-    result, score_info = _search_impl(query, dataset, negative_prompts, negative_threshold, t)
-    if result is None:
-        return {"content": [{"type": "text", "text": f"No Image Found\n{score_info}"}]}
+        result, score_info = _search_impl(query, dataset, negative_prompts, negative_threshold, t)
+        if result is None:
+            return _make_result(f"No Image Found\n{score_info}")
 
-    img_path = _save_grid_to_tmp(result)
-    return {"content": [
-        {"type": "text", "text": f"Grid image saved at: {img_path}\nUse the Read tool to view it.\nShowing top {t} results for '{query}' in {dataset}.\n{score_info}"},
-    ]}
+        img_path = _save_grid_to_tmp(result)
+        return _make_result_with_image(img_path, f"Showing top {t} results for '{query}' in {dataset}.\n{score_info}")
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        _log(f"[ERROR] search failed: {tb}")
+        return _make_result(f"ERROR in search: {e}\n{tb}")
 
 
 @tool("sample", "Sample random images within a similarity score range.", {
@@ -216,28 +283,32 @@ async def tool_search(args):
     "negative_threshold": {"type": "number", "description": "Threshold for negative filtering. Default 0.2."},
 })
 async def tool_sample(args):
-    err = _require_init()
-    if err:
-        return {"content": [{"type": "text", "text": err}]}
+    try:
+        err = _require_init()
+        if err:
+            return _make_result(err)
 
-    query = args["query"]
-    dataset = args["dataset"]
-    min_t = args["min_threshold"]
-    max_t = args["max_threshold"]
-    count = args.get("count", 5)
-    negative_prompts = args.get("negative_prompts", [])
-    negative_threshold = args.get("negative_threshold", 0.2)
+        query = args["query"]
+        dataset = "photos"
+        min_t = _coerce_float(args.get("min_threshold"), 0.0)
+        max_t = _coerce_float(args.get("max_threshold"), 1.0)
+        count = _coerce_int(args.get("count"), 5)
+        negative_prompts = _coerce_list(args.get("negative_prompts"))
+        negative_threshold = _coerce_float(args.get("negative_threshold"), 0.2)
 
-    paths = _sample_impl(query, dataset, min_t, max_t, negative_prompts, negative_threshold)
-    if not paths:
-        return {"content": [{"type": "text", "text": "No Image Found"}]}
+        paths = _sample_impl(query, dataset, min_t, max_t, negative_prompts, negative_threshold)
+        if not paths:
+            return _make_result("No Image Found")
 
-    sampled = random.sample(paths, min(count, len(paths)))
-    grid = grid_stack(sampled, row_size=5)
-    img_path = _save_grid_to_tmp(grid)
-    return {"content": [
-        {"type": "text", "text": f"Grid image saved at: {img_path}\nUse the Read tool to view it.\nSampled {len(sampled)} from {len(paths)} candidates."},
-    ]}
+        sampled = random.sample(paths, min(count, len(paths)))
+        grid = grid_stack(sampled, row_size=5)
+        img_path = _save_grid_to_tmp(grid)
+        return _make_result_with_image(img_path, f"Sampled {len(sampled)} from {len(paths)} candidates.")
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        _log(f"[ERROR] sample failed: {tb}")
+        return _make_result(f"ERROR in sample: {e}\n{tb}")
 
 
 @tool("commit", "Commit images with similarity >= threshold to the dataset.", {
@@ -249,77 +320,95 @@ async def tool_sample(args):
     "message": {"type": "string", "description": "Descriptive tags for this commit."},
 })
 async def tool_commit(args):
-    err = _require_init()
-    if err:
-        return {"content": [{"type": "text", "text": err}]}
+    try:
+        err = _require_init()
+        if err:
+            return _make_result(err)
 
-    query = args["query"]
-    dataset = args["dataset"]
-    threshold = args["threshold"]
-    negative_prompts = args.get("negative_prompts", [])
-    negative_threshold = args.get("negative_threshold", 0.2)
-    message = args.get("message", "")
+        query = args["query"]
+        dataset = "photos"
+        threshold = _coerce_float(args.get("threshold"), 0.3)
+        negative_prompts = _coerce_list(args.get("negative_prompts"))
+        negative_threshold = _coerce_float(args.get("negative_threshold"), 0.2)
+        message = args.get("message", "")
 
-    embeddings, names = _get_embeddings_and_names(dataset)
-    excluded = _apply_negative_filter(embeddings, names, negative_prompts, negative_threshold)
+        embeddings, names = _get_embeddings_and_names(dataset)
+        excluded = _apply_negative_filter(embeddings, names, negative_prompts, negative_threshold)
 
-    query_embedding = model.process([{"text": query}]).cpu()
-    res = torch.nn.functional.cosine_similarity(embeddings, query_embedding.float())
+        query_embedding = model.process([{"text": query}]).cpu()
+        res = torch.nn.functional.cosine_similarity(embeddings, query_embedding.float())
 
-    mask = res >= threshold
-    candidate_indices = torch.where(mask)[0].tolist()
-    selected = [names[i].item() for i in candidate_indices if names[i].item() not in excluded]
+        mask = res >= threshold
+        candidate_indices = torch.where(mask)[0].tolist()
+        selected = [names[i].item() for i in candidate_indices if names[i].item() not in excluded]
 
-    images = []
-    for name in selected:
-        path = f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}"
-        if os.path.exists(path):
-            images.append(path)
+        images = []
+        for name in selected:
+            path = f"{DATASET_ROOT}/{dataset_map[dataset]}/{name}"
+            if os.path.exists(path):
+                images.append(path)
 
-    commit_id = str(uuid.uuid4())[:8]
-    dataset_commits[commit_id] = {
-        "query": query, "dataset": dataset, "threshold": threshold,
-        "negative_prompts": negative_prompts, "negative_threshold": negative_threshold,
-        "message": message, "images": images, "size": len(images),
-    }
-    with open(DATASET_JSON, "w") as f:
-        json.dump(dataset_commits, f, indent=2)
+        commit_id = str(uuid.uuid4())[:8]
+        dataset_commits[commit_id] = {
+            "query": query, "dataset": dataset, "threshold": threshold,
+            "negative_prompts": negative_prompts, "negative_threshold": negative_threshold,
+            "message": message, "images": images, "size": len(images),
+        }
+        with open(DATASET_JSON, "w") as f:
+            json.dump(dataset_commits, f, indent=2)
 
-    return {"content": [{"type": "text", "text": f"Committed with ID: {commit_id}, message: {message} with {len(images)} images."}]}
+        return _make_result(f"Committed with ID: {commit_id}, message: {message} with {len(images)} images.")
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        _log(f"[ERROR] commit failed: {tb}")
+        return _make_result(f"ERROR in commit: {e}\n{tb}")
 
 
 @tool("undo_commit", "Remove a commit from the dataset.", {
     "commit_id": {"type": "string", "description": "The 8-character commit ID to remove."},
 })
 async def tool_undo_commit(args):
-    err = _require_init()
-    if err:
-        return {"content": [{"type": "text", "text": err}]}
+    try:
+        err = _require_init()
+        if err:
+            return _make_result(err)
 
-    commit_id = args["commit_id"]
-    if commit_id not in dataset_commits:
-        return {"content": [{"type": "text", "text": f"Commit ID {commit_id} not found."}]}
+        commit_id = args["commit_id"]
+        if commit_id not in dataset_commits:
+            return _make_result(f"Commit ID {commit_id} not found.")
 
-    removed = dataset_commits.pop(commit_id)
-    with open(DATASET_JSON, "w") as f:
-        json.dump(dataset_commits, f, indent=2)
-    return {"content": [{"type": "text", "text": f"Removed commit {commit_id}: {removed['message']} with {removed['size']} images."}]}
+        removed = dataset_commits.pop(commit_id)
+        with open(DATASET_JSON, "w") as f:
+            json.dump(dataset_commits, f, indent=2)
+        return _make_result(f"Removed commit {commit_id}: {removed['message']} with {removed['size']} images.")
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        _log(f"[ERROR] undo_commit failed: {tb}")
+        return _make_result(f"ERROR in undo_commit: {e}\n{tb}")
 
 
 @tool("status", "Show all commit history.", {})
 async def tool_status(args):
-    err = _require_init()
-    if err:
-        return {"content": [{"type": "text", "text": err}]}
+    try:
+        err = _require_init()
+        if err:
+            return _make_result(err)
 
-    if not dataset_commits:
-        return {"content": [{"type": "text", "text": "No commits yet."}]}
+        if not dataset_commits:
+            return _make_result("No commits yet.")
 
-    total = sum(c["size"] for c in dataset_commits.values())
-    lines = [f"Total commits: {len(dataset_commits)}, Total images: {total}\n\nCommit History:"]
-    for cid, info in dataset_commits.items():
-        lines.append(f"- [{cid}] {info['message']} ({info['size']} images)")
-    return {"content": [{"type": "text", "text": "\n".join(lines)}]}
+        total = sum(c["size"] for c in dataset_commits.values())
+        lines = [f"Total commits: {len(dataset_commits)}, Total images: {total}\n\nCommit History:"]
+        for cid, info in dataset_commits.items():
+            lines.append(f"- [{cid}] {info['message']} ({info['size']} images)")
+        return _make_result("\n".join(lines))
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        _log(f"[ERROR] status failed: {tb}")
+        return _make_result(f"ERROR in status: {e}\n{tb}")
 
 
 @tool("sample_from_committed", "Sample images from a committed batch.", {
@@ -327,37 +416,47 @@ async def tool_status(args):
     "n": {"type": "integer", "description": "Number of images to sample. Default 20."},
 })
 async def tool_sample_from_committed(args):
-    err = _require_init()
-    if err:
-        return {"content": [{"type": "text", "text": err}]}
+    try:
+        err = _require_init()
+        if err:
+            return _make_result(err)
 
-    commit_id = args["commit_id"]
-    n = args.get("n", 20)
-    if commit_id not in dataset_commits:
-        return {"content": [{"type": "text", "text": f"Commit ID {commit_id} not found."}]}
+        commit_id = args["commit_id"]
+        n = _coerce_int(args.get("n"), 20)
+        if commit_id not in dataset_commits:
+            return _make_result(f"Commit ID {commit_id} not found.")
 
-    images = [p for p in dataset_commits[commit_id]["images"] if os.path.exists(p)]
-    if not images:
-        return {"content": [{"type": "text", "text": "No images found on disk for this commit."}]}
+        images = [p for p in dataset_commits[commit_id]["images"] if os.path.exists(p)]
+        if not images:
+            return _make_result("No images found on disk for this commit.")
 
-    sampled = random.sample(images, min(n, len(images)))
-    grid = grid_stack(sampled, row_size=5)
-    img_path = _save_grid_to_tmp(grid)
-    return {"content": [
-        {"type": "text", "text": f"Grid image saved at: {img_path}\nUse the Read tool to view it.\nSampled {len(sampled)} images from commit {commit_id}."},
-    ]}
+        sampled = random.sample(images, min(n, len(images)))
+        grid = grid_stack(sampled, row_size=5)
+        img_path = _save_grid_to_tmp(grid)
+        return _make_result_with_image(img_path, f"Sampled {len(sampled)} images from commit {commit_id}.")
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        _log(f"[ERROR] sample_from_committed failed: {tb}")
+        return _make_result(f"ERROR in sample_from_committed: {e}\n{tb}")
 
 
 @tool("log_actions", "Log the agent's thoughts and reasoning.", {
     "msg": {"type": "string", "description": "The message to log."},
 })
 async def tool_log_actions(args):
-    msg = args.get("msg", "")
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open(LOG_FILE, "a") as f:
-        f.write(f"[{timestamp}] {msg}\n")
-    _log(f"[LOG] {msg}")
-    return {"content": [{"type": "text", "text": "Logged."}]}
+    try:
+        msg = args.get("msg", "")
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open(LOG_FILE, "a") as f:
+            f.write(f"[{timestamp}] {msg}\n")
+        _log(f"[LOG] {msg}")
+        return _make_result("Logged.")
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        _log(f"[ERROR] log_actions failed: {tb}")
+        return _make_result(f"ERROR in log_actions: {e}\n{tb}")
 
 
 # All tools list for the server

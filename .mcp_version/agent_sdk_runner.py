@@ -14,7 +14,7 @@ from claude_agent_sdk import (
     AssistantMessage, TextBlock, ToolUseBlock, ToolResultBlock,
 )
 
-from agent_sdk_tools import ALL_TOOLS, load_existing_commits, TMP_DIR
+from agent_sdk_tools import ALL_TOOLS, load_existing_commits, TMP_DIR, pop_tool_returns
 
 # ---------------------------------------------------------------------------
 # Checkpoint helpers
@@ -127,6 +127,11 @@ async def run_one(main_type: str, sub_type: str, methods: dict, system_prompt: s
         await client.query(task)
         async for message in client.receive_response():
             if isinstance(message, AssistantMessage):
+                # Drain any tool returns from previous turn before processing new blocks
+                for ret in pop_tool_returns():
+                    logger.log_tool_result(ret)
+                    for img_path in _extract_image_paths(ret):
+                        logger.log_image(img_path)
                 for block in message.content:
                     if isinstance(block, TextBlock):
                         print(block.text)
