@@ -97,7 +97,7 @@ def _extract_image_paths(text: str) -> list[str]:
 # Runner
 # ---------------------------------------------------------------------------
 
-async def run_one(main_type: str, sub_type: str, methods: dict, system_prompt: str, model_id: str = "claude-haiku-4-5-20251001"):
+async def run_one(main_type: str, sub_type: str, methods: dict, system_prompt: str, server, model_id: str = "claude-haiku-4-5-20251001"):
     key = f"{main_type}:{sub_type}"
     print(f"\n{'='*60}")
     print(f"[runner] Starting: {key}")
@@ -112,7 +112,6 @@ async def run_one(main_type: str, sub_type: str, methods: dict, system_prompt: s
     )
     logger.log_task(task)
 
-    server = create_sdk_mcp_server("dataset-curation", tools=ALL_TOOLS)
     options = ClaudeAgentOptions(
         cwd=os.path.dirname(os.path.abspath(__file__)),
         model=model_id,
@@ -169,6 +168,8 @@ async def main():
     prompt_path = Path(__file__).parent / "system_prompt.md"
     system_prompt = prompt_path.read_text()
 
+    server = create_sdk_mcp_server("dataset-curation", tools=ALL_TOOLS)
+
     for main_type in classes:
         if args.filter_type and main_type != args.filter_type:
             continue
@@ -178,7 +179,7 @@ async def main():
                 print(f"[SKIP] {key}")
                 continue
 
-            await run_one(main_type, sub_type, classes[main_type][sub_type], system_prompt, model_id=args.model)
+            await run_one(main_type, sub_type, classes[main_type][sub_type], system_prompt, server, model_id=args.model)
             completed.add(key)
             save_checkpoint(completed)
             print(f"[CHECKPOINT] Saved: {key}")

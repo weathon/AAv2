@@ -1,0 +1,27 @@
+{
+    "clarity_and_focus": {
+        "intentional_blur": "Motion blur, shallow depth of field, soft focus, and dreamlike softening effects.",
+        "multiple_exposure_overlay": "Double exposures, ghosted subjects, and layered overlapping frames.",
+        "film_and_digital_artifacts": "Grain, noise, VHS decay, scanlines, datamoshing, compression errors, and lo-fi texture."
+    },
+    "color_and_tone": {
+        "clashing_and_disharmony": "Aggressively conflicting palettes, toxic neon, wrong object colors, and chromatic aberration.",
+        "muted_and_faded": "Desaturated, washed-out, monotone, or retro faded tones with low vibrancy.",
+        "sickly_and_inconsistent": "Unhealthy color casts, uneven white balance, color banding, and mixed color temperatures."
+    },
+    "lighting_and_exposure": {
+        "exposure_extremes": "Deliberate underexposure, overexposure, crushed shadows, or blown highlights.",
+        "flash_and_light_leak": "Harsh or insufficient flash, specular hotspots, and simulated light leak streaks.",
+        "flat_and_low_contrast": "Absence of directional light, collapsed depth, crushed midtones, and oppressive tonal compression."
+    },
+    "composition_and_structure": {
+        "unconventional_framing": "Tilted horizons, skewed angles, off-level framing, and deliberate instability.",
+        "obstructed_and_cropped": "Subjects cut off, blocked, or hidden at frame edges with withheld information.",
+        "snapshot_and_scale": "Amateur snapshot energy, awkward timing, and unrealistic or surreal scale relationships."
+    },
+    "emotion_and_subject": {
+        "negative_emotion": "Expressions of sadness, anger, fear, distress, or scenes evoking depression and dread.",
+        "decay_and_disgust": "Aged, broken, dirty, rotten, or physically deteriorated subjects and environments.",
+        "unfinished_and_raw": "Deliberately exposed construction, visible incompleteness, and rough unpolished process."
+    }
+}

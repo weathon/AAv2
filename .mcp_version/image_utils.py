@@ -9,7 +9,7 @@ import base64
 from io import BytesIO
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 
 def vstack(images):
@@ -46,11 +46,28 @@ def hstack(images):
     return stacked
 
 
-def grid_stack(image_paths, row_size):
+def _draw_score(img, score, font_size=32):
+    """Draw a score label on the top-left corner of an image."""
+    draw = ImageDraw.Draw(img)
+    text = f"{score:.3f}" if isinstance(score, float) else str(score)
+    try:
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", font_size)
+    except (IOError, OSError):
+        font = ImageFont.load_default()
+    bbox = draw.textbbox((0, 0), text, font=font)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    pad = 6
+    draw.rectangle([0, 0, tw + 2 * pad, th + 2 * pad], fill=(0, 0, 0, 180))
+    draw.text((pad, pad), text, fill=(255, 255, 255), font=font)
+    return img
+
+
+def grid_stack(image_paths, row_size, scores=None, font_size=32):
     target_width = 2048
     rows = []
     for i in range(0, len(image_paths), row_size):
-        imgs = [Image.open(p) for p in image_paths[i : i + row_size]]
+        imgs = [Image.open(p).convert("RGBA") for p in image_paths[i : i + row_size]]
+        row_scores = scores[i : i + row_size] if scores is not None else None
         aspect_ratios = [img.size[0] / img.size[1] for img in imgs]
         target_height = int(round(target_width / sum(aspect_ratios)))
 
@@ -62,11 +79,14 @@ def grid_stack(image_paths, row_size):
             else:
                 new_w = int(round(target_height * aspect_ratios[j]))
                 current_width += new_w
-            resized_imgs.append(img.resize((new_w, target_height), Image.BILINEAR))
+            resized = img.resize((new_w, target_height), Image.BILINEAR)
+            if row_scores is not None and j < len(row_scores):
+                _draw_score(resized, row_scores[j], font_size=font_size)
+            resized_imgs.append(resized)
 
         rows.append(hstack(resized_imgs))
 
-    return vstack(rows)
+    return vstack(rows).convert("RGB")
 
 
 def encode_to_base64(image: Image.Image) -> str:
